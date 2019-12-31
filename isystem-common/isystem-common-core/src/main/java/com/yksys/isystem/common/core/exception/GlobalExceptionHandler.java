@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(ParameterException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ExceptionResult handleOauth2WebResponseException(Exception e) {

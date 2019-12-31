@@ -12,7 +12,7 @@ import java.util.Set;
  * @create: 2019-12-26 16:51
  **/
 @Data
-@ConfigurationProperties(prefix = "api-gateway")
+@ConfigurationProperties(prefix = "apiGateway")
 public class ApiGatewayProperties {
     /**
      * 是否开启签名验证
