@@ -21,8 +21,9 @@ api:
   check-sign: false
   api-debug: true
   permit-all:
-    -a
-    -b
+    -/*/login/**
+    -/*/logout/**
+    -/*/oauth/**
 
 ribbon:
   #请求连接的超时时间
@@ -61,12 +62,12 @@ zuul:
 #  check-sign: false
 #  api-debug: true
 #  permit-all:
-#    - /*/login/**
-#    - /*/logout/**
-#    - /*/oauth/**
+#    -/*/login/**
+#    -/*/logout/**
+#    -/*/oauth/**
 #  authority-ignores:
-#    - /*/authority/granted/me
+#    -/*/authority/granted/me
 #  sign-ignores:
-#    - /**/login/**
+#    -/**/login/**
 
 
