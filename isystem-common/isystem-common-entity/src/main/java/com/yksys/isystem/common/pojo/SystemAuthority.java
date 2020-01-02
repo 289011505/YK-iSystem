@@ -16,6 +16,8 @@ public class SystemAuthority {
     private String authority;
     //菜单id
     private String menuId;
+    //api接口id
+    private String apiId;
     //备注
     private String remark;
     //状态

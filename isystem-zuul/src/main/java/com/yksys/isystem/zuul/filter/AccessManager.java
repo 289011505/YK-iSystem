@@ -38,6 +38,21 @@ public class AccessManager {
     private Set<String> authorityIgnores = Sets.newHashSet();
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
 
+    public AccessManager(ResourceLocator resourceLocator, ApiGatewayProperties apiGatewayProperties) {
+        this.resourceLocator = resourceLocator;
+        this.apiGatewayProperties = apiGatewayProperties;
+        if (apiGatewayProperties != null) {
+            if (!CollectionUtils.isEmpty(apiGatewayProperties.getPermitAll())) {
+                permitAll.addAll(apiGatewayProperties.getPermitAll());
+            }
+
+            if (!CollectionUtils.isEmpty(apiGatewayProperties.getAuthorityIgnores())) {
+                authorityIgnores.addAll(apiGatewayProperties.getAuthorityIgnores());
+            }
+
+        }
+    }
+
     public boolean check(HttpServletRequest request, Authentication authentication) {
         if (!apiGatewayProperties.getAccessControl()) {
             return true;
@@ -138,5 +153,13 @@ public class AccessManager {
             url = StringUtil.isNotBlank(url) ? url + pathInfo : pathInfo;
         }
         return url;
+    }
+
+    public ApiGatewayProperties getApiGatewayProperties() {
+        return apiGatewayProperties;
+    }
+
+    public void setApiGatewayProperties(ApiGatewayProperties apiGatewayProperties) {
+        this.apiGatewayProperties = apiGatewayProperties;
     }
 }

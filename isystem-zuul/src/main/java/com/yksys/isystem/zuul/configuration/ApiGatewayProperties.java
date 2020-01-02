@@ -12,20 +12,20 @@ import java.util.Set;
  * @create: 2019-12-26 16:51
  **/
 @Data
-@ConfigurationProperties(prefix = "apiGateway")
+@ConfigurationProperties(prefix = "api")
 public class ApiGatewayProperties {
     /**
      * 是否开启签名验证
      */
-    private Boolean checkSign = true;
+    private Boolean checkSign;
     /**
      * 是否开启动态访问控制
      */
-    private Boolean accessControl = true;
+    private Boolean accessControl;
     /**
      * 是否开启接口调试
      */
-    private Boolean apiDebug = false;
+    private Boolean apiDebug;
     /**
      * 始终放行
      */

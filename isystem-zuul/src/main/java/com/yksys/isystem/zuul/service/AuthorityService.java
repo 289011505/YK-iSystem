@@ -1,9 +1,12 @@
 package com.yksys.isystem.zuul.service;
 
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.zuul.service.fallback.AuthorityServiceFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  * @program: YK-iSystem
@@ -19,5 +22,5 @@ public interface AuthorityService {
      * @return
      */
     @GetMapping("/api/systemUserInfo/getAuthorityResources")
-    Result getAuthorityResources();
+    Result<List<AuthorityResource>> getAuthorityResources();
 }
