@@ -20,7 +20,7 @@ api:
   access-control: true
   check-sign: false
   api-debug: true
-  permit-all: [/*/login/**, /*/logout/**, /*/oauth/**]
+  permit-all: /*/login/**, /*/logout/**, /*/oauth/**
 
 ribbon:
   #请求连接的超时时间
