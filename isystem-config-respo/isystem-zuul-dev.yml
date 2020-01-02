@@ -16,6 +16,10 @@ spring:
 server:
   port: 8769
 
+isystem:
+  api:
+    access-control: true
+
 ribbon:
   #请求连接的超时时间
   ConnectTimeout: 2000
