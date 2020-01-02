@@ -48,6 +48,21 @@ zuul:
     max-semaphores: 1000
   sensitive-headers: ''
 
+
+isystem:
+  api:
+    access-control: true
+    check-sign: false
+    api-debug: true
+    permit-all:
+      - /*/login/**
+      - /*/logout/**
+      - /*/oauth/**
+    authority-ignores:
+      - /*/authority/granted/me
+    sign-ignores:
+      - /**/login/**
+
 #isystem:
 #  api:
 #    #动态权限控制
