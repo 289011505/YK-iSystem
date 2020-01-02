@@ -20,6 +20,9 @@ api:
   access-control: true
   check-sign: false
   api-debug: true
+  permit-all:
+    - a
+    - b
 
 ribbon:
   #请求连接的超时时间
