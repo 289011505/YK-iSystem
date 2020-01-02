@@ -57,10 +57,15 @@ isystem:
     #接口调试,生产环境设为false
     api-debug: true
     # 始终放行
-    permit-all: [/*/login/**, /*/logout/**, /*/oauth/**]
+    permit-all:
+      - /*/login/**
+      - /*/logout/**
+      - /*/oauth/**
     # 忽略权限鉴定
-    authority-ignores: []
+    authority-ignores:
+      - /*/authority/granted/me
     # 签名忽略
-    sign-ignores: []
+    sign-ignores:
+      - /**/login/**
 
 
