@@ -19,7 +19,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Date 2019/11/10 11:39
  * @Version 1.0
  **/
-@SpringBootApplication(scanBasePackages = "com.yksys.isystem", exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication( exclude = DataSourceAutoConfiguration.class)
 @EnableEurekaClient
 @EnableFeignClients
 @EnableDiscoveryClient
