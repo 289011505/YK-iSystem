@@ -81,15 +81,29 @@ public class JdbcRouteLocator extends SimpleRouteLocator implements ApplicationL
                 return gatewayRoute;
             });
 
+//            if (!CollectionUtils.isEmpty(list)) {
+//                list.stream().filter(result -> !StringUtil.isEmpty(result.getPath()))
+//                        .filter(result -> !StringUtil.isEmpty(result.getServiceId()) && ! StringUtil.isEmpty(result.getUrl()))
+//                        .forEach(result ->{
+//                            ZuulProperties.ZuulRoute zuulRoute = new ZuulProperties.ZuulRoute();
+//                            BeanUtils.copyProperties(result, zuulRoute);
+//                            zuulRoute.setId(result.getServiceId());
+//                            routes.put(zuulRoute.getPath(), zuulRoute);
+//                        });
+//            }
             if (!CollectionUtils.isEmpty(list)) {
-                list.stream().filter(result -> !StringUtil.isEmpty(result.getPath()))
-                        .filter(result -> !StringUtil.isEmpty(result.getServiceId()) && ! StringUtil.isEmpty(result.getUrl()))
-                        .forEach(result ->{
-                            ZuulProperties.ZuulRoute zuulRoute = new ZuulProperties.ZuulRoute();
-                            BeanUtils.copyProperties(result, zuulRoute);
-                            zuulRoute.setId(result.getServiceId());
-                            routes.put(zuulRoute.getPath(), zuulRoute);
-                        });
+                for (GatewayRoute gatewayRoute : list) {
+                    if (StringUtil.isEmpty(gatewayRoute.getPath())) {
+                        continue;
+                    }
+                    if (StringUtil.isEmpty(gatewayRoute.getServiceId()) && StringUtil.isEmpty(gatewayRoute.getUrl())) {
+                        continue;
+                    }
+                    ZuulProperties.ZuulRoute zuulRoute = new ZuulProperties.ZuulRoute();
+                    BeanUtils.copyProperties(gatewayRoute, zuulRoute);
+                    zuulRoute.setId(gatewayRoute.getRouteName());
+                    routes.put(zuulRoute.getPath(), zuulRoute);
+                }
             }
 
             log.info("加载动态路由:{}", list.size());

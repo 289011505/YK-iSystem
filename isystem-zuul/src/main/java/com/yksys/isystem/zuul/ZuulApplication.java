@@ -25,7 +25,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @EnableDiscoveryClient
 @EnableZuulProxy
-@ConfigurationProperties
 public class ZuulApplication implements CommandLineRunner {
     @Autowired
     private ResourceLocator resourceLocator;
