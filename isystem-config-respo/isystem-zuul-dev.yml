@@ -1,17 +1,6 @@
 spring:
   application:
     name: isystem-zuul
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yk-isystem20191202?characterEncoding=utf-8
-    username: root
-    password: root
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      max-active: 20
-      initial-size: 5
-      min-idle: 5
-      max-wait: 6000
 
 server:
   port: 8769
@@ -48,38 +37,24 @@ zuul:
     max-semaphores: 1000
   sensitive-headers: ''
 
-#isystem:
-#  api:
-#    access-control: true
-#    check-sign: false
-#    api-debug: true
-#    permit-all:
-#      - /*/login/**
-#      - /*/logout/**
-#      - /*/oauth/**
-#    authority-ignores:
-#      - /*/authority/granted/me
-#    sign-ignores:
-#      - /**/login/**
-
-#isystem:
-#  api:
-#    #动态权限控制
-#    access-control: true
-#    #校验参数签名
-#    check-sign: false
-#    #接口调试,生产环境设为false
-#    api-debug: true
-#    # 始终放行
-#    permit-all:
-#      - /*/login/**
-#      - /*/logout/**
-#      - /*/oauth/**
-#    # 忽略权限鉴定
-#    authority-ignores:
-#      - /*/authority/granted/me
-#    # 签名忽略
-#    sign-ignores:
-#      - /**/login/**
+isystem:
+  api:
+    #动态权限控制
+    access-control: true
+    #校验参数签名
+    check-sign: false
+    #接口调试,生产环境设为false
+    api-debug: true
+    # 始终放行
+    permit-all:
+      - /*/login/**
+      - /*/logout/**
+      - /*/oauth/**
+    # 忽略权限鉴定
+    authority-ignores:
+      - /*/authority/granted/me
+    # 签名忽略
+    sign-ignores:
+      - /**/login/**
 
 
