@@ -16,11 +16,14 @@ spring:
 server:
   port: 8769
 
-#api:
-#  access-control: true
-#  check-sign: false
-#  api-debug: true
-#  permitAll:
+api:
+  access-control: true
+  check-sign: false
+  api-debug: true
+  permitAll:
+    - /*/login/**
+    - /*/logout/**
+    - /*/oauth/**
 
 ribbon:
   #请求连接的超时时间
@@ -54,23 +57,17 @@ zuul:
     max-semaphores: 1000
   sensitive-headers: ''
 
-api:
-  #动态权限控制
-  access-control: true
-  #校验参数签名
-  check-sign: false
-  #接口调试,生产环境设为false
-  api-debug: true
-  # 始终放行
-  permit-all:
-    - /*/login/**
-    - /*/logout/**
-    - /*/oauth/**
-  # 忽略权限鉴定
-  authority-ignores:
-    - /*/authority/granted/me
-  # 签名忽略
-  sign-ignores:
-    - /**/login/**
+#api:
+#  access-control: true
+#  check-sign: false
+#  api-debug: true
+#  permit-all:
+#    - /*/login/**
+#    - /*/logout/**
+#    - /*/oauth/**
+#  authority-ignores:
+#    - /*/authority/granted/me
+#  sign-ignores:
+#    - /**/login/**
 
 
