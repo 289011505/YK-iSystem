@@ -67,7 +67,8 @@ public class LoginController {
 
     private JSONObject getToken(String userName, String password, String type, HttpHeaders headers) {
         AuthorizationParam auth = oauth2ClientProperties.getOauth2().get("auth");
-        String url = WebUtil.getServerUrl(WebUtil.getHttpServletRequest()) + "/oauth/token";
+//        String url = WebUtil.getServerUrl(WebUtil.getHttpServletRequest()) + "/oauth/token";
+        String url = "http://localhost:8503/oauth/token";
         // 使用oauth2密码模式登录
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
         postParameters.add("username", userName);
