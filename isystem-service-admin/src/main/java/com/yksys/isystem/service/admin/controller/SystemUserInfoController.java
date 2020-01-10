@@ -55,8 +55,9 @@ public class SystemUserInfoController {
      * @return
      */
     @GetMapping("/getCurrentUserMenus")
-    public Result getCurrentUserMenus(@RequestParam String userId, @RequestParam String userName) {
-        List<AuthorityMenu> list = systemUserInfoService.getAuthorityMenuByUserId(userId, userName);
+    public Result getCurrentUserMenus() {
+        String userName = AppSession.getCurrentUser().getUsername();
+        List<AuthorityMenu> list = systemUserInfoService.getAuthorityMenuByUserId(AppSession.getCurrentUserId(), userName);
         return new Result(HttpStatus.OK.value(), "获取成功", list);
     }
 
