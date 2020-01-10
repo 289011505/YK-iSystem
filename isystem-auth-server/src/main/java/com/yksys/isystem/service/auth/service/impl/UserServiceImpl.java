@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
         userDetails.setEnabled(systemUserInfo.getStatus().equals(ComConstants.ACCOUNT_STATUS_NORMAL));
         userDetails.setClientId(clientProperties.getOauth2().get("auth").getClientId());
         userDetails.setUsername(systemUserInfo.getUserName());
+        userDetails.setRoleCode(systemUserInfo.getRole().getRoleCode());
 
         return userDetails;
     }

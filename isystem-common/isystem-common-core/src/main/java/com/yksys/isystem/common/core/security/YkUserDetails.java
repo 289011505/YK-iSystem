@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: YK-iSystem
@@ -43,4 +45,6 @@ public class YkUserDetails implements UserDetails {
     private String nickName;
     //头像
     private String userIcon;
+    //角色
+    private String roleCode;
 }

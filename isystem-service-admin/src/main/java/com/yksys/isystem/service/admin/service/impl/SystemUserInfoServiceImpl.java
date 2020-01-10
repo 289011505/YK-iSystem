@@ -5,6 +5,7 @@ import com.yksys.isystem.common.core.constants.ComConstants;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.security.UserAuthority;
 import com.yksys.isystem.common.core.utils.MapUtil;
+import com.yksys.isystem.common.model.AuthorityApi;
 import com.yksys.isystem.common.model.AuthorityMenu;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.model.SystemUserInfo;
@@ -38,17 +39,21 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
         }
         SystemUserInfo systemUserInfo = MapUtil.mapToObject(SystemUserInfo.class, systemUserInfoMap, false);
         //获取用户角色集合
-        List<SystemRole> userRoles = getUserRoles(systemUserInfo.getId());
+        SystemRole systemRole = getUserRoles(systemUserInfo.getId());
         //用户权限列表
-        List<UserAuthority> userAuthorities = getUserAuthorities(systemUserInfo.getId(), systemUserInfo.getUserName());
-        systemUserInfo.setRoles(userRoles);
+        List<UserAuthority> userAuthorities = getUserAuthorities(systemUserInfo.getId(), systemRole.getRoleCode());
+        systemUserInfo.setRole(systemRole);
         systemUserInfo.setAuthorities(userAuthorities);
         return systemUserInfo;
     }
 
     @Override
-    public List<SystemRole> getUserRoles(String userId) {
-        return systemUserInfoMapper.getUserRoles(userId);
+    public SystemRole getUserRoles(String userId) {
+        List<SystemRole> userRoles = systemUserInfoMapper.getUserRoles(userId);
+        if (CollectionUtils.isEmpty(userRoles)) {
+            throw new ParameterException("该用户角色设置错误!, 请重新设置");
+        }
+        return userRoles.get(0);
     }
 
     @Override
@@ -58,14 +63,10 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
             return systemUserInfoMapper.getUserAuthorities();
         }
         List<UserAuthority> list = Lists.newArrayList();
-        List<SystemRole> userRoles = getUserRoles(userId);
-        if (!CollectionUtils.isEmpty(userRoles)) {
-            userRoles.forEach(userRole -> {
-                List<UserAuthority> authoritiesByRoleId = systemUserInfoMapper.getUserAuthoritiesByRoleId(userRole.getId());
-                if (!CollectionUtils.isEmpty(authoritiesByRoleId)) {
-                    list.addAll(authoritiesByRoleId);
-                }
-            });
+        SystemRole systemRole = getUserRoles(userId);
+        List<UserAuthority> authoritiesByRoleId = systemUserInfoMapper.getUserAuthoritiesByRoleId(systemRole.getId());
+        if (!CollectionUtils.isEmpty(authoritiesByRoleId)) {
+            list.addAll(authoritiesByRoleId);
         }
 
         if (!CollectionUtils.isEmpty(list)) {
@@ -85,20 +86,38 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
             return systemUserInfoMapper.getAuthorityMenus();
         }
         List<AuthorityMenu> list = Lists.newArrayList();
-        List<SystemRole> userRoles = getUserRoles(userId);
-        if (!CollectionUtils.isEmpty(userRoles)) {
-            userRoles.forEach(userRole -> {
-                List<AuthorityMenu> authorityMenuList = systemUserInfoMapper.getUserAuthorityMenusByRoleId(userRole.getId());
-                if (!CollectionUtils.isEmpty(authorityMenuList)) {
-                    list.addAll(authorityMenuList);
-                }
-            });
+        SystemRole systemRole = getUserRoles(userId);
+        List<AuthorityMenu> authorityMenuList = systemUserInfoMapper.getUserAuthorityMenusByRoleId(systemRole.getId());
+        if (!CollectionUtils.isEmpty(authorityMenuList)) {
+            list.addAll(authorityMenuList);
         }
         if (!CollectionUtils.isEmpty(list)) {
             //集合去重
             list.stream().collect(Collectors.collectingAndThen(
                     Collectors.toCollection(
                             () -> new TreeSet<>(Comparator.comparing(AuthorityMenu::getAuthorityId))),
+                    ArrayList::new));
+        }
+        return list;
+    }
+
+    @Override
+    public List<AuthorityApi> getAuthorityApisByUserId(String userId, String roleCode) {
+        if (ComConstants.ROOT_ADMIN.equals(roleCode)) {
+            //返回所有权限
+            return systemUserInfoMapper.getAuthorityApis();
+        }
+        List<AuthorityApi> list = Lists.newArrayList();
+        SystemRole systemRole = getUserRoles(userId);
+        List<AuthorityApi> authorityApis = systemUserInfoMapper.getUserAuthorityApisByRoleId(systemRole.getId());
+        if (!CollectionUtils.isEmpty(authorityApis)) {
+            list.addAll(authorityApis);
+        }
+        if (!CollectionUtils.isEmpty(list)) {
+            //集合去重
+            list.stream().collect(Collectors.collectingAndThen(
+                    Collectors.toCollection(
+                            () -> new TreeSet<>(Comparator.comparing(AuthorityApi::getAuthorityId))),
                     ArrayList::new));
         }
         return list;

@@ -19,7 +19,7 @@ public class SystemUserInfo extends SystemUser implements Serializable {
     private static final long serialVersionUID = -1666628898966720470L;
 
     //角色集合
-    private List<SystemRole> roles;
+    private SystemRole role;
 
     //用户权限
     private List<UserAuthority> authorities;

@@ -45,9 +45,22 @@
     </select>
 
     <select id="getAuthorityMenus" resultType="com.yksys.isystem.common.model.AuthorityMenu">
-        select a.id authorityId, a.authority authority, b.id id, b.menu_name menuName, b.menu_code menuCode, b.menu_desc menuDesc,
+        select a.id authorityId, a.authority authority, b.id id, b.menu_name menuName, b.menu_code menuCode, b.menu_desc
+        menuDesc,
         b.pid pid, b.scheme scheme, b.target target, b.sort sort, b.level level, b.remark remark, b.url url, b.icon icon
         from tb_system_authority a inner join tb_system_menu b on a.menu_id = b.id
+        <where>
+            AND a.status = 1 and b.status = 1
+        </where>
+    </select>
+
+    <!--  获取所有的api列表  -->
+    <select id="getAuthorityApis" resultType="com.yksys.isystem.common.model.AuthorityApi">
+        select a.id authorityId, a.authority authority, b.id id, b.api_name apiName, b.api_code apiCode, b.api_desc
+        apiDesc,
+        b.request_method requestMethod, b.content_type contentType, b.class_name className, b.method_name methodName,
+        b.path path, b.service_id serviceId, b.persist persist, b.auth auth, b.open open, b.status status
+        from tb_system_authority a inner join tb_system_api b on a.api_id = b.id
         <where>
             AND a.status = 1 and b.status = 1
         </where>
@@ -69,15 +82,19 @@
         where b.role_id = #{roleId} and a.status = 1 and c.status = 1
     </select>
 
+    <!-- 根据roleId获取api列表-->
+    <select id="getUserAuthorityApisByRoleId" resultType="com.yksys.isystem.common.model.AuthorityApi">
+        select a.id authorityId, a.authority authority, b.id id, b.api_name apiName, b.api_code apiCode, b.api_desc
+        apiDesc,
+        b.request_method requestMethod, b.content_type contentType, b.class_name className, b.method_name methodName,
+        b.path path, b.service_id serviceId, b.persist persist, b.auth auth, b.open open, b.status status
+        from tb_system_authority a inner join tb_authority_role b on a.id = b.authority_id
+        inner join tb_system_api c on c.id = a.api_id
+        where b.role_id = #{roleId} and a.status = 1 and c.status = 1
+    </select>
+
     <!-- 获取所有访问权限列表 -->
     <select id="getAuthorityResources" resultType="com.yksys.isystem.common.model.AuthorityResource">
-        SELECT a.id authorityId,a.authority authority, b.url path, b.service_id serviceId , b.`status` status, c.path prefix
-        FROM tb_system_authority a INNER JOIN tb_system_menu b on a.menu_id = b.id
-        LEFT JOIN tb_gateway_route c on c.route_name = b.service_id
-        where a.status = 1 and b.status = 1 and  c.status = 1
-
-        UNION ALL
-
         SELECT a.id authorityId,a.authority authority, b.path path, b.service_id serviceId , b.`status` status, c.path prefix
         FROM tb_system_authority a INNER JOIN tb_system_api b on a.api_id = b.id
         LEFT JOIN tb_gateway_route c on c.route_name = b.service_id
