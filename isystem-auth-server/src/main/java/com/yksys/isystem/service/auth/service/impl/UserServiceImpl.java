@@ -1,13 +1,14 @@
 package com.yksys.isystem.service.auth.service.impl;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yksys.isystem.common.core.constants.ComConstants;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.security.YkUserDetails;
 import com.yksys.isystem.common.core.security.oauth2.client.Oauth2ClientProperties;
 import com.yksys.isystem.common.model.SystemUserInfo;
+import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import com.yksys.isystem.service.auth.service.UserService;
-import com.yksys.isystem.service.auth.service.feign.SystemUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,8 +33,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
         Map<String, Object> map = Maps.newHashMap();
         map.put("account", account);
-        Result<SystemUserInfo> loginUserInfo = systemUserInfoService.getLoginUserInfo(map);
-        SystemUserInfo systemUserInfo = loginUserInfo.getData();
+        SystemUserInfo systemUserInfo = systemUserInfoService.getLoginUserInfo(map);
         if (systemUserInfo == null) {
             throw new UsernameNotFoundException("用户" + account + "不存在!");
         }
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         userDetails.setEnabled(systemUserInfo.getStatus().equals(ComConstants.ACCOUNT_STATUS_NORMAL));
         userDetails.setClientId(clientProperties.getOauth2().get("auth").getClientId());
         userDetails.setUsername(systemUserInfo.getUserName());
-        userDetails.setRoleCode(systemUserInfo.getRole().getRoleCode());
+        userDetails.setRoleCode(Lists.newArrayList(systemUserInfo.getRole().getRoleCode()));
 
         return userDetails;
     }

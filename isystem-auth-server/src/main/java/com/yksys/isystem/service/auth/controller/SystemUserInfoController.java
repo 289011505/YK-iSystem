@@ -1,11 +1,11 @@
-package com.yksys.isystem.service.admin.controller;
+package com.yksys.isystem.service.auth.controller;
 
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.model.AuthorityMenu;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.model.SystemUserInfo;
-import com.yksys.isystem.service.admin.service.SystemUserInfoService;
+import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,8 +56,7 @@ public class SystemUserInfoController {
      */
     @GetMapping("/getCurrentUserMenus")
     public Result getCurrentUserMenus() {
-        String userName = AppSession.getCurrentUser().getUsername();
-        List<AuthorityMenu> list = systemUserInfoService.getAuthorityMenuByUserId(AppSession.getCurrentUserId(), userName);
+        List<AuthorityMenu> list = systemUserInfoService.getAuthorityMenuByUserId(AppSession.getCurrentUserId(), AppSession.getCurrentUserRoleCode().get(0));
         return new Result(HttpStatus.OK.value(), "获取成功", list);
     }
 

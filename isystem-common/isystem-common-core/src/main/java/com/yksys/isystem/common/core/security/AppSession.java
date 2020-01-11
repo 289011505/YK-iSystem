@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,6 +62,14 @@ public class AppSession {
      */
     public static String getCurrentUserId() {
         return getCurrentUser().getUserId();
+    }
+
+    /**
+     * 获取当前登录认证用户id
+     * @return
+     */
+    public static List<String> getCurrentUserRoleCode() {
+        return getCurrentUser().getRoleCode();
     }
 
     /**

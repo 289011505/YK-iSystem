@@ -37,7 +37,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     @Override
     public List<Map<String, Object>> getSystemUsers(int start, int pageSize, Map<String, Object> map) {
-        PageHelper.offsetPage(start, pageSize);
+        PageHelper.startPage(start, pageSize);
         return this.getSystemUsers(map);
     }
 

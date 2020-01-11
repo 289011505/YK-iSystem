@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.admin.service.impl;
+package com.yksys.isystem.service.auth.service.impl;
 
 import com.google.common.collect.Lists;
 import com.yksys.isystem.common.core.constants.ComConstants;
@@ -10,9 +10,8 @@ import com.yksys.isystem.common.model.AuthorityMenu;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.model.SystemUserInfo;
 import com.yksys.isystem.common.pojo.SystemRole;
-import com.yksys.isystem.common.pojo.UserRole;
-import com.yksys.isystem.service.admin.mapper.SystemUserInfoMapper;
-import com.yksys.isystem.service.admin.service.SystemUserInfoService;
+import com.yksys.isystem.service.auth.mapper.SystemUserInfoMapper;
+import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.admin.service;
+package com.yksys.isystem.service.auth.service;
 
 import com.yksys.isystem.common.core.security.UserAuthority;
 import com.yksys.isystem.common.model.AuthorityApi;

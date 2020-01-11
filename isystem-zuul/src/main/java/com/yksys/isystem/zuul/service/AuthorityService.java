@@ -4,6 +4,7 @@ import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.zuul.service.fallback.AuthorityServiceFallback;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
  * @author: YuKai Fan
  * @create: 2019-12-27 10:08
  **/
-@FeignClient(value = "isystem-service-admin", fallbackFactory = AuthorityServiceFallback.class)
+@Component
+@FeignClient(value = "isystem-auth-server", fallbackFactory = AuthorityServiceFallback.class)
 public interface AuthorityService {
 
     /**
