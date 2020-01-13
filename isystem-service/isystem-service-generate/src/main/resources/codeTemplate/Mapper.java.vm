@@ -1,0 +1,95 @@
+package ${package}.mapper;
+
+import ${package}.common.pojo.${className};
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * @program: YK-iSystem
+ * @description: 系统${comments}mapper
+ * @author: YuKai Fan
+ * @create: 2019-12-03 14:56
+ **/
+public interface ${className}Mapper {
+    /**
+     * 新增${comments}
+     * @param ${classname} ${comments}实体
+     * @return
+     */
+    int add${className}(${className} ${classname});
+
+    /**
+     * 批量新增${comments}
+     * @param list ${comments}集合
+     */
+    void add${className}s(@Param(value = "list") List<${className}> list);
+
+    /**
+     * 根据id查询指定${comments}
+     * @param id  主键
+     * @return
+     */
+    Map<String, Object> get${className}ById(String id);
+
+    /**
+     * 根据id修改${comments}
+     * @param user ${comments}实体
+     * @return
+     */
+    int edit${className}ById(${className} ${classname});
+
+    /**
+     * 批量修改${comments}
+     *
+     * @param ${classname} ${comments}实体
+     * @param ids 主键集合
+     */
+    void edit${className}ByIds(@Param("map") ${className} ${classname}, @Param("list") List<String> ids);
+
+    /**
+     * 根据id删除${comments}
+     * @param id
+     * @return
+     */
+    int del${className}ById(String id);
+
+    /**
+     * 批量删除${comments}
+     *
+     * @param ids 主键集合
+     * @return dao成功失败标志
+     */
+    int del${className}ByIds(List<String> ids);
+
+    /**
+     * 真删除${comments}
+     *
+     * @param id 主键
+     * @return dao成功失败标志
+     */
+    int del${className}RealById(String id);
+
+    /**
+     * 真批量删除${comments}
+     *
+     * @param ids 主键集合
+     * @return dao成功失败标志
+     */
+    int del${className}RealByIds(List<String> ids);
+
+    /**
+     * 全部真删除
+     * @return
+     */
+    int delAll${className}Real();
+
+    /**
+     * 获取所有${comments}.
+     * @param map 页面表单
+     * @return 结果集合
+     */
+    List<Map<String, Object>> get${className}s(Map<String, Object> map);
+}

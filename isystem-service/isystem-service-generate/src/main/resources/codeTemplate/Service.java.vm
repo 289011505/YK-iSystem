@@ -1,0 +1,73 @@
+package ${package}.service;
+import ${package}.common.pojo.${className};
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @program: YK-iSystem
+ * @description: ${comments} service
+ * @author: YuKai Fan
+ * @create: ${datetime}
+ **/
+public interface ${className}Service {
+    /**
+     * 新增${comments}
+     * @param ${classname}
+     * @return
+     */
+    ${className} add${className}(${className} ${classname});
+
+    /**
+     * 根据id查询${comments}
+     * @param id
+     * @return
+     */
+    Map<String, Object> get${className}ById(String id);
+
+    /**
+     * 获取所有${comments}(分页)
+     * @param start 开始记录
+     * @param pageSize 分页大小
+     * @param map 参数
+     * @return
+     */
+    List<Map<String, Object>> get${className}s(int start, int pageSize, Map<String, Object> map);
+
+    /**
+     * 获取所有${comments}
+     * @param map 参数
+     * @return
+     */
+    List<Map<String, Object>> get${className}s(Map<String, Object> map);
+
+    /**
+     * 修改${comments}
+     * @param ${classname}
+     */
+    void edit${className}(${className} ${classname});
+
+    /**
+     * 根据id删除${comments}(软删除)
+     * @param id
+     */
+    void del${className}ById(String id);
+
+    /**
+     * 批量删除(软删除)
+     * @param ids
+     */
+    void del${className}ByIs(List<String> ids);
+
+    /**
+     * 根据id删除${comments}(真删除)
+     * @param id
+     */
+    void del${className}RealById(String id);
+
+    /**
+     * 批量删除(真删除)
+     * @param ids
+     */
+    void del${className}RealByIds(List<String> ids);
+}

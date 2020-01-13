@@ -69,7 +69,7 @@ public class AppSession {
      * @return
      */
     public static List<String> getCurrentUserRoleCode() {
-        return getCurrentUser().getRoleCode();
+        return getCurrentUser().getRoles();
     }
 
     /**

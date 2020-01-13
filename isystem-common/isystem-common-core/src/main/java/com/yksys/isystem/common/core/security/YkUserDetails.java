@@ -46,5 +46,5 @@ public class YkUserDetails implements UserDetails {
     //头像
     private String userIcon;
     //角色
-    private List<String> roleCode;
+    private List<String> roles;
 }

@@ -1,0 +1,109 @@
+package ${package}.controller;
+
+import ${package}.common.core.dto.DataTableViewPage;
+import ${package}.common.core.dto.Result;
+import ${package}.common.pojo.${className};
+import ${package}.common.vo.${className}Vo;
+import ${package}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
+
+
+/**
+ * @program: YK-iSystem
+ * @description: ${comments}
+ * @author: YuKai Fan
+ * @create: ${datetime}
+ *
+ */
+@RestController
+@RequestMapping("/api/${classname}")
+public class ${className}Controller {
+    @Autowired
+    private ${className}Service ${classname}Service;
+
+    /**
+     * 新增${comments}
+     * @return
+     */
+    @PostMapping("/add${className}")
+    public Result add${className}(@RequestBody ${className}Vo ${classname}Vo) {
+        ${className} ${classname} = ${classname}Vo.convert();
+        return new Result(HttpStatus.OK.value(), "新增成功", ${classname}Service.add${className}(${classname}));
+    }
+
+    /**
+     * 根据id查询${comments}
+     * @param id
+     * @return
+     */
+    @PostMapping("/get${className}ById")
+    public Result get${className}ById(@RequestParam String id) {
+        return new Result(HttpStatus.OK.value(), "查询成功", ${classname}Service.get${className}ById(id));
+    }
+
+    /**
+     * 更新${comments}
+     *
+     * @return
+     */
+    @PutMapping("/edit${className}")
+    public Result edit${className}(@RequestBody ${className}Vo ${classname}Vo) {
+        ${className} ${classname} = ${classname}Vo.convert();
+        ${classname}Service.edit${className}(${classname});
+        return new Result(HttpStatus.OK.value(), "更新成功");
+    }
+
+    /**
+     * 根据id删除${comments}
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/del${className}")
+    public Result del${className}ById(@RequestParam String id) {
+        ${classname}Service.del${className}ById(id);
+        return new Result(HttpStatus.OK.value(), "删除成功");
+    }
+
+    /**
+     * 根据id删除${comments}
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/del${className}/{ids}")
+    public Result del${className}ByIds(@PathVariable("ids") String[] ids) {
+        ${classname}Service.del${className}ByIs(Arrays.asList(ids));
+        return new Result(HttpStatus.OK.value(), "批量删除成功");
+    }
+
+    /**
+     * 获取所有的${comments}(不分页)
+     * @param map 参数
+     * @return
+     */
+    @GetMapping("/get${className}s/noPage")
+    public Result get${className}s(@RequestParam Map<String, Object> map) {
+        return new Result(HttpStatus.OK.value(), "获取成功", ${classname}Service.get${className}s(map));
+    }
+
+    /**
+     * 获取所有${comments}
+     * @param start 开始记录
+     * @param pageSize 分页大小
+     * @param map 参数
+     * @return
+     */
+    @GetMapping("/get${className}s")
+    public Result get${className}s(@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+                                 @RequestParam(value = "pageSize", required = false, defaultValue = "30") int pageSize,
+                                 @RequestParam Map<String, Object> map) {
+        List<Map<String, Object>> list = ${classname}Service.get${className}s(start, pageSize, map);
+        return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
+    }
+
+}

@@ -1,0 +1,76 @@
+package ${package}.impl;
+
+
+import com.github.pagehelper.PageHelper;
+import ${package}.common.core.utils.AppUtil;
+import ${package}.common.pojo.${className};
+import ${package}.mapper.${className}Mapper;
+import ${package}.service.${className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+
+/**
+* @program: YK-iSystem
+* @description:
+* @author: YuKai Fan
+* @create: 2019-12-03 20:05
+**/
+@Service
+public class ${className}ServiceImpl implements ${className}Service {
+    @Autowired
+    private ${className}Mapper ${classname}Mapper;
+
+    @Override
+    public ${className} add${className}(${className} ${classname}) {
+        ${classname}.setId(AppUtil.randomId());
+        ${classname}.setStatus(1);
+        ${classname}Mapper.add${className}(${classname});
+        return ${classname};
+    }
+
+    @Override
+    public Map<String, Object> get${className}ById(String id) {
+        return ${classname}Mapper.get${className}ById(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> get${className}s(int start, int pageSize, Map<String, Object> map) {
+        PageHelper.startPage(start, pageSize);
+        return this.get${className}s(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> get${className}s(Map<String, Object> map) {
+        return ${classname}Mapper.get${className}s(map);
+    }
+
+    @Override
+    public void edit${className}(${className} ${classname}) {
+        ${classname}Mapper.edit${className}ById(${classname});
+    }
+
+    @Override
+    public void del${className}ById(String id) {
+        ${classname}Mapper.del${className}ById(id);
+    }
+
+    @Override
+    public void del${className}ByIs(List<String> ids) {
+        ${classname}Mapper.del${className}ByIds(ids);
+    }
+
+    @Override
+    public void del${className}RealById(String id) {
+        ${classname}Mapper.del${className}RealById(id);
+    }
+
+    @Override
+    public void del${className}RealByIds(List<String> ids) {
+        ${classname}Mapper.del${className}RealByIds(ids);
+    }
+
+}

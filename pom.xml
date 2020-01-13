@@ -3,15 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>isystem-config</module>
-        <module>isystem-eureka</module>
-        <module>isystem-admin</module>
-        <module>isystem-zipkin</module>
-        <module>isystem-zuul</module>
-        <module>isystem-service-admin</module>
-        <module>isystem-web-admin</module>
         <module>isystem-common</module>
         <module>isystem-auth-server</module>
+        <module>isystem-cloud</module>
+        <module>isystem-service</module>
+        <module>isystem-web</module>
     </modules>
 
     <parent>
