@@ -1,4 +1,4 @@
-package ${package}.pojo;
+package ${package}.common.pojo;
 
 import java.io.Serializable;
 import lombok.Data;
@@ -22,26 +22,5 @@ public class ${className} implements Serializable {
 	private $column.attrType $column.attrname;
 	#end
 #end
-
-###foreach ($column in $columns)
-##    #if($column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'createUserId' && $column.attrname != 'updateUserId')
-##        #if($column.comments.length() > 0 )
-##            /**
-##             * 设置：${column.comments}
-##             */
-##            #end
-##            public void set${column.attrName}($column.attrType $column.attrname) {
-##                this.$column.attrname = $column.attrname;
-##            }
-##            #if( $column.comments.length() > 0 )
-##            /**
-##             * 获取：${column.comments}
-##             */
-##            #end
-##            public $column.attrType get${column.attrName}() {
-##                return $column.attrname;
-##            }
-##        #end
-##    #end
 
 }

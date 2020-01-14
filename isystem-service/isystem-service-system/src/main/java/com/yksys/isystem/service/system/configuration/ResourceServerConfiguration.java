@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.generate.configuration;
+package com.yksys.isystem.service.system.configuration;
 
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.security.YkAccessDeniedHandler;
@@ -66,7 +66,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .and()
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                .antMatchers("/api/generate/generateCode/**").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

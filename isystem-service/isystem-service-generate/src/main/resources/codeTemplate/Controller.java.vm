@@ -71,7 +71,7 @@ public class ${className}Controller {
     }
 
     /**
-     * 根据id删除${comments}
+     * 根据ids批量删除${comments}
      * @param ids
      * @return
      */

@@ -1,6 +1,5 @@
 package com.yksys.isystem.service.generate.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.service.generate.service.SysGeneratorService;

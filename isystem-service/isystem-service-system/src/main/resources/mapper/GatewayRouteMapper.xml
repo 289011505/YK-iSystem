@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.system.mapper.GatewayRouteMapper">
+    <!-- 新增 -->
+    <insert id="addGatewayRoute">
+        INSERT INTO tb_gateway_route(
+        <include refid="gatewayRoute_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="gatewayRoute_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="addGatewayRoutes">
+        INSERT INTO tb_gateway_route(
+        <include refid="gatewayRoute_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="gatewayRoute_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="editGatewayRouteById">
+        UPDATE tb_gateway_route
+        <set>
+            <include refid="gatewayRoute_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="editGatewayRouteByIds">
+        UPDATE tb_gateway_route
+        <set>
+            <include refid="gatewayRoute_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 删除 -->
+    <update id="delGatewayRouteById">
+            update tb_gateway_route SET status = 0 WHERE id = #{id}
+        </update>
+
+    <!-- 批量删除 -->
+    <update id="delGatewayRouteByIds">
+        UPDATE tb_gateway_route SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 真删除 -->
+    <delete id="delGatewayRouteRealById">
+            DELETE FROM tb_gateway_route WHERE id = #{id}
+        </delete>
+
+    <!-- 真批量删除 -->
+    <delete id="delGatewayRouteRealByIds">
+        DELETE FROM tb_gateway_route WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 清空 -->
+    <delete id="delGatewayRouteReals">
+            DELETE FROM tb_gateway_route
+        </delete>
+
+    <!-- 查询管理列表 -->
+    <select id="getGatewayRoutes" parameterType="Map" resultType="Map">
+        SELECT
+        <include refid="gatewayRoute_select_cond"/>
+        FROM tb_gateway_route a
+        <where>
+            <include refid="gatewayRoute_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
+
+    <!-- 根据id查询网关路由表 -->
+    <select id="getGatewayRouteById" resultType="Map">
+        SELECT
+        <include refid="gatewayRoute_select_cond_one"/>
+        FROM tb_gateway_route a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
+
+
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="gatewayRoute_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.route_name routeName
+                                            
+                                    , a.path path
+                                            
+                                    , a.service_id serviceId
+                                            
+                                    , a.url url
+                                            
+                                    , a.strip_prefix stripPrefix
+                                            
+                                    , a.retryable retryable
+                                            
+                                    , a.persist persist
+                                            
+                                    , a.status status
+                                            
+                                    , a.route_desc routeDesc
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="gatewayRoute_select_cond_one">
+            a.id id
+                                                                            , a.route_name routeName
+                                                                , a.path path
+                                                                , a.service_id serviceId
+                                                                , a.url url
+                                                                , a.strip_prefix stripPrefix
+                                                                , a.retryable retryable
+                                                                , a.persist persist
+                                                                , a.status status
+                                                                , a.route_desc routeDesc
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="gatewayRoute_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="routeName != null and routeName != '' and routeName != 'null' and routeName != 'undefined'">
+            AND a.route_name = #{routeName}
+        </if>
+        <if test="path != null and path != '' and path != 'null' and path != 'undefined'">
+            AND a.path = #{path}
+        </if>
+        <if test="serviceId != null and serviceId != '' and serviceId != 'null' and serviceId != 'undefined'">
+            AND a.service_id = #{serviceId}
+        </if>
+        <if test="url != null and url != '' and url != 'null' and url != 'undefined'">
+            AND a.url = #{url}
+        </if>
+        <if test="stripPrefix != null">
+            AND a.strip_prefix = #{stripPrefix}
+        </if>
+        <if test="retryable != null">
+            AND a.retryable = #{retryable}
+        </if>
+        <if test="persist != null">
+            AND a.persist = #{persist}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="routeDesc != null and routeDesc != '' and routeDesc != 'null' and routeDesc != 'undefined'">
+            AND a.route_desc = #{routeDesc}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="gatewayRoute_add_key">
+            id
+                                                        
+                    , route_name
+                                            
+                    , path
+                                            
+                    , service_id
+                                            
+                    , url
+                                            
+                    , strip_prefix
+                                            
+                    , retryable
+                                            
+                    , persist
+                                            
+                    , status
+                                            
+                    , route_desc
+                                                                                                                                                    </sql>
+
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="gatewayRoute_add_val">
+            #{id}
+                                                                            , #{routeName}
+                                                                , #{path}
+                                                                , #{serviceId}
+                                                                , #{url}
+                                                                , #{stripPrefix}
+                                                                , #{retryable}
+                                                                , #{persist}
+                                                                , #{status}
+                                                                , #{routeDesc}
+                                                                                                                                                    </sql>
+
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="gatewayRoute_set_if">
+        <if test="routeName != null and routeName != '' and routeName != 'null' and routeName != 'undefined'">
+            route_name = #{routeName},
+        </if>
+        <if test="path != null and path != '' and path != 'null' and path != 'undefined'">
+            path = #{path},
+        </if>
+        <if test="serviceId != null and serviceId != '' and serviceId != 'null' and serviceId != 'undefined'">
+            service_id = #{serviceId},
+        </if>
+        <if test="url != null and url != '' and url != 'null' and url != 'undefined'">
+            url = #{url},
+        </if>
+        <if test="stripPrefix != null">
+            strip_prefix = #{stripPrefix},
+        </if>
+        <if test="retryable != null">
+            retryable = #{retryable},
+        </if>
+        <if test="persist != null">
+            persist = #{persist},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="routeDesc != null and routeDesc != '' and routeDesc != 'null' and routeDesc != 'undefined'">
+            route_desc = #{routeDesc},
+        </if>
+    </sql>
+</mapper>

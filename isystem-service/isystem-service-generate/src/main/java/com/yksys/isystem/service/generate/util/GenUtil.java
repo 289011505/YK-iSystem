@@ -31,13 +31,13 @@ public class GenUtil {
 
     public static List<String> getTemplates() {
         List<String> templates = Lists.newArrayList();
-        templates.add("");
-        templates.add("");
-        templates.add("");
-        templates.add("");
-        templates.add("");
-        templates.add("");
-        templates.add("");
+        templates.add("codeTemplate/Controller.java.vm");
+        templates.add("codeTemplate/Entity.java.vm");
+        templates.add("codeTemplate/Mapper.java.vm");
+        templates.add("codeTemplate/Mapper.xml.vm");
+        templates.add("codeTemplate/Service.java.vm");
+        templates.add("codeTemplate/ServiceImpl.java.vm");
+//        templates.add("codeTemplate/Controller.java.vm");
         return templates;
     }
 
@@ -184,10 +184,10 @@ public class GenUtil {
         if(template.contains("ServiceImpl.java.vm")){
             return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
         }
-        if(template.contains("Dao.java.vm")){
+        if(template.contains("Mapper.java.vm")){
             return packagePath + "mapper" + File.separator + className + "Mapper.java";
         }
-        if(template.contains("Dao.xml.vm")){
+        if(template.contains("Mapper.xml.vm")){
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + className + "Mapper.xml";
         }
 

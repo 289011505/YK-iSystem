@@ -1,0 +1,49 @@
+package ${package}.common.vo;
+
+import java.io.Serializable;
+import lombok.Data;
+import ${package}.common.pojo.${className};
+import org.springframework.beans.BeanUtils;
+
+
+/**
+ * ${comments} vo类
+ * 
+ * @author YuKai Fan
+ * @create ${datetime}
+ */
+@Data
+public class ${className}Vo implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+#foreach ($column in $columns)
+#if($column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'createUserId' && $column.attrname != 'updateUserId')
+	#if($column.comments.length() > 0)
+    //$column.comments
+	#end
+	private $column.attrType $column.attrname;
+	#end
+#end
+
+	public ${className} convert() {
+			${className}Vo.${className}VoConvert ${classname}VoConvert = new ${className}Vo.${className}VoConvert();
+		${className} ${classname} = ${classname}VoConvert.convert(this);
+		return ${classname};
+	}
+
+	private static class ${className}VoConvert extends Converter<${className}Vo, ${className}> {
+
+		@Override
+		protected ${className} doForward(${className}Vo ${classname}Vo) {
+			${className} ${classname} = new ${className}();
+			BeanUtils.copyProperties(${classname}Vo, ${classname});
+			return ${classname};
+		}
+
+		@Override
+		protected ${className}Vo doBackward(${className} ${classname}) {
+			return null;
+		}
+	}
+
+}
