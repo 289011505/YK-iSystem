@@ -14,4 +14,4 @@ spring:
       max-wait: 6000
 
 server:
-  port: 8503
+  port: 8504
