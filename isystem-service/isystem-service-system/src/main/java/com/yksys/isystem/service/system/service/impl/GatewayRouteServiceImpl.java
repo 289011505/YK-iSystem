@@ -28,6 +28,7 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
     public GatewayRoute addGatewayRoute(GatewayRoute gatewayRoute) {
         gatewayRoute.setId(AppUtil.randomId());
         gatewayRoute.setStatus(1);
+        gatewayRoute.setServiceId(gatewayRoute.getRouteName());
         gatewayRouteMapper.addGatewayRoute(gatewayRoute);
         return gatewayRoute;
     }

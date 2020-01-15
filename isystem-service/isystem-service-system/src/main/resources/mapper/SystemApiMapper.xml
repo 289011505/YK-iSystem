@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.system.mapper.SystemApiMapper">
+        <!-- 新增 -->
+        <insert id="addSystemApi">
+            INSERT INTO tb_system_api(<include refid="systemApi_add_key"><property name="alias" value="" /></include>)
+            VALUES (<include refid="systemApi_add_val"><property name="alias" value="" /></include>)
+        </insert>
+
+        <!-- 批量新增 -->
+        <insert id="addSystemApis">
+            INSERT INTO tb_system_api(<include refid="systemApi_add_key"><property name="alias" value="" /></include>)
+            VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (<include refid="systemApi_add_val"><property name="alias" value="item."/></include>)
+            </foreach>
+        </insert>
+
+        <!-- 修改 -->
+        <update id="editSystemApiById">
+            UPDATE tb_system_api
+            <set>
+                <include refid="systemApi_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <!-- 批量修改 -->
+        <update id="editSystemApiByIds">
+            UPDATE tb_system_api
+            <set>
+                <include refid="systemApi_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 删除 -->
+        <update id="delSystemApiById">
+            update tb_system_api SET status = 0 WHERE id = #{id}
+        </update>
+
+        <!-- 批量删除 -->
+        <update id="delSystemApiByIds">
+            UPDATE tb_system_api SET status = 0 WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 真删除 -->
+        <delete id="delSystemApiRealById">
+            DELETE FROM tb_system_api WHERE id = #{id}
+        </delete>
+
+        <!-- 真批量删除 -->
+        <delete id="delSystemApiRealByIds">
+            DELETE FROM tb_system_api WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </delete>
+
+        <!-- 清空 -->
+        <delete id="delSystemApiReals">
+            DELETE FROM tb_system_api
+        </delete>
+
+        <!-- 查询管理列表 -->
+        <select id="getSystemApis" parameterType="Map" resultType="Map">
+            SELECT <include refid="systemApi_select_cond" />
+            FROM tb_system_api a
+            <where>
+                <include refid="systemApi_where_if" />
+                AND a.status in (1, 2)
+            </where>
+            ORDER BY a.status ASC, a.create_time DESC
+        </select>
+
+        <!-- 根据id查询网关api接口表 -->
+        <select id="getSystemApiById" resultType="Map">
+            SELECT <include refid="systemApi_select_cond_one"/>
+            FROM tb_system_api a
+            WHERE a.status in (1, 2) and a.id = #{id}
+        </select>
+
+
+        <!-- 查询的选择项, 增删字段时调整 -->
+        <sql id="systemApi_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.api_code apiCode
+                                            
+                                    , a.api_name apiName
+                                            
+                                    , a.api_category apiCategory
+                                            
+                                    , a.api_desc apiDesc
+                                            
+                                    , a.request_method requestMethod
+                                            
+                                    , a.content_type contentType
+                                            
+                                    , a.class_name className
+                                            
+                                    , a.method_name methodName
+                                            
+                                    , a.path path
+                                            
+                                    , a.service_id serviceId
+                                            
+                                    , a.persist persist
+                                            
+                                    , a.auth auth
+                                            
+                                    , a.open open
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+        <!-- (单个)查询的选择项, 增删字段时调整 -->
+        <sql id="systemApi_select_cond_one">
+            a.id id
+                                                                            , a.api_code apiCode
+                                                                , a.api_name apiName
+                                                                , a.api_category apiCategory
+                                                                , a.api_desc apiDesc
+                                                                , a.request_method requestMethod
+                                                                , a.content_type contentType
+                                                                , a.class_name className
+                                                                , a.method_name methodName
+                                                                , a.path path
+                                                                , a.service_id serviceId
+                                                                , a.persist persist
+                                                                , a.auth auth
+                                                                , a.open open
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+        <!-- 查询条件 -->
+        <sql id="systemApi_where_if">
+                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                    AND a.id = #{id}
+                </if>
+                                                            <if test="apiCode != null and apiCode != '' and apiCode != 'null' and apiCode != 'undefined'">
+                    AND a.api_code = #{apiCode}
+                </if>
+                                                            <if test="apiName != null and apiName != '' and apiName != 'null' and apiName != 'undefined'">
+                    AND a.api_name = #{apiName}
+                </if>
+                                                            <if test="apiCategory != null and apiCategory != '' and apiCategory != 'null' and apiCategory != 'undefined'">
+                    AND a.api_category = #{apiCategory}
+                </if>
+                                                            <if test="apiDesc != null and apiDesc != '' and apiDesc != 'null' and apiDesc != 'undefined'">
+                    AND a.api_desc = #{apiDesc}
+                </if>
+                                                            <if test="requestMethod != null and requestMethod != '' and requestMethod != 'null' and requestMethod != 'undefined'">
+                    AND a.request_method = #{requestMethod}
+                </if>
+                                                            <if test="contentType != null and contentType != '' and contentType != 'null' and contentType != 'undefined'">
+                    AND a.content_type = #{contentType}
+                </if>
+                                                            <if test="className != null and className != '' and className != 'null' and className != 'undefined'">
+                    AND a.class_name = #{className}
+                </if>
+                                                            <if test="methodName != null and methodName != '' and methodName != 'null' and methodName != 'undefined'">
+                    AND a.method_name = #{methodName}
+                </if>
+                                                            <if test="path != null and path != '' and path != 'null' and path != 'undefined'">
+                    AND a.path = #{path}
+                </if>
+                                                            <if test="serviceId != null and serviceId != '' and serviceId != 'null' and serviceId != 'undefined'">
+                    AND a.service_id = #{serviceId}
+                </if>
+                                                            <if test="persist != null">
+                    AND a.persist = #{persist}
+                </if>
+                                                            <if test="auth != null">
+                    AND a.auth = #{auth}
+                </if>
+                                                            <if test="open != null">
+                    AND a.open = #{open}
+                </if>
+                                                            <if test="status != null">
+                    AND a.status = #{status}
+                </if>
+                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+                    AND a.create_user_id = #{createUserId}
+                </if>
+                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+                    AND a.create_time = #{createTime}
+                </if>
+                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+                    AND a.update_user_id = #{updateUserId}
+                </if>
+                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+                    AND a.update_time = #{updateTime}
+                </if>
+                                    </sql>
+
+
+        <!-- (批量)新增键, 增删字段时调整 -->
+        <sql id="systemApi_add_key">
+            id
+                                                        
+                    , api_code
+                                            
+                    , api_name
+                                            
+                    , api_category
+                                            
+                    , api_desc
+                                            
+                    , request_method
+                                            
+                    , content_type
+                                            
+                    , class_name
+                                            
+                    , method_name
+                                            
+                    , path
+                                            
+                    , service_id
+                                            
+                    , persist
+                                            
+                    , auth
+                                            
+                    , open
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+        <!-- (批量)新增值, 增删字段时调整 -->
+        <sql id="systemApi_add_val">
+            #{id}
+                                                                            , #{apiCode}
+                                                                , #{apiName}
+                                                                , #{apiCategory}
+                                                                , #{apiDesc}
+                                                                , #{requestMethod}
+                                                                , #{contentType}
+                                                                , #{className}
+                                                                , #{methodName}
+                                                                , #{path}
+                                                                , #{serviceId}
+                                                                , #{persist}
+                                                                , #{auth}
+                                                                , #{open}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+        <!-- (批量修改的条件,增减字段时调整) -->
+        <sql id="systemApi_set_if">
+                                                                                                                                <if test="apiCode != null and apiCode != '' and apiCode != 'null' and apiCode != 'undefined'">
+                                api_code = #{apiCode},
+                            </if>
+                                                                                                                                                                <if test="apiName != null and apiName != '' and apiName != 'null' and apiName != 'undefined'">
+                                api_name = #{apiName},
+                            </if>
+                                                                                                                                                                <if test="apiCategory != null and apiCategory != '' and apiCategory != 'null' and apiCategory != 'undefined'">
+                                api_category = #{apiCategory},
+                            </if>
+                                                                                                                                                                <if test="apiDesc != null and apiDesc != '' and apiDesc != 'null' and apiDesc != 'undefined'">
+                                api_desc = #{apiDesc},
+                            </if>
+                                                                                                                                                                <if test="requestMethod != null and requestMethod != '' and requestMethod != 'null' and requestMethod != 'undefined'">
+                                request_method = #{requestMethod},
+                            </if>
+                                                                                                                                                                <if test="contentType != null and contentType != '' and contentType != 'null' and contentType != 'undefined'">
+                                content_type = #{contentType},
+                            </if>
+                                                                                                                                                                <if test="className != null and className != '' and className != 'null' and className != 'undefined'">
+                                class_name = #{className},
+                            </if>
+                                                                                                                                                                <if test="methodName != null and methodName != '' and methodName != 'null' and methodName != 'undefined'">
+                                method_name = #{methodName},
+                            </if>
+                                                                                                                                                                <if test="path != null and path != '' and path != 'null' and path != 'undefined'">
+                                path = #{path},
+                            </if>
+                                                                                                                                                                <if test="serviceId != null and serviceId != '' and serviceId != 'null' and serviceId != 'undefined'">
+                                service_id = #{serviceId},
+                            </if>
+                                                                                                                                                                <if test="persist != null">
+                                persist = #{persist},
+                            </if>
+                                                                                                                                                                <if test="auth != null">
+                                auth = #{auth},
+                            </if>
+                                                                                                                                                                <if test="open != null">
+                                open = #{open},
+                            </if>
+                                                                                                                                                                <if test="status != null">
+                                status = #{status},
+                            </if>
+                                                                                                                                                                                                                                                                                                                                                </sql>
+</mapper>

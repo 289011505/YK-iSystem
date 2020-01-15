@@ -150,7 +150,7 @@
                     title: null
                 },
                 formData: {
-                    id: ''
+                    id: '',
                     #foreach($column in $columns)
                         #if($column.attrname != 'id' && $column.attrname != 'createUserId' && $column.attrname != 'updateUserId'
                             && $column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'status')
@@ -194,12 +194,12 @@
             resetTemp() {
                 this.formData = {
                     id: '',
-                    routeName: '',
-                    path: '',
-                    stripPrefix: 1,
-                    persist: 0,
-                    retryable: 0,
-                    routeDesc: ''
+                    #foreach($column in $columns)
+                        #if($column.attrname != 'id' && $column.attrname != 'createUserId' && $column.attrname != 'updateUserId'
+                        && $column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'status')
+                            $column.attrname null ,
+                        #end
+                    #end
                 }
             },
             handleCreate() {

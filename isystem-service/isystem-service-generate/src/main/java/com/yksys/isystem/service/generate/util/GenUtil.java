@@ -39,6 +39,7 @@ public class GenUtil {
         templates.add("codeTemplate/ServiceImpl.java.vm");
         templates.add("codeTemplate/Api.js.vm");
         templates.add("codeTemplate/List.vue.vm");
+        templates.add("codeTemplate/EntityVo.java.vm");
 //        templates.add("codeTemplate/Controller.java.vm");
         return templates;
     }
@@ -177,6 +178,9 @@ public class GenUtil {
         if(template.contains("Entity.java.vm")){
             return packagePath + "pojo" + File.separator + className + ".java";
         }
+        if(template.contains("EntityVo.java.vm")){
+            return packagePath + "pojo" + File.separator + className + "Vo.java";
+        }
         if(template.contains("Controller.java.vm")){
             return packagePath + "controller" + File.separator + className + "Controller.java";
         }
@@ -199,6 +203,7 @@ public class GenUtil {
         if(template.contains("Api.js.vm")){
             return "main" + File.separator + "vue" + File.separator + className.toLowerCase() + ".js";
         }
+
         return null;
     }
 }
