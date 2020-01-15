@@ -37,6 +37,8 @@ public class GenUtil {
         templates.add("codeTemplate/Mapper.xml.vm");
         templates.add("codeTemplate/Service.java.vm");
         templates.add("codeTemplate/ServiceImpl.java.vm");
+        templates.add("codeTemplate/Api.js.vm");
+        templates.add("codeTemplate/List.vue.vm");
 //        templates.add("codeTemplate/Controller.java.vm");
         return templates;
     }
@@ -191,20 +193,11 @@ public class GenUtil {
             return "main" + File.separator + "resources" + File.separator + "mapper" + File.separator + className + "Mapper.xml";
         }
 
-        if(template.contains("list.html.vm")){
-            return "main" + File.separator + "resources" + File.separator + "templates" + File.separator
-                    + "system" + File.separator + className.toLowerCase() + ".html";
+        if(template.contains("List.vue.vm")){
+            return "main" + File.separator + "vue" + File.separator + className.toLowerCase() + ".vue";
         }
-        if(template.contains("list.js.vm")){
-            return "main" + File.separator + "resources" + File.separator + "static" + File.separator + "public" + File.separator
-                    + "js" + File.separator + "generator" + File.separator + className.toLowerCase() + ".js";
-        }
-        if(template.contains("menu.sql.vm")){
-            return "tb_" + className.toLowerCase() + ".sql";
-        }
-        if(template.contains("add.html.vm")){
-            return "main" + File.separator + "resources" + File.separator + "templates" + File.separator
-                    + "system" + File.separator + "add" + className + ".html";
+        if(template.contains("Api.js.vm")){
+            return "main" + File.separator + "vue" + File.separator + className.toLowerCase() + ".js";
         }
         return null;
     }

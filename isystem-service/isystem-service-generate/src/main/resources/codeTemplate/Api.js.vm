@@ -1,0 +1,91 @@
+/**
+ * Created by YuKai Fan on 2020/1/13
+ */
+import request from '@/utils/request'
+
+/**
+ * 新增${comments}
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function add${className}(data) {
+  return request({
+    url: '/system/api/${classname}/add${className}',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 根据id查询${comments}
+ * @param data
+ * @returns {*}
+ */
+export function get${className}ById(id) {
+  return request({
+    url: '/system/api/${classname}/get${className}ById',
+    method: 'get',
+    params: { id }
+  })
+}
+
+/**
+ * 更新${comments}
+ * @param data
+ */
+export function edit${className}(data) {
+  return request({
+    url: '/system/api/${classname}/edit${className}',
+    method: 'put',
+    data
+  })
+}
+
+/**
+ * 根据id删除${comments}
+ * @param data
+ */
+export function del${className}(id) {
+  return request({
+    url: '/system/api/${classname}/del${className}',
+    method: 'delete',
+    params: { id }
+  })
+}
+
+/**
+ * 根据ids批量删除${comments}
+ * @param data
+ */
+export function del${className}ByIds(ids) {
+  return request({
+    url: '/system/api/${classname}/del${className}/' + ids,
+    method: 'delete'
+  })
+}
+
+/**
+ * 获取所有的${comments}(不分页)
+ * @param data
+ * @returns {*}
+ */
+export function get${className}sNoPage(data) {
+  return request({
+    url: '/system/api/${classname}/get${className}s/noPage',
+    method: 'get',
+    params: data
+  })
+}
+
+/**
+ * 获取所有${comments}
+ * @param data
+ * @returns {*}
+ */
+export function get${className}s(data) {
+  return request({
+    url: '/system/api/${classname}/get${className}s',
+    method: 'get',
+    params: data
+  })
+}
