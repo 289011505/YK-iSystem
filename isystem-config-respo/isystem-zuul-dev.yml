@@ -52,7 +52,8 @@ zuul:
     add-response-headers: false
   semaphore:
     max-semaphores: 1000
-  sensitive-headers: ''
+  sensitive-headers: Access-Control-Allow-Origin
+  ignored-headers: Access-Control-Allow-Origin,H-APP-Id,Token,APPToken
 
 #api:
 #  access-control: true
