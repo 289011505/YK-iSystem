@@ -152,9 +152,9 @@
                 formData: {
                     id: ''
                     #foreach($column in $columns)
-                        #if($column.attrname != 'id' && $column.attrname != 'createUserId'&& $column.attrname != 'updateUserId'
-                        && $column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'status')
-                            $column.attrname: null ,
+                        #if($column.attrname != 'id' && $column.attrname != 'createUserId' && $column.attrname != 'updateUserId'
+                            && $column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'status')
+                            $column.attrname null ,
                         #end
                     #end
                 },
