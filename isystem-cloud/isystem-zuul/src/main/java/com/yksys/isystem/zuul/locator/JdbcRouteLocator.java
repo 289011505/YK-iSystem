@@ -122,6 +122,6 @@ public class JdbcRouteLocator extends SimpleRouteLocator implements ApplicationL
 
     @Override
     public void onApplicationEvent(RemoteRefreshRouteEvent remoteRefreshRouteEvent) {
-
+        doRefresh();
     }
 }

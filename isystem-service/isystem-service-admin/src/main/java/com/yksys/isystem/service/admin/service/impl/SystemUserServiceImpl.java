@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.admin.service.impl;
 
+
 import com.github.pagehelper.PageHelper;
 import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.pojo.SystemUser;
@@ -11,12 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- * @program: YK-iSystem
- * @description:
- * @author: YuKai Fan
- * @create: 2019-12-03 20:05
- **/
+* @program: YK-iSystem
+* @description:
+* @author: YuKai Fan
+* @create: 2019-12-03 20:05
+**/
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
     @Autowired

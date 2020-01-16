@@ -1,21 +1,22 @@
 package com.yksys.isystem.common.vo;
 
-import com.google.common.base.Converter;
-import com.yksys.isystem.common.pojo.SystemUser;
-import lombok.Data;
-import org.springframework.beans.BeanUtils;
-
 import java.io.Serializable;
 
+import lombok.Data;
+import com.google.common.base.Converter;
+import com.yksys.isystem.common.pojo.SystemUser;
+import org.springframework.beans.BeanUtils;
+
+
 /**
- * @program: YK-iSystem
- * @description:
- * @author: YuKai Fan
- * @create: 2019-12-04 09:33
- **/
+ * 系统用户表 vo类
+ *
+ * @author YuKai Fan
+ * @create 2020-01-16 14:11:47
+ */
 @Data
 public class SystemUserVo implements Serializable {
-    private static final long serialVersionUID = -8816454437885030486L;
+    private static final long serialVersionUID = 1L;
 
     //用户标识
     private String id;
@@ -25,10 +26,14 @@ public class SystemUserVo implements Serializable {
     private String userName;
     //密码
     private String password;
+    //盐
+    private String salt;
     //用户昵称
     private String nickName;
     //头像
     private String userIcon;
+    //最后登录时间
+    private String lastLoginTime;
     //年龄
     private Integer age;
     //性别 1男  0女
@@ -50,11 +55,11 @@ public class SystemUserVo implements Serializable {
     //地址
     private String address;
     //身份证号
-    private String idCard;
+    private String idcard;
     //备注
     private String remark;
-    //盐
-    private String salt;
+    //状态:0  已禁用 1 正在使用
+    private Integer status;
 
     public SystemUser convert() {
         SystemUserVoConvert systemUserVoConvert = new SystemUserVoConvert();
@@ -76,4 +81,5 @@ public class SystemUserVo implements Serializable {
             return null;
         }
     }
+
 }

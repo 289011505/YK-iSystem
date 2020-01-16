@@ -2,6 +2,7 @@ package com.yksys.isystem.service.system.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.security.http.YkRestTemplate;
 import com.yksys.isystem.common.pojo.GatewayRoute;
 import com.yksys.isystem.common.vo.GatewayRouteVo;
 import com.yksys.isystem.service.system.service.GatewayRouteService;
@@ -26,6 +27,8 @@ import java.util.Map;
 public class GatewayRouteController {
     @Autowired
     private GatewayRouteService gatewayRouteService;
+    @Autowired
+    private YkRestTemplate ykRestTemplate;
 
     /**
      * 新增网关路由表
@@ -34,7 +37,10 @@ public class GatewayRouteController {
     @PostMapping("/addGatewayRoute")
     public Result addGatewayRoute(@RequestBody GatewayRouteVo gatewayRouteVo) {
         GatewayRoute gatewayRoute = gatewayRouteVo.convert();
-        return new Result(HttpStatus.OK.value(), "新增成功", gatewayRouteService.addGatewayRoute(gatewayRoute));
+        GatewayRoute result = gatewayRouteService.addGatewayRoute(gatewayRoute);
+        //刷新网关
+        ykRestTemplate.refreshGateway();
+        return new Result(HttpStatus.OK.value(), "新增成功", result);
     }
 
     /**
@@ -56,6 +62,8 @@ public class GatewayRouteController {
     public Result editGatewayRoute(@RequestBody GatewayRouteVo gatewayRouteVo) {
         GatewayRoute gatewayRoute = gatewayRouteVo.convert();
         gatewayRouteService.editGatewayRoute(gatewayRoute);
+        //刷新网关
+        ykRestTemplate.refreshGateway();
         return new Result(HttpStatus.OK.value(), "更新成功");
     }
 
@@ -67,6 +75,8 @@ public class GatewayRouteController {
     @DeleteMapping("/delGatewayRoute")
     public Result delGatewayRouteById(@RequestParam String id) {
         gatewayRouteService.delGatewayRouteById(id);
+        //刷新网关
+        ykRestTemplate.refreshGateway();
         return new Result(HttpStatus.OK.value(), "删除成功");
     }
 
@@ -78,6 +88,8 @@ public class GatewayRouteController {
     @DeleteMapping("/delGatewayRoute/{ids}")
     public Result delGatewayRouteByIds(@PathVariable("ids") String[] ids) {
         gatewayRouteService.delGatewayRouteByIs(Arrays.asList(ids));
+        //刷新网关
+        ykRestTemplate.refreshGateway();
         return new Result(HttpStatus.OK.value(), "批量删除成功");
     }
 

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.admin.mapper.SystemAuthorityMapper">
+    <!-- 新增 -->
+    <insert id="addSystemAuthority">
+        INSERT INTO tb_system_authority(
+        <include refid="systemAuthority_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="systemAuthority_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="addSystemAuthorities">
+        INSERT INTO tb_system_authority(
+        <include refid="systemAuthority_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="systemAuthority_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="editSystemAuthorityById">
+        UPDATE tb_system_authority
+        <set>
+            <include refid="systemAuthority_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="editSystemAuthorityByIds">
+        UPDATE tb_system_authority
+        <set>
+            <include refid="systemAuthority_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 删除 -->
+    <update id="delSystemAuthorityById">
+            update tb_system_authority SET status = 0 WHERE id = #{id}
+        </update>
+
+    <!-- 批量删除 -->
+    <update id="delSystemAuthorityByIds">
+        UPDATE tb_system_authority SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 真删除 -->
+    <delete id="delSystemAuthorityRealById">
+            DELETE FROM tb_system_authority WHERE id = #{id}
+        </delete>
+
+    <!-- 真批量删除 -->
+    <delete id="delSystemAuthorityRealByIds">
+        DELETE FROM tb_system_authority WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 清空 -->
+    <delete id="delSystemAuthorityReals">
+            DELETE FROM tb_system_authority
+        </delete>
+
+    <!-- 查询管理列表 -->
+    <select id="getSystemAuthorities" parameterType="Map" resultType="Map">
+        SELECT
+        <include refid="systemAuthority_select_cond"/>
+        FROM tb_system_authority a
+        <where>
+            <include refid="systemAuthority_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
+
+    <!-- 根据id查询系统权限表 -->
+    <select id="getSystemAuthorityById" resultType="Map">
+        SELECT
+        <include refid="systemAuthority_select_cond_one"/>
+        FROM tb_system_authority a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
+
+
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="systemAuthority_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.authority authority
+                                            
+                                    , a.api_id apiId
+                                            
+                                    , a.menu_id menuId
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="systemAuthority_select_cond_one">
+            a.id id
+                                                                            , a.authority authority
+                                                                , a.api_id apiId
+                                                                , a.menu_id menuId
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="systemAuthority_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="authority != null and authority != '' and authority != 'null' and authority != 'undefined'">
+            AND a.authority = #{authority}
+        </if>
+        <if test="apiId != null and apiId != '' and apiId != 'null' and apiId != 'undefined'">
+            AND a.api_id = #{apiId}
+        </if>
+        <if test="menuId != null and menuId != '' and menuId != 'null' and menuId != 'undefined'">
+            AND a.menu_id = #{menuId}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="systemAuthority_add_key">
+            id
+                                                        
+                    , authority
+                                            
+                    , api_id
+                                            
+                    , menu_id
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="systemAuthority_add_val">
+            #{id}
+                                                                            , #{authority}
+                                                                , #{apiId}
+                                                                , #{menuId}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="systemAuthority_set_if">
+        <if test="authority != null and authority != '' and authority != 'null' and authority != 'undefined'">
+            authority = #{authority},
+        </if>
+        <if test="apiId != null and apiId != '' and apiId != 'null' and apiId != 'undefined'">
+            api_id = #{apiId},
+        </if>
+        <if test="menuId != null and menuId != '' and menuId != 'null' and menuId != 'undefined'">
+            menu_id = #{menuId},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+    </sql>
+</mapper>

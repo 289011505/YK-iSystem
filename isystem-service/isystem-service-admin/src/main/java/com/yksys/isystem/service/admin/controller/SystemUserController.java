@@ -9,16 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
+
 
 /**
  * @program: YK-iSystem
- * @description:
+ * @description: 系统用户表
  * @author: YuKai Fan
- * @create: 2019-12-04 09:06
- **/
+ * @create: 2020-01-16 14:11:47
+ *
+ */
 @RestController
 @RequestMapping("/api/systemUser")
 public class SystemUserController {
@@ -26,7 +28,7 @@ public class SystemUserController {
     private SystemUserService systemUserService;
 
     /**
-     * 新增用户
+     * 新增系统用户表
      * @return
      */
     @PostMapping("/addSystemUser")
@@ -36,7 +38,7 @@ public class SystemUserController {
     }
 
     /**
-     * 根据id查询用户
+     * 根据id查询系统用户表
      * @param id
      * @return
      */
@@ -46,7 +48,7 @@ public class SystemUserController {
     }
 
     /**
-     * 更新用户
+     * 更新系统用户表
      *
      * @return
      */
@@ -58,7 +60,7 @@ public class SystemUserController {
     }
 
     /**
-     * 根据id删除用户
+     * 根据id删除系统用户表
      * @param id
      * @return
      */
@@ -69,7 +71,7 @@ public class SystemUserController {
     }
 
     /**
-     * 根据id删除用户
+     * 根据ids批量删除系统用户表
      * @param ids
      * @return
      */
@@ -80,7 +82,7 @@ public class SystemUserController {
     }
 
     /**
-     * 获取所有的用户(不分页)
+     * 获取所有的系统用户表(不分页)
      * @param map 参数
      * @return
      */
@@ -90,7 +92,7 @@ public class SystemUserController {
     }
 
     /**
-     * 获取所有用户
+     * 获取所有系统用户表
      * @param start 开始记录
      * @param pageSize 分页大小
      * @param map 参数

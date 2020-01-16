@@ -124,7 +124,7 @@ public class GenUtil {
 
             try {
                 //添加到zip
-                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"))));
+                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), tableEntity.getClassname(), config.getString("package"))));
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
@@ -170,7 +170,7 @@ public class GenUtil {
      * @param packageName
      * @return
      */
-    public static String getFileName(String template, String className, String packageName){
+    public static String getFileName(String template, String className, String classname, String packageName){
         String packagePath = "main" + File.separator + "java" + File.separator;
         if(StringUtils.isNotBlank(packageName)){
             packagePath += packageName.replace(".", File.separator) + File.separator;
@@ -198,10 +198,10 @@ public class GenUtil {
         }
 
         if(template.contains("List.vue.vm")){
-            return "main" + File.separator + "vue" + File.separator + className.toLowerCase() + ".vue";
+            return "main" + File.separator + "vue" + File.separator + classname + ".vue";
         }
         if(template.contains("Api.js.vm")){
-            return "main" + File.separator + "vue" + File.separator + className.toLowerCase() + ".js";
+            return "main" + File.separator + "vue" + File.separator + classname + ".js";
         }
 
         return null;
