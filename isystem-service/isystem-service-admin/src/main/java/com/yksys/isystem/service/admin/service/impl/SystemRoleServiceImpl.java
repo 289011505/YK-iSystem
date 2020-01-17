@@ -3,11 +3,13 @@ package com.yksys.isystem.service.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.yksys.isystem.common.core.utils.AppUtil;
+import com.yksys.isystem.common.pojo.AuthorityRole;
 import com.yksys.isystem.common.pojo.SystemRole;
 import com.yksys.isystem.service.admin.mapper.SystemRoleMapper;
 import com.yksys.isystem.service.admin.service.SystemRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -71,6 +73,21 @@ public class SystemRoleServiceImpl implements SystemRoleService {
     @Override
     public void delSystemRoleRealByIds(List<String> ids) {
         systemRoleMapper.delSystemRoleRealByIds(ids);
+    }
+
+    @Override
+    public void assignRoleAuth(String roleId, List<String> authorityIds) {
+        //先删除原有的权限, 再重新添加
+        systemRoleMapper.delRoleAuth(roleId);
+        if (!CollectionUtils.isEmpty(authorityIds)) {
+            authorityIds.forEach(authorityId -> {
+                AuthorityRole authorityRole = new AuthorityRole();
+                authorityRole.setId(AppUtil.randomId());
+                authorityRole.setAuthorityId(authorityId);
+                authorityRole.setRoleId(roleId);
+                systemRoleMapper.assignRoleAuth(authorityRole);
+            });
+        }
     }
 
 }

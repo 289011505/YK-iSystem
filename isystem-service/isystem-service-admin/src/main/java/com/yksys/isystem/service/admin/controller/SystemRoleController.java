@@ -2,6 +2,7 @@ package com.yksys.isystem.service.admin.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.pojo.AuthorityRole;
 import com.yksys.isystem.common.pojo.SystemRole;
 import com.yksys.isystem.common.vo.SystemRoleVo;
 import com.yksys.isystem.service.admin.service.SystemRoleService;
@@ -104,6 +105,17 @@ public class SystemRoleController {
                                  @RequestParam Map<String, Object> map) {
         List<Map<String, Object>> list = systemRoleService.getSystemRoles(start, pageSize, map);
         return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
+    }
+
+    /**
+     * 分配角色
+     * @param systemRoleVo
+     * @return
+     */
+    @PostMapping("/assignRoleAuth")
+    public Result assignRoleAuth(@RequestBody SystemRoleVo systemRoleVo) {
+        systemRoleService.assignRoleAuth(systemRoleVo.getId(), systemRoleVo.getAuthorityIds());
+        return new Result(HttpStatus.OK.value(), "分配成功");
     }
 
 }

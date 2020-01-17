@@ -1,4 +1,5 @@
 package com.yksys.isystem.service.admin.service;
+import com.yksys.isystem.common.pojo.AuthorityRole;
 import com.yksys.isystem.common.pojo.SystemRole;
 
 import java.util.List;
@@ -70,4 +71,11 @@ public interface SystemRoleService {
      * @param ids
      */
     void delSystemRoleRealByIds(List<String> ids);
+
+    /**
+     * 分配角色
+     * @param id
+     * @param authorityIds
+     */
+    void assignRoleAuth(String id, List<String> authorityIds);
 }

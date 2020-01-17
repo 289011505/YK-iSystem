@@ -3,6 +3,7 @@ package com.yksys.isystem.service.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.yksys.isystem.common.core.utils.AppUtil;
+import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.pojo.SystemAuthority;
 import com.yksys.isystem.service.admin.mapper.SystemAuthorityMapper;
 import com.yksys.isystem.service.admin.service.SystemAuthorityService;
@@ -45,7 +46,11 @@ public class SystemAuthorityServiceImpl implements SystemAuthorityService {
 
     @Override
     public List<Map<String, Object>> getSystemAuthorities(Map<String, Object> map) {
-        return systemAuthorityMapper.getSystemAuthorities(map);
+        List<Map<String, Object>> systemAuthorities = systemAuthorityMapper.getSystemAuthorities(map);
+        if (map.containsKey("roleId")) {
+
+        }
+        return systemAuthorities;
     }
 
     @Override

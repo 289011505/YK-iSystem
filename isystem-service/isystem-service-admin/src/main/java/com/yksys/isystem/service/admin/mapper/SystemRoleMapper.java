@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.admin.mapper;
 
+import com.yksys.isystem.common.pojo.AuthorityRole;
 import com.yksys.isystem.common.pojo.SystemRole;
 import org.apache.ibatis.annotations.Param;
 
@@ -92,4 +93,16 @@ public interface SystemRoleMapper {
      * @return 结果集合
      */
     List<Map<String, Object>> getSystemRoles(Map<String, Object> map);
+
+    /**
+     * 分配角色
+     * @param authorityRole
+     */
+    void assignRoleAuth(AuthorityRole authorityRole);
+
+    /**
+     * 删除权限
+     * @param roleId
+     */
+    void delRoleAuth(String roleId);
 }

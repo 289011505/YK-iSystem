@@ -1,6 +1,7 @@
 package com.yksys.isystem.common.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 import com.google.common.base.Converter;
@@ -28,6 +29,8 @@ public class SystemRoleVo implements Serializable {
     private Integer status;
     //角色编码
     private String roleCode;
+    //权限id集合
+    private List<String> authorityIds;
 
     public SystemRole convert() {
         SystemRoleVoConvert systemRoleVoConvert = new SystemRoleVoConvert();
