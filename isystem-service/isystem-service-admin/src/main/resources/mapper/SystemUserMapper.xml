@@ -127,7 +127,7 @@
                                             
                                     , a.address address
                                             
-                                    , a.idcard idcard
+                                    , a.idcard idCard
                                             
                                     , a.remark remark
                                             
@@ -162,7 +162,7 @@
                                                                 , a.city city
                                                                 , a.dist dist
                                                                 , a.address address
-                                                                , a.idcard idcard
+                                                                , a.idcard idCard
                                                                 , a.remark remark
                                                                 , a.status status
                                                                 , a.create_user_id createUserId
@@ -227,8 +227,8 @@
                                                             <if test="address != null and address != '' and address != 'null' and address != 'undefined'">
                     AND a.address = #{address}
                 </if>
-                                                            <if test="idcard != null and idcard != '' and idcard != 'null' and idcard != 'undefined'">
-                    AND a.idcard = #{idcard}
+                                                            <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
+                    AND a.idcard = #{idCard}
                 </if>
                                                             <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
                     AND a.remark = #{remark}
@@ -316,7 +316,7 @@
                                                                 , #{city}
                                                                 , #{dist}
                                                                 , #{address}
-                                                                , #{idcard}
+                                                                , #{idCard}
                                                                 , #{remark}
                                                                 , #{status}
                                                                                                                                                     </sql>
@@ -374,8 +374,8 @@
                                                                                                                                                                 <if test="address != null and address != '' and address != 'null' and address != 'undefined'">
                                 address = #{address},
                             </if>
-                                                                                                                                                                <if test="idcard != null and idcard != '' and idcard != 'null' and idcard != 'undefined'">
-                                idcard = #{idcard},
+                                                                                                                                                                <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
+                                idcard = #{idCard},
                             </if>
                                                                                                                                                                 <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
                                 remark = #{remark},

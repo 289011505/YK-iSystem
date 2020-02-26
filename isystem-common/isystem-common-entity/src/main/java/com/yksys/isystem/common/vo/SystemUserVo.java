@@ -55,7 +55,7 @@ public class SystemUserVo implements Serializable {
     //地址
     private String address;
     //身份证号
-    private String idcard;
+    private String idCard;
     //备注
     private String remark;
     //状态:0  已禁用 1 正在使用
