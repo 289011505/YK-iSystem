@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>isystem-web</artifactId>
+    <packaging>pom</packaging>
     <modules>
         <module>isystem-web-admin</module>
     </modules>
