@@ -20,7 +20,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Date 2019/11/10 11:39
  * @Version 1.0
  **/
-@SpringBootApplication( exclude = DataSourceAutoConfiguration.class)
+@SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
 @EnableDiscoveryClient
