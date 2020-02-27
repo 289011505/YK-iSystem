@@ -1,6 +1,6 @@
 spring:
   application:
-    name: isystem-service-admin
+    name: isystem-service-fileupload
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/yk-isystem20191202?characterEncoding=utf-8
@@ -12,6 +12,22 @@ spring:
       initial-size: 5
       min-idle: 5
       max-wait: 6000
+  servlet:
+    multipart:
+      max-file-size: 1024MB # 最大支持文件大小
+      max-request-size: 1024MB # 最大支持请求大小
 
 server:
   port: 8505
+
+# 分布式文件系统DFS配置
+fdfs:
+  so-timeout: 1501
+  connect-timeout: 601
+  thumb-image:
+    width: 150
+    height: 150
+  reqHost: 192.168.100.110
+  reqPort: 8888
+  trackerList:
+    - 192.168.100.110:22122
