@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: isystem-service-redis
-
-server:
-  port: 8502
