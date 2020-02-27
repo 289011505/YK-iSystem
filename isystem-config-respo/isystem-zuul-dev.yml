@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.100.110:3306/yk-isystem20191202?characterEncoding=utf-8
     username: root
-    password: root
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       max-active: 20
