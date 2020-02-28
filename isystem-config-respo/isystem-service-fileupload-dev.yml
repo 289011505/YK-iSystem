@@ -20,14 +20,14 @@
 server:
   port: 8505
 
-# 分布式文件系统DFS配置
-fdfs:
-  so-timeout: 1501
-  connect-timeout: 601
-  thumb-image:
-    width: 150
-    height: 150
-  reqHost: 192.168.100.110
-  reqPort: 8888
-  trackerList:
-    - 192.168.100.110:22122
+## 分布式文件系统DFS配置
+#fdfs:
+#  so-timeout: 1501
+#  connect-timeout: 601
+#  thumb-image:
+#    width: 150
+#    height: 150
+#  reqHost: 192.168.100.110
+#  reqPort: 8888
+#  trackerList:
+#    - 192.168.100.110:22122
