@@ -1,19 +1,26 @@
 package com.yksys.isystem.service.fileupload.controller;
 
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.service.fileupload.configuration.FastDFSClient;
+import com.yksys.isystem.service.fileupload.service.AttachmentService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @program: yk-isystem
@@ -26,17 +33,36 @@ import java.net.URLEncoder;
 public class FileUploadController {
     @Autowired
     private FastDFSClient fastDFSClient;
+    @Autowired
+    private AttachmentService attachmentService;
 
     /**
-     * 文件上传
-     * @param file
+     * 图片上传
+     * @param request
      * @return
      * @throws IOException
      */
     @PostMapping("/upload")
-    public Result upload(MultipartFile file) throws IOException {
-        String url = fastDFSClient.uploadFile(file);
-        return new Result(HttpStatus.OK.value(), "上传成功", url);
+    public Result upload(HttpServletRequest request) throws IOException {
+
+//        if (request instanceof MultipartHttpServletRequest) {
+//            Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
+//            if (CollectionUtils.isEmpty(fileMap) || CollectionUtils.isEmpty(fileMap.keySet())) {
+//                return null;
+//            }
+//            for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
+//                if (StringUtil.isBlank(entry.getKey())) {
+//                    continue;
+//                }
+//
+//                if (!entry.getValue().isEmpty()) {
+//                    String url = fastDFSClient.uploadFile(entry.getValue());
+//                    return new Result(HttpStatus.OK.value(), "上传成功", url);
+//                }
+//            }
+//        }
+//        String url = fastDFSClient.uploadFile(file);
+        return new Result(HttpStatus.OK.value(), "上传成功");
     }
 
     /**

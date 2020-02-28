@@ -36,7 +36,7 @@ public interface ${className}Mapper {
 
     /**
      * 根据id修改${comments}
-     * @param user ${comments}实体
+     * @param ${classname} ${comments}实体
      * @return
      */
     int edit${className}ById(${className} ${classname});
