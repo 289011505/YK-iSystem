@@ -23,7 +23,5 @@ fdfs:
   thumb-image:
     width: 150
     height: 150
-  reqHost: 192.168.100.110
-  reqPort: 8888
-  trackerList:
-    - 192.168.100.110:22122
+  web-server-url: 192.168.100.110:8888/
+  trackerList: 192.168.100.110:22122
