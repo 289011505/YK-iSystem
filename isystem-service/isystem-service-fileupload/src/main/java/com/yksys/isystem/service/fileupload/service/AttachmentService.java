@@ -1,6 +1,8 @@
 package com.yksys.isystem.service.fileupload.service;
 import com.yksys.isystem.common.pojo.Attachment;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -70,4 +72,11 @@ public interface AttachmentService {
      * @param ids
      */
     void delAttachmentRealByIds(List<String> ids);
+
+    /**
+     * 上传文件
+     * @param request
+     * @return
+     */
+    Attachment addAttachment(HttpServletRequest request) throws IOException;
 }

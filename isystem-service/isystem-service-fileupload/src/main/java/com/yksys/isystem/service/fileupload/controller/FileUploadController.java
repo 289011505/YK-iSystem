@@ -2,6 +2,7 @@ package com.yksys.isystem.service.fileupload.controller;
 
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.utils.StringUtil;
+import com.yksys.isystem.common.pojo.Attachment;
 import com.yksys.isystem.service.fileupload.configuration.FastDFSClient;
 import com.yksys.isystem.service.fileupload.service.AttachmentService;
 import org.apache.commons.io.IOUtils;
@@ -44,25 +45,8 @@ public class FileUploadController {
      */
     @PostMapping("/upload")
     public Result upload(HttpServletRequest request) throws IOException {
-
-//        if (request instanceof MultipartHttpServletRequest) {
-//            Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
-//            if (CollectionUtils.isEmpty(fileMap) || CollectionUtils.isEmpty(fileMap.keySet())) {
-//                return null;
-//            }
-//            for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
-//                if (StringUtil.isBlank(entry.getKey())) {
-//                    continue;
-//                }
-//
-//                if (!entry.getValue().isEmpty()) {
-//                    String url = fastDFSClient.uploadFile(entry.getValue());
-//                    return new Result(HttpStatus.OK.value(), "上传成功", url);
-//                }
-//            }
-//        }
-//        String url = fastDFSClient.uploadFile(file);
-        return new Result(HttpStatus.OK.value(), "上传成功");
+        Attachment attachment = attachmentService.addAttachment(request);
+        return new Result(HttpStatus.OK.value(), "上传成功", attachment);
     }
 
     /**

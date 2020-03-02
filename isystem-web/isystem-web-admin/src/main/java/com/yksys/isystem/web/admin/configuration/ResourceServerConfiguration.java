@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.admin.configuration;
+package com.yksys.isystem.web.admin.configuration;
 
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.security.YkAccessDeniedHandler;
@@ -32,10 +32,6 @@ import javax.sql.DataSource;
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
     @Autowired
     private RedisConnectionFactory redisConnectionFactory;
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Bean
     public TokenStore tokenStore() {
@@ -47,19 +43,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public JdbcClientDetailsService clientDetailsService() {
-        JdbcClientDetailsService jdbcClientDetailsService = new JdbcClientDetailsService(dataSource);
-        jdbcClientDetailsService.setPasswordEncoder(passwordEncoder);
-        return jdbcClientDetailsService;
-    }
-
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         //构建redis获取token服务
         resources.tokenServices(AppSession.buildRedisTokenServices(redisConnectionFactory));
     }
-
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
