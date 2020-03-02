@@ -9,12 +9,16 @@ import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.web.admin.service.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.expression.Maps;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @program: YK-iSystem
@@ -34,7 +38,7 @@ public class SystemUserController {
      * @return
      * @throws IOException
      */
-    @PostMapping("/updateUserIcon")
+    @GetMapping("/updateUserIcon")
     public Result updateUserIcon(HttpServletRequest request) throws IOException {
 //        Result<Attachment> result = systemUserService.upload(request);
 //        if (result != null && result.getCode() == 200) {
@@ -49,6 +53,7 @@ public class SystemUserController {
 //            }
 //        }
 //        return new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "更新失败");
-        return systemUserService.getSystemUsers(null);
+        Map<String, Object> map = new HashMap<>();
+        return systemUserService.getSystemUsers(map);
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableDiscoveryClient
-@EnableFeignClients
 @MapperScan(basePackages = {"com.yksys.isystem.service.admin.mapper"})
 public class ServiceAdminApplication {
 
