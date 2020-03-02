@@ -8,4 +8,4 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 5000 # 设置hystrix的超时时间为5000ms
+            timeoutInMilliseconds: 50000 # 设置hystrix的超时时间为5000ms
