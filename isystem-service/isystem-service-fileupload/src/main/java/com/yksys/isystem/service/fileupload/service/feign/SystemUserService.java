@@ -1,16 +1,12 @@
-package com.yksys.isystem.web.admin.service;
+package com.yksys.isystem.service.fileupload.service.feign;
 
 import com.yksys.isystem.common.core.dto.Result;
-import com.yksys.isystem.common.pojo.SystemUser;
 import com.yksys.isystem.common.vo.SystemUserVo;
-import com.yksys.isystem.web.admin.service.fallback.SystemUserServiceFallback;
-import feign.RequestLine;
+import com.yksys.isystem.service.fileupload.service.feign.fallback.SystemUserServiceFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -28,6 +24,6 @@ public interface SystemUserService {
      * @param systemUserVo
      * @return
      */
-    @PutMapping("/api/systemUser/editSystemUser")
+    @PutMapping(value = "/api/systemUser/editSystemUser", consumes = "application/json")
     Result editSystemUser(@RequestBody SystemUserVo systemUserVo);
 }

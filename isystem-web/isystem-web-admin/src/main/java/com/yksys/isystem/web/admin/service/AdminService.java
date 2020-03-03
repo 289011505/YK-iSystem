@@ -3,6 +3,7 @@ package com.yksys.isystem.web.admin.service;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.web.admin.service.fallback.AdminServiceFallback;
+import feign.RequestLine;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         userDetails.setAuthorities(systemUserInfo.getAuthorities());
         userDetails.setAccount(systemUserInfo.getAccount());
         userDetails.setPassword(systemUserInfo.getPassword());
+        userDetails.setUserIconUrl(systemUserInfo.getUserIconUrl());
         userDetails.setUserIcon(systemUserInfo.getUserIcon());
         userDetails.setCredentialsNonExpired(true);
         userDetails.setAccountNonExpired(true);

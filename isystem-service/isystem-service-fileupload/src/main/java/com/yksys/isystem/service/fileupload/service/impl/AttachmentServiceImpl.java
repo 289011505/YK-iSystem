@@ -107,6 +107,14 @@ public class AttachmentServiceImpl implements AttachmentService {
         return null;
     }
 
+    @Override
+    public Attachment addAttachment(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String url = fastDFSClient.uploadFile(file);
+        Attachment attachment = addAttachment("file", fileName, file.getSize(), url);
+        return attachment;
+    }
+
     private Attachment addAttachment(String fileKey, String fileName, long attachSize, String url) {
         Attachment attachment = new Attachment();
         //根据后缀名判断文件类型

@@ -71,8 +71,8 @@
 
         <!-- 查询管理列表 -->
         <select id="getSystemUsers" parameterType="Map" resultType="Map">
-            SELECT <include refid="systemUser_select_cond" />
-            FROM tb_system_user a
+            SELECT <include refid="systemUser_select_cond" />, b.attach_url userIconUrl
+            FROM tb_system_user a left join tb_attachment b on b.id = a.user_icon
             <where>
                 <include refid="systemUser_where_if" />
                 AND a.status in (1, 2)

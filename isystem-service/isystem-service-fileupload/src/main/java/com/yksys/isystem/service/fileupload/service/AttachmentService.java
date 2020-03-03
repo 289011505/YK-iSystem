@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.fileupload.service;
 import com.yksys.isystem.common.pojo.Attachment;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -79,4 +80,11 @@ public interface AttachmentService {
      * @return
      */
     Attachment addAttachment(HttpServletRequest request) throws IOException;
+
+    /**
+     * 上传文件
+     * @param file
+     * @return
+     */
+    Attachment addAttachment(MultipartFile file) throws IOException;
 }

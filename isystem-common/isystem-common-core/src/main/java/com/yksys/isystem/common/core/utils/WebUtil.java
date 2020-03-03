@@ -3,10 +3,13 @@ package com.yksys.isystem.common.core.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.net.HttpHeaders;
+import com.sun.xml.internal.ws.api.message.Attachment;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 
@@ -566,5 +569,25 @@ public class WebUtil {
         }
 
         return map;
+    }
+
+    public static MultipartFile requestToFile(HttpServletRequest request) {
+        if (request instanceof MultipartHttpServletRequest) {
+            Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
+            if (CollectionUtils.isEmpty(fileMap) || CollectionUtils.isEmpty(fileMap.keySet())) {
+                return null;
+            }
+            for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
+                if (StringUtil.isBlank(entry.getKey())) {
+                    continue;
+                }
+
+                if (!entry.getValue().isEmpty()) {
+                    return entry.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 }

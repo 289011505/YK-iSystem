@@ -7,8 +7,8 @@
         SELECT a.id id, a.account account, a.user_name userName, a.password password, a.nick_name nickName, a.user_icon
         userIcon,a.age age, a.sex sex, a.marry_flag marryFlag,
         a.education education, a.phone phone, a.email email, a.prov prov, a.city city, a.dist dist, a.address
-        address,a.idCard idCard, a.status status
-        FROM tb_system_user a
+        address,a.idCard idCard, a.status status, b.attach_url userIconUrl
+        FROM tb_system_user a left join tb_attachment b on b.id = a.user_icon
         <where>
             <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
                 AND a.id = #{id}

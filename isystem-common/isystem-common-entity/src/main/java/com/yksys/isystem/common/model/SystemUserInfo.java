@@ -21,6 +21,9 @@ public class SystemUserInfo extends SystemUser implements Serializable {
     //角色集合
     private SystemRole role;
 
+    //用户头像url
+    private String userIconUrl;
+
     //用户权限
     private List<UserAuthority> authorities;
 }

@@ -5,12 +5,15 @@ import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.pojo.Attachment;
 import com.yksys.isystem.service.fileupload.configuration.FastDFSClient;
 import com.yksys.isystem.service.fileupload.service.AttachmentService;
+import com.yksys.isystem.service.fileupload.service.feign.SystemUserService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -36,9 +39,11 @@ public class FileUploadController {
     private FastDFSClient fastDFSClient;
     @Autowired
     private AttachmentService attachmentService;
+    @Autowired
+    private SystemUserService systemUserService;
 
     /**
-     * 图片上传
+     * 文件上传
      * @param request
      * @return
      * @throws IOException
@@ -46,6 +51,20 @@ public class FileUploadController {
     @PostMapping("/upload")
     public Result upload(HttpServletRequest request) throws IOException {
         Attachment attachment = attachmentService.addAttachment(request);
+        return new Result(HttpStatus.OK.value(), "上传成功", attachment);
+    }
+
+    /**
+     * 文件上传
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @PostMapping(value = "/uploadByFile",
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result upload(@RequestPart(value = "file") MultipartFile file) throws IOException {
+        Attachment attachment = attachmentService.addAttachment(file);
         return new Result(HttpStatus.OK.value(), "上传成功", attachment);
     }
 

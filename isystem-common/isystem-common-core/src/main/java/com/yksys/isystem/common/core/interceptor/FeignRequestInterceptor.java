@@ -6,6 +6,7 @@ import com.yksys.isystem.common.core.utils.AppUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -19,6 +20,7 @@ import java.util.Map;
  * @author: YuKai Fan
  * @create: 2019-12-26 11:55
  **/
+@Component
 @Slf4j
 public class FeignRequestInterceptor implements RequestInterceptor {
     @Override
@@ -31,6 +33,16 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 
         if (request.getHeader(ComConstants.REQUEST_HEADER_ID) == null) {
             requestTemplate.header(ComConstants.REQUEST_HEADER_ID, AppUtil.randomId());
+        }
+
+        // 设置request中的attribute到header:主要是设置自行设置的token、userId等信息，以便转发到Feign调用的服务
+        Enumeration<String> reqAttrbuteNames = request.getAttributeNames();
+        if (reqAttrbuteNames != null) {
+            while (reqAttrbuteNames.hasMoreElements()) {
+                String attrName = reqAttrbuteNames.nextElement();
+                String values = request.getAttribute(attrName).toString();
+                requestTemplate.header(attrName, values);
+            }
         }
 
         log.debug("FeignRequestInterceptor: {}", request.toString());

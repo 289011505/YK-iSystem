@@ -43,7 +43,9 @@ public class YkUserDetails implements UserDetails {
     private String clientId;
     //用户昵称
     private String nickName;
-    //头像
+    //头像url
+    private String userIconUrl;
+    //头像id
     private String userIcon;
     //角色
     private List<String> roles;
