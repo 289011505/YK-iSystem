@@ -14,7 +14,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @create: 2019-12-05 10:07
  **/
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@EnableDiscoveryClient
 @EnableFeignClients
 @EnableEurekaClient
 public class WebAdminApplication {
