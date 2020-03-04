@@ -5,6 +5,7 @@ import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.domain.proto.storage.DownloadByteArray;
 import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
+import com.yksys.isystem.common.core.constants.ComConstants;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -105,7 +106,7 @@ public class FastDFSClient {
      * @return
      */
     private String getResAccessUrl(StorePath storePath) {
-        String fileUrl = fdfsWebServer.getWebServerUrl() + storePath.getFullPath();
+        String fileUrl = ComConstants.HTTP + fdfsWebServer.getWebServerUrl() + storePath.getFullPath();
         return fileUrl;
     }
 }

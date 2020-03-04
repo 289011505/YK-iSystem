@@ -22,4 +22,9 @@ public class ComConstants {
      * 微服务之间传递的唯一标识
      */
     public final static String REQUEST_HEADER_ID = "Request-Header-Id";
+
+    /**
+     * http前缀
+     */
+    public final static String HTTP = "http://";
 }
