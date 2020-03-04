@@ -21,7 +21,7 @@ fdfs:
   so-timeout: 1501
   connect-timeout: 601
   thumb-image:
-    width: 150
-    height: 150
+    width: 500
+    height: 500
   web-server-url: 192.168.100.110:8888/
   trackerList: 192.168.100.110:22122
