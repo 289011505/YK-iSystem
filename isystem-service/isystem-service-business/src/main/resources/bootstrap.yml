@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+      name: isystem-client-eureka, isystem-service-business, isystem-common-service, isystem-client-redis, isystem-service-datasource
+      label: master
+      profile: dev

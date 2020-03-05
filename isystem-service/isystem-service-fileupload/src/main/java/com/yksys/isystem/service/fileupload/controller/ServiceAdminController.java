@@ -6,6 +6,7 @@ import com.yksys.isystem.common.core.security.YkUserDetails;
 import com.yksys.isystem.common.core.utils.WebUtil;
 import com.yksys.isystem.common.pojo.Attachment;
 import com.yksys.isystem.common.vo.SystemUserVo;
+import com.yksys.isystem.service.fileupload.service.AliyunOssService;
 import com.yksys.isystem.service.fileupload.service.AttachmentService;
 import com.yksys.isystem.service.fileupload.service.feign.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class ServiceAdminController {
     private SystemUserService systemUserService;
     @Autowired
     private RedisTokenStore redisTokenStore;
+    @Autowired
+    private AliyunOssService aliyunOssService;
 
     /**
      * 更新用户头像
@@ -45,7 +48,7 @@ public class ServiceAdminController {
      */
     @PostMapping("/updateUserIcon")
     public Result updateUserIcon(HttpServletRequest request) throws IOException {
-        Attachment attachment = attachmentService.addAttachment(request);
+        Attachment attachment = aliyunOssService.addAttachment(request);
         if (attachment != null) {
             SystemUserVo systemUserVo = new SystemUserVo();
             YkUserDetails currentUser = AppSession.getCurrentUser();

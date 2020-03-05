@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: isystem-service-business
+
+server:
+  port: 8506

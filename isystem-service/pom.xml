@@ -15,6 +15,7 @@
         <module>isystem-service-admin</module>
         <module>isystem-service-generate</module>
         <module>isystem-service-system</module>
+        <module>isystem-service-business</module>
     </modules>
 
     <dependencies>

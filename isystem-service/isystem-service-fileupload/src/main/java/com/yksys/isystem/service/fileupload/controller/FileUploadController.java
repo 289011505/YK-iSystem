@@ -39,8 +39,6 @@ public class FileUploadController {
     private FastDFSClient fastDFSClient;
     @Autowired
     private AttachmentService attachmentService;
-    @Autowired
-    private SystemUserService systemUserService;
 
     /**
      * 文件上传

@@ -3,6 +3,8 @@ package com.yksys.isystem.common.core.utils;
 import com.yksys.isystem.common.core.constants.FileTypeEnum;
 import com.yksys.isystem.common.core.exception.ParameterException;
 
+import java.time.LocalDateTime;
+
 /**
  * @program: YK-iSystem
  * @description: 文件工具类
@@ -72,6 +74,39 @@ public class FileUtil {
         }
 
         return type;
+    }
+
+    /**
+     * 根据文件类型返回相应的文件路径
+     * @param type
+     * @return
+     */
+    public static String getFilePath(int type, String fileId, String postfix) {
+        String prefix = "";
+        switch (type) {
+            case 1:
+                prefix = "images";
+                break;
+            case 2:
+                prefix = "videos";
+                break;
+            case 3:
+                prefix = "docs";
+                break;
+            case 4:
+                prefix = "tottents";
+                break;
+            case 5:
+                prefix = "audios";
+                break;
+            case 6:
+                prefix = "others";
+                break;
+        }
+
+        String dataStr = TimeUtil.parseTime(LocalDateTime.now(), TimeUtil.TimeFormat.SHORT_DATE_PATTERN_LINE);
+        String filePath = prefix + "/" + dataStr + "/" + fileId + "." + postfix;
+        return filePath;
     }
 
     /**

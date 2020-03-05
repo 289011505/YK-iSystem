@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.business.mapper.ArticleMapper">
+        <!-- 新增 -->
+        <insert id="addArticle">
+            INSERT INTO tb_article(<include refid="article_add_key"><property name="alias" value="" /></include>)
+            VALUES (<include refid="article_add_val"><property name="alias" value="" /></include>)
+        </insert>
+
+        <!-- 批量新增 -->
+        <insert id="addArticles">
+            INSERT INTO tb_article(<include refid="article_add_key"><property name="alias" value="" /></include>)
+            VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (<include refid="article_add_val"><property name="alias" value="item."/></include>)
+            </foreach>
+        </insert>
+
+        <!-- 修改 -->
+        <update id="editArticleById">
+            UPDATE tb_article
+            <set>
+                <include refid="article_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <!-- 批量修改 -->
+        <update id="editArticleByIds">
+            UPDATE tb_article
+            <set>
+                <include refid="article_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 删除 -->
+        <update id="delArticleById">
+            update tb_article SET status = 0 WHERE id = #{id}
+        </update>
+
+        <!-- 批量删除 -->
+        <update id="delArticleByIds">
+            UPDATE tb_article SET status = 0 WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 真删除 -->
+        <delete id="delArticleRealById">
+            DELETE FROM tb_article WHERE id = #{id}
+        </delete>
+
+        <!-- 真批量删除 -->
+        <delete id="delArticleRealByIds">
+            DELETE FROM tb_article WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </delete>
+
+        <!-- 清空 -->
+        <delete id="delArticleReals">
+            DELETE FROM tb_article
+        </delete>
+
+        <!-- 查询管理列表 -->
+        <select id="getArticles" parameterType="Map" resultType="Map">
+            SELECT <include refid="article_select_cond" />
+            FROM tb_article a
+            <where>
+                <include refid="article_where_if" />
+                AND a.status in (1, 2)
+            </where>
+            ORDER BY a.status ASC, a.create_time DESC
+        </select>
+
+        <!-- 根据id查询文章管理表 -->
+        <select id="getArticleById" resultType="Map">
+            SELECT <include refid="article_select_cond_one"/>
+            FROM tb_article a
+            WHERE a.status in (1, 2) and a.id = #{id}
+        </select>
+
+
+        <!-- 查询的选择项, 增删字段时调整 -->
+        <sql id="article_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.title title
+                                            
+                                    , a.content content
+                                            
+                                    , a.article_cover articleCover
+                                            
+                                    , a.article_summary articleSummary
+                                            
+                                    , a.importance importance
+                                            
+                                    , a.article_class_id articleClassId
+                                            
+                                    , a.publish_time publishTime
+                                            
+                                    , a.comment comment
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+        <!-- (单个)查询的选择项, 增删字段时调整 -->
+        <sql id="article_select_cond_one">
+            a.id id
+                                                                            , a.title title
+                                                                , a.content content
+                                                                , a.article_cover articleCover
+                                                                , a.article_summary articleSummary
+                                                                , a.importance importance
+                                                                , a.article_class_id articleClassId
+                                                                , a.publish_time publishTime
+                                                                , a.comment comment
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+        <!-- 查询条件 -->
+        <sql id="article_where_if">
+                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                    AND a.id = #{id}
+                </if>
+                                                            <if test="title != null and title != '' and title != 'null' and title != 'undefined'">
+                    AND a.title = #{title}
+                </if>
+                                                            <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+                    AND a.content = #{content}
+                </if>
+                                                            <if test="articleCover != null and articleCover != '' and articleCover != 'null' and articleCover != 'undefined'">
+                    AND a.article_cover = #{articleCover}
+                </if>
+                                                            <if test="articleSummary != null and articleSummary != '' and articleSummary != 'null' and articleSummary != 'undefined'">
+                    AND a.article_summary = #{articleSummary}
+                </if>
+                                                            <if test="importance != null">
+                    AND a.importance = #{importance}
+                </if>
+                                                            <if test="articleClassId != null and articleClassId != '' and articleClassId != 'null' and articleClassId != 'undefined'">
+                    AND a.article_class_id = #{articleClassId}
+                </if>
+                                                            <if test="publishTime != null and publishTime != '' and publishTime != 'null' and publishTime != 'undefined'">
+                    AND a.publish_time = #{publishTime}
+                </if>
+                                                            <if test="comment != null">
+                    AND a.comment = #{comment}
+                </if>
+                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                    AND a.remark = #{remark}
+                </if>
+                                                            <if test="status != null">
+                    AND a.status = #{status}
+                </if>
+                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+                    AND a.create_user_id = #{createUserId}
+                </if>
+                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+                    AND a.create_time = #{createTime}
+                </if>
+                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+                    AND a.update_user_id = #{updateUserId}
+                </if>
+                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+                    AND a.update_time = #{updateTime}
+                </if>
+                                    </sql>
+
+
+        <!-- (批量)新增键, 增删字段时调整 -->
+        <sql id="article_add_key">
+            id
+                                                        
+                    , title
+                                            
+                    , content
+                                            
+                    , article_cover
+                                            
+                    , article_summary
+                                            
+                    , importance
+                                            
+                    , article_class_id
+                                            
+                    , publish_time
+                                            
+                    , comment
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+        <!-- (批量)新增值, 增删字段时调整 -->
+        <sql id="article_add_val">
+            #{id}
+                                                                            , #{title}
+                                                                , #{content}
+                                                                , #{articleCover}
+                                                                , #{articleSummary}
+                                                                , #{importance}
+                                                                , #{articleClassId}
+                                                                , #{publishTime}
+                                                                , #{comment}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+        <!-- (批量修改的条件,增减字段时调整) -->
+        <sql id="article_set_if">
+                                                                                                                                <if test="title != null and title != '' and title != 'null' and title != 'undefined'">
+                                title = #{title},
+                            </if>
+                                                                                                                                                                <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+                                content = #{content},
+                            </if>
+                                                                                                                                                                <if test="articleCover != null and articleCover != '' and articleCover != 'null' and articleCover != 'undefined'">
+                                article_cover = #{articleCover},
+                            </if>
+                                                                                                                                                                <if test="articleSummary != null and articleSummary != '' and articleSummary != 'null' and articleSummary != 'undefined'">
+                                article_summary = #{articleSummary},
+                            </if>
+                                                                                                                                                                <if test="importance != null">
+                                importance = #{importance},
+                            </if>
+                                                                                                                                                                <if test="articleClassId != null and articleClassId != '' and articleClassId != 'null' and articleClassId != 'undefined'">
+                                article_class_id = #{articleClassId},
+                            </if>
+                                                                                                                                                                <if test="publishTime != null and publishTime != '' and publishTime != 'null' and publishTime != 'undefined'">
+                                publish_time = #{publishTime},
+                            </if>
+                                                                                                                                                                <if test="comment != null">
+                                comment = #{comment},
+                            </if>
+                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                                remark = #{remark},
+                            </if>
+                                                                                                                                                                <if test="status != null">
+                                status = #{status},
+                            </if>
+                                                                                                                                                                                                                                                                                                                                                </sql>
+</mapper>
