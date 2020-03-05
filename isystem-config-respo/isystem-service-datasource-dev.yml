@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yk-isystem20191202?characterEncoding=utf-8
-    username: root
-    password: root
+    url: jdbc:mysql://rm-m5e91lmw2n84e7lp36o.mysql.rds.aliyuncs.com:3306/yk-isystem20191202?characterEncoding=utf-8
+    username: yukaifan
+    password: Fyk961222!@#
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       max-active: 20
