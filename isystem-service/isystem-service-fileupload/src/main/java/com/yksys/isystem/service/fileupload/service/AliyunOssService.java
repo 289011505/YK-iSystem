@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @program: YK-iSystem
@@ -33,4 +34,12 @@ public interface AliyunOssService {
      * @return
      */
     Attachment addAttachment(HttpServletRequest request) throws IOException;
+
+    /**
+     * 批量上传
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    List<Attachment> addAttachments(HttpServletRequest request) throws IOException;
 }

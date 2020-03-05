@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,6 +67,14 @@ public class AliyunOssServiceImpl implements AliyunOssService {
                     return this.addAttachment(attachment);
                 }
             }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Attachment> addAttachments(HttpServletRequest request) throws IOException {
+        if (request instanceof MultipartHttpServletRequest) {
+
         }
         return null;
     }
