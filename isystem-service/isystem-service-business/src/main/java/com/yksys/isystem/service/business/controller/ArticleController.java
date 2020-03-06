@@ -2,16 +2,25 @@ package com.yksys.isystem.service.business.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.utils.MapUtil;
+import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.pojo.Article;
 import com.yksys.isystem.common.vo.ArticleVo;
+import com.yksys.isystem.common.vo.BucketVo;
 import com.yksys.isystem.service.business.service.ArticleService;
+import com.yksys.isystem.service.business.service.feign.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 
 
 /**
@@ -42,7 +51,7 @@ public class ArticleController {
      * @param id
      * @return
      */
-    @PostMapping("/getArticleById")
+    @GetMapping("/getArticleById")
     public Result getArticleById(@RequestParam String id) {
         return new Result(HttpStatus.OK.value(), "查询成功", articleService.getArticleById(id));
     }
@@ -105,5 +114,4 @@ public class ArticleController {
         List<Map<String, Object>> list = articleService.getArticles(start, pageSize, map);
         return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
     }
-
 }

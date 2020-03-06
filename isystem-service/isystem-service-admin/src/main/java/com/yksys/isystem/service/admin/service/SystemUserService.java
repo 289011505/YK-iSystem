@@ -1,6 +1,9 @@
 package com.yksys.isystem.service.admin.service;
+import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.pojo.SystemUser;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -70,4 +73,11 @@ public interface SystemUserService {
      * @param ids
      */
     void delSystemUserRealByIds(List<String> ids);
+
+    /**
+     * 更新用户头像
+     * @param request
+     * @return
+     */
+    Result updateUserIcon(HttpServletRequest request) throws IOException;
 }

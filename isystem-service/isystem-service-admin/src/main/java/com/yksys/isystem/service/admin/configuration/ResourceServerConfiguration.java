@@ -38,7 +38,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private PasswordEncoder passwordEncoder;
 
     @Bean
-    public TokenStore tokenStore() {
+    public RedisTokenStore redisTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
     }
 

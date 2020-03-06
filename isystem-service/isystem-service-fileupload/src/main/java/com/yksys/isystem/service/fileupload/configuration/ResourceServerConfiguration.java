@@ -66,7 +66,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // Fegin访问不需要认证
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/api/oss/uploadOSS","/api/oss/uploadOSSByOwnId", "/api/oss/uploadOSSByFile").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

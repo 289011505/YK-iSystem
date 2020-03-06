@@ -42,7 +42,7 @@ public class ${className}Controller {
      * @param id
      * @return
      */
-    @PostMapping("/get${className}ById")
+    @GetMapping("/get${className}ById")
     public Result get${className}ById(@RequestParam String id) {
         return new Result(HttpStatus.OK.value(), "查询成功", ${classname}Service.get${className}ById(id));
     }

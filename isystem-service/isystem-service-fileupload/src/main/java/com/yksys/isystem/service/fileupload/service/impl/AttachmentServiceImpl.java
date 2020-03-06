@@ -3,7 +3,7 @@ package com.yksys.isystem.service.fileupload.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.yksys.isystem.common.core.utils.AppUtil;
-import com.yksys.isystem.common.core.utils.FileUtil;
+import com.yksys.isystem.common.core.utils.file.FileUtil;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.pojo.Attachment;
 import com.yksys.isystem.service.fileupload.configuration.FastDFSClient;

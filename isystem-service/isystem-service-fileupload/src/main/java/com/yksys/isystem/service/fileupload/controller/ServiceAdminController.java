@@ -31,8 +31,6 @@ import java.util.HashMap;
 @RequestMapping("/api/admin")
 public class ServiceAdminController {
     @Autowired
-    private AttachmentService attachmentService;
-    @Autowired
     private SystemUserService systemUserService;
     @Autowired
     private RedisTokenStore redisTokenStore;

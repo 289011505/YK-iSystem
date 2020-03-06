@@ -2,13 +2,19 @@ package com.yksys.isystem.service.admin.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.security.AppSession;
+import com.yksys.isystem.common.core.security.YkUserDetails;
+import com.yksys.isystem.common.pojo.Attachment;
 import com.yksys.isystem.common.pojo.SystemUser;
 import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.service.admin.service.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
@@ -26,6 +32,8 @@ import java.util.Arrays;
 public class SystemUserController {
     @Autowired
     private SystemUserService systemUserService;
+    @Autowired
+    private RedisTokenStore redisTokenStore;
 
     /**
      * 新增系统用户表
@@ -104,6 +112,32 @@ public class SystemUserController {
                                  @RequestParam Map<String, Object> map) {
         List<Map<String, Object>> list = systemUserService.getSystemUsers(start, pageSize, map);
         return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
+    }
+
+    /**
+     * 更新用户头像
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/updateUserIcon")
+    public Result updateUserIcon(HttpServletRequest request) throws IOException {
+        Result<Attachment> result = systemUserService.updateUserIcon(request);
+        if (result == null) {
+            return new Result(HttpStatus.INTERNAL_SERVER_ERROR.value(), "更新失败");
+        }
+        SystemUserVo systemUserVo = new SystemUserVo();
+        YkUserDetails currentUser = AppSession.getCurrentUser();
+        systemUserVo.setId(currentUser.getUserId());
+        systemUserVo.setUserIcon(result.getData().getId());
+        this.editSystemUser(systemUserVo);
+
+        //更新当前登录的用户
+        currentUser.setUserIcon(result.getData().getId());
+        currentUser.setUserIconUrl(result.getData().getAttachUrl());
+        AppSession.updateCurrentUser(redisTokenStore, currentUser);
+        return result;
     }
 
 }

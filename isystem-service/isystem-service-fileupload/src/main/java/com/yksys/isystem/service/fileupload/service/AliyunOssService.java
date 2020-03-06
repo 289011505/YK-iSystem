@@ -1,6 +1,7 @@
 package com.yksys.isystem.service.fileupload.service;
 
 import com.yksys.isystem.common.pojo.Attachment;
+import com.yksys.isystem.common.vo.BucketVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,14 @@ public interface AliyunOssService {
      * @param file
      * @return
      */
-    Attachment addAttachment(MultipartFile file) throws IOException;
+    Attachment addAttachment(MultipartFile file, BucketVo bucketVo) throws IOException;
+
+    /**
+     * 上传文件
+     * @param file
+     * @return
+     */
+    Attachment addAttachment(MultipartFile file, String ownId, BucketVo bucketVo) throws IOException;
 
     /**
      * 上传文件
@@ -34,6 +42,13 @@ public interface AliyunOssService {
      * @return
      */
     Attachment addAttachment(HttpServletRequest request) throws IOException;
+
+    /**
+     * 上传文件
+     * @param request
+     * @return
+     */
+    Attachment addAttachment(HttpServletRequest request, String ownId) throws IOException;
 
     /**
      * 批量上传

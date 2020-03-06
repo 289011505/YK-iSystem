@@ -1,9 +1,17 @@
-package com.yksys.isystem.common.core.utils;
+package com.yksys.isystem.common.core.utils.file;
 
 import com.yksys.isystem.common.core.constants.FileTypeEnum;
 import com.yksys.isystem.common.core.exception.ParameterException;
+import com.yksys.isystem.common.core.utils.MapUtil;
+import com.yksys.isystem.common.core.utils.StringUtil;
+import com.yksys.isystem.common.core.utils.TimeUtil;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @program: YK-iSystem
@@ -121,6 +129,38 @@ public class FileUtil {
                 return fileTypeEnum;
             }
         }
+        return null;
+    }
+
+    /**
+     * request转为file
+     * @param request
+     * @return
+     */
+    public static FileModel getRequestFile(HttpServletRequest request) {
+        if (request instanceof MultipartHttpServletRequest) {
+            Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
+            if (CollectionUtils.isEmpty(fileMap) || CollectionUtils.isEmpty(fileMap.keySet())) {
+                return null;
+            }
+            for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
+                if (StringUtil.isBlank(entry.getKey())) {
+                    continue;
+                }
+
+                if (!entry.getValue().isEmpty()) {
+                    Map<String, Object> parameterMap = MapUtil.getParameterMap(request);
+                    FileModel fileModel = new FileModel();
+                    fileModel.setFile(entry.getValue());
+                    fileModel.setBucketName(parameterMap.get("bucketName").toString());
+                    fileModel.setCannedACL(parameterMap.get("cannedACL").toString());
+                    fileModel.setDataRedundancyType(parameterMap.get("dataRedundancyType").toString());
+                    fileModel.setStorageType(parameterMap.get("storageType").toString());
+                    return fileModel;
+                }
+            }
+        }
+
         return null;
     }
 }

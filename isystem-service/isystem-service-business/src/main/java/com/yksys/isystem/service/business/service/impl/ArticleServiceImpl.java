@@ -27,7 +27,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article addArticle(Article article) {
         article.setId(AppUtil.randomId());
-        article.setStatus(1);
         articleMapper.addArticle(article);
         return article;
     }

@@ -2,27 +2,45 @@ package com.yksys.isystem.service.admin.service.impl;
 
 
 import com.github.pagehelper.PageHelper;
+import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.security.AppSession;
+import com.yksys.isystem.common.core.security.YkUserDetails;
 import com.yksys.isystem.common.core.utils.AppUtil;
+import com.yksys.isystem.common.core.utils.MapUtil;
+import com.yksys.isystem.common.core.utils.StringUtil;
+import com.yksys.isystem.common.core.utils.file.FileModel;
+import com.yksys.isystem.common.core.utils.file.FileUtil;
 import com.yksys.isystem.common.pojo.SystemUser;
+import com.yksys.isystem.common.vo.BucketVo;
+import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.service.admin.mapper.SystemUserMapper;
 import com.yksys.isystem.service.admin.service.SystemUserService;
+import com.yksys.isystem.service.admin.service.feign.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 
 /**
-* @program: YK-iSystem
-* @description:
-* @author: YuKai Fan
-* @create: 2019-12-03 20:05
-**/
+ * @program: YK-iSystem
+ * @description:
+ * @author: YuKai Fan
+ * @create: 2019-12-03 20:05
+ **/
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
     @Autowired
     private SystemUserMapper systemUserMapper;
+    @Autowired
+    private FileUploadService fileUploadService;
 
     @Override
     public SystemUser addSystemUser(SystemUser systemUser) {
@@ -71,6 +89,20 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public void delSystemUserRealByIds(List<String> ids) {
         systemUserMapper.delSystemUserRealByIds(ids);
+    }
+
+    @Override
+    public Result updateUserIcon(HttpServletRequest request) throws IOException {
+        FileModel fileModel = FileUtil.getRequestFile(request);
+        if (fileModel == null) {
+            return null;
+        }
+        BucketVo bucketVo = new BucketVo();
+        bucketVo.setBucketName(fileModel.getBucketName());
+        bucketVo.setStorageType(fileModel.getStorageType());
+        bucketVo.setDataRedundancyType(fileModel.getDataRedundancyType());
+        bucketVo.setCannedACL(fileModel.getCannedACL());
+        return fileUploadService.uploadOSSByFile(fileModel.getFile(), bucketVo);
     }
 
 }

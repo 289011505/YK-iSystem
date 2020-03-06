@@ -1,6 +1,7 @@
 package com.yksys.isystem.service.fileupload.service.impl;
 
 import com.yksys.isystem.common.core.utils.*;
+import com.yksys.isystem.common.core.utils.file.FileUtil;
 import com.yksys.isystem.common.pojo.Attachment;
 import com.yksys.isystem.common.vo.BucketVo;
 import com.yksys.isystem.service.fileupload.mapper.AttachmentMapper;
@@ -38,12 +39,33 @@ public class AliyunOssServiceImpl implements AliyunOssService {
     }
 
     @Override
-    public Attachment addAttachment(MultipartFile file) throws IOException {
+    public Attachment addAttachment(MultipartFile file, BucketVo bucketVo) throws IOException {
+        return this.addAttachment(file, null, bucketVo);
+    }
+
+    @Override
+    public Attachment addAttachment(MultipartFile file, String ownId, BucketVo bucketVo) throws IOException {
+        if (!file.isEmpty()) {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(file.getBytes());
+
+            String fileName = file.getOriginalFilename();
+            Attachment attachment = addAttachment(file.getName(), fileName, file.getSize());
+
+            String url = AliyunOssUtil.uploadSimpleByByte(bucketVo, byteArrayInputStream, attachment.getRemark());
+            attachment.setAttachUrl(url);
+            attachment.setOwnerId(ownId);
+            return this.addAttachment(attachment);
+        }
         return null;
     }
 
     @Override
     public Attachment addAttachment(HttpServletRequest request) throws IOException {
+        return this.addAttachment(request, null);
+    }
+
+    @Override
+    public Attachment addAttachment(HttpServletRequest request, String ownId) throws IOException {
         if (request instanceof MultipartHttpServletRequest) {
             Map<String, MultipartFile> fileMap = ((MultipartHttpServletRequest) request).getFileMap();
             if (CollectionUtils.isEmpty(fileMap) || CollectionUtils.isEmpty(fileMap.keySet())) {
@@ -64,6 +86,7 @@ public class AliyunOssServiceImpl implements AliyunOssService {
 
                     String url = AliyunOssUtil.uploadSimpleByByte(bucketVo, byteArrayInputStream, attachment.getRemark());
                     attachment.setAttachUrl(url);
+                    attachment.setOwnerId(ownId);
                     return this.addAttachment(attachment);
                 }
             }
