@@ -2,28 +2,26 @@ package com.yksys.isystem.service.admin.service.impl;
 
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
 import com.yksys.isystem.common.core.dto.Result;
-import com.yksys.isystem.common.core.security.AppSession;
-import com.yksys.isystem.common.core.security.YkUserDetails;
 import com.yksys.isystem.common.core.utils.AppUtil;
-import com.yksys.isystem.common.core.utils.MapUtil;
+import com.yksys.isystem.common.core.utils.PinYinUtil;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.core.utils.file.FileModel;
 import com.yksys.isystem.common.core.utils.file.FileUtil;
 import com.yksys.isystem.common.pojo.SystemUser;
+import com.yksys.isystem.common.pojo.UserRole;
 import com.yksys.isystem.common.vo.BucketVo;
-import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.service.admin.mapper.SystemUserMapper;
 import com.yksys.isystem.service.admin.service.SystemUserService;
 import com.yksys.isystem.service.admin.service.feign.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +44,32 @@ public class SystemUserServiceImpl implements SystemUserService {
     public SystemUser addSystemUser(SystemUser systemUser) {
         systemUser.setId(AppUtil.randomId());
         systemUser.setStatus(1);
+        if (StringUtil.isBlank(systemUser.getPassword())) {//如果密码为空则使用默认密码111111
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encode = passwordEncoder.encode("111111");
+            systemUser.setPassword(encode);
+        }
+        if (StringUtil.isBlank(systemUser.getAccount())) {//如果账号为空则使用名称的拼音
+            systemUser.setAccount(PinYinUtil.toPinyin(systemUser.getUserName()));
+        }
         systemUserMapper.addSystemUser(systemUser);
+
+        //添加用户角色关系
+        if (!CollectionUtils.isEmpty(systemUser.getRoles())) {
+            addUserRoles(systemUser);
+        }
         return systemUser;
+    }
+
+    private void addUserRoles(SystemUser systemUser) {
+        List<UserRole> list = Lists.newArrayList();
+        systemUser.getRoles().forEach(roleId -> {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(systemUser.getId());
+            userRole.setRoleId(roleId);
+            list.add(userRole);
+        });
+        systemUserMapper.addUserRoles(list);
     }
 
     @Override
@@ -63,12 +85,22 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     @Override
     public List<Map<String, Object>> getSystemUsers(Map<String, Object> map) {
-        return systemUserMapper.getSystemUsers(map);
+        List<Map<String, Object>> systemUsers = systemUserMapper.getSystemUsers(map);
+        systemUsers.forEach(systemUser -> {
+            systemUser.put("roles", systemUserMapper.getUserRolesByUserId(systemUser.get("id").toString()));
+        });
+        return systemUsers;
     }
 
     @Override
     public void editSystemUser(SystemUser systemUser) {
         systemUserMapper.editSystemUserById(systemUser);
+
+        //先删除用户角色关系, 再添加
+        systemUserMapper.delUserRolesByUserId(systemUser.getId());
+        if (!CollectionUtils.isEmpty(systemUser.getRoles())) {
+            addUserRoles(systemUser);
+        }
     }
 
     @Override

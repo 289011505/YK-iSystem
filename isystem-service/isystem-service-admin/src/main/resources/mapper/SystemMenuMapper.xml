@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.admin.mapper.SystemMenuMapper">
+    <!-- 新增 -->
+    <insert id="addSystemMenu">
+        INSERT INTO tb_system_menu(
+        <include refid="systemMenu_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="systemMenu_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="addSystemMenus">
+        INSERT INTO tb_system_menu(
+        <include refid="systemMenu_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="systemMenu_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="editSystemMenuById">
+        UPDATE tb_system_menu
+        <set>
+            <include refid="systemMenu_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="editSystemMenuByIds">
+        UPDATE tb_system_menu
+        <set>
+            <include refid="systemMenu_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 删除 -->
+    <update id="delSystemMenuById">
+            update tb_system_menu SET status = 0 WHERE id = #{id}
+        </update>
+
+    <!-- 批量删除 -->
+    <update id="delSystemMenuByIds">
+        UPDATE tb_system_menu SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 真删除 -->
+    <delete id="delSystemMenuRealById">
+            DELETE FROM tb_system_menu WHERE id = #{id}
+        </delete>
+
+    <!-- 真批量删除 -->
+    <delete id="delSystemMenuRealByIds">
+        DELETE FROM tb_system_menu WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 清空 -->
+    <delete id="delSystemMenuReals">
+            DELETE FROM tb_system_menu
+        </delete>
+
+    <!-- 查询管理列表 -->
+    <select id="getSystemMenus" parameterType="Map" resultType="Map">
+        SELECT
+        <include refid="systemMenu_select_cond"/>, b.id authorityId, b.authority authority
+        c.id apiId, c.api_name apiName
+        FROM tb_system_menu a LEFT JOIN `tb_system_authority` b on a.id = b.`menu_id` and b.status = 1
+        left join `tb_system_api` c on c.id = b.`api_id` and c.status = 1
+        <where>
+            <include refid="systemMenu_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
+
+    <!-- 根据id查询系统菜单表 -->
+    <select id="getSystemMenuById" resultType="Map">
+        SELECT
+        <include refid="systemMenu_select_cond_one"/>
+        FROM tb_system_menu a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
+
+
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="systemMenu_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.menu_name menuName
+                                            
+                                    , a.menu_code menuCode
+                                            
+                                    , a.menu_desc menuDesc
+                                            
+                                    , a.pid pid
+                                            
+                                    , a.scheme scheme
+                                            
+                                    , a.target target
+                                            
+                                    , a.sort sort
+                                            
+                                    , a.level level
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                            
+                                    , a.url url
+                                            
+                                    , a.icon icon
+                                            
+                                    , a.service_id serviceId
+                                    </sql>
+
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="systemMenu_select_cond_one">
+            a.id id
+                                                                            , a.menu_name menuName
+                                                                , a.menu_code menuCode
+                                                                , a.menu_desc menuDesc
+                                                                , a.pid pid
+                                                                , a.scheme scheme
+                                                                , a.target target
+                                                                , a.sort sort
+                                                                , a.level level
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                                                , a.url url
+                                                                , a.icon icon
+                                                                , a.service_id serviceId
+                                    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="systemMenu_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="menuName != null and menuName != '' and menuName != 'null' and menuName != 'undefined'">
+            AND a.menu_name = #{menuName}
+        </if>
+        <if test="menuCode != null and menuCode != '' and menuCode != 'null' and menuCode != 'undefined'">
+            AND a.menu_code = #{menuCode}
+        </if>
+        <if test="menuDesc != null and menuDesc != '' and menuDesc != 'null' and menuDesc != 'undefined'">
+            AND a.menu_desc = #{menuDesc}
+        </if>
+        <if test="pid != null and pid != '' and pid != 'null' and pid != 'undefined'">
+            AND a.pid = #{pid}
+        </if>
+        <if test="scheme != null and scheme != '' and scheme != 'null' and scheme != 'undefined'">
+            AND a.scheme = #{scheme}
+        </if>
+        <if test="target != null and target != '' and target != 'null' and target != 'undefined'">
+            AND a.target = #{target}
+        </if>
+        <if test="sort != null">
+            AND a.sort = #{sort}
+        </if>
+        <if test="level != null">
+            AND a.level = #{level}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+        <if test="url != null and url != '' and url != 'null' and url != 'undefined'">
+            AND a.url = #{url}
+        </if>
+        <if test="icon != null and icon != '' and icon != 'null' and icon != 'undefined'">
+            AND a.icon = #{icon}
+        </if>
+        <if test="serviceId != null and serviceId != '' and serviceId != 'null' and serviceId != 'undefined'">
+            AND a.service_id = #{serviceId}
+        </if>
+    </sql>
+
+
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="systemMenu_add_key">
+            id
+                                                        
+                    , menu_name
+                                            
+                    , menu_code
+                                            
+                    , menu_desc
+                                            
+                    , pid
+                                            
+                    , scheme
+                                            
+                    , target
+                                            
+                    , sort
+                                            
+                    , level
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                            
+                    , url
+                                            
+                    , icon
+                                            
+                    , service_id
+                                    </sql>
+
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="systemMenu_add_val">
+            #{id}
+                                                                            , #{menuName}
+                                                                , #{menuCode}
+                                                                , #{menuDesc}
+                                                                , #{pid}
+                                                                , #{scheme}
+                                                                , #{target}
+                                                                , #{sort}
+                                                                , #{level}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                                                , #{url}
+                                                                , #{icon}
+                                                                , #{serviceId}
+                                    </sql>
+
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="systemMenu_set_if">
+        <if test="menuName != null and menuName != '' and menuName != 'null' and menuName != 'undefined'">
+            menu_name = #{menuName},
+        </if>
+        <if test="menuCode != null and menuCode != '' and menuCode != 'null' and menuCode != 'undefined'">
+            menu_code = #{menuCode},
+        </if>
+        <if test="menuDesc != null and menuDesc != '' and menuDesc != 'null' and menuDesc != 'undefined'">
+            menu_desc = #{menuDesc},
+        </if>
+        <if test="pid != null and pid != '' and pid != 'null' and pid != 'undefined'">
+            pid = #{pid},
+        </if>
+        <if test="scheme != null and scheme != '' and scheme != 'null' and scheme != 'undefined'">
+            scheme = #{scheme},
+        </if>
+        <if test="target != null and target != '' and target != 'null' and target != 'undefined'">
+            target = #{target},
+        </if>
+        <if test="sort != null">
+            sort = #{sort},
+        </if>
+        <if test="level != null">
+            level = #{level},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="url != null and url != '' and url != 'null' and url != 'undefined'">
+            url = #{url},
+        </if>
+        <if test="icon != null and icon != '' and icon != 'null' and icon != 'undefined'">
+            icon = #{icon},
+        </if>
+        <if test="serviceId != null and serviceId != '' and serviceId != 'null' and serviceId != 'undefined'">
+            service_id = #{serviceId},
+        </if>
+    </sql>
+</mapper>

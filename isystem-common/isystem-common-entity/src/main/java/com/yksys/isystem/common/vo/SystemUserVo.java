@@ -1,6 +1,7 @@
 package com.yksys.isystem.common.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 import com.google.common.base.Converter;
@@ -60,6 +61,8 @@ public class SystemUserVo implements Serializable {
     private String remark;
     //状态:0  已禁用 1 正在使用
     private Integer status;
+    //角色列表
+    private List<String> roles;
 
     public SystemUser convert() {
         SystemUserVoConvert systemUserVoConvert = new SystemUserVoConvert();

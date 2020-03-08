@@ -55,4 +55,6 @@ public class SystemUser {
     private Integer status;
     //盐
     private String salt;
+    //角色集合
+    private List<String> roles;
 }

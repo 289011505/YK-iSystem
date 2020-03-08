@@ -2,94 +2,135 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yksys.isystem.service.admin.mapper.SystemUserMapper">
-        <!-- 新增 -->
-        <insert id="addSystemUser">
-            INSERT INTO tb_system_user(<include refid="systemUser_add_key"><property name="alias" value="" /></include>)
-            VALUES (<include refid="systemUser_add_val"><property name="alias" value="" /></include>)
-        </insert>
+    <!-- 新增 -->
+    <insert id="addSystemUser">
+        INSERT INTO tb_system_user(
+        <include refid="systemUser_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="systemUser_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
 
-        <!-- 批量新增 -->
-        <insert id="addSystemUsers">
-            INSERT INTO tb_system_user(<include refid="systemUser_add_key"><property name="alias" value="" /></include>)
-            VALUES
-            <foreach collection="list" item="item" index="index" separator=",">
-                (<include refid="systemUser_add_val"><property name="alias" value="item."/></include>)
-            </foreach>
-        </insert>
+    <!-- 批量新增 -->
+    <insert id="addSystemUsers">
+        INSERT INTO tb_system_user(
+        <include refid="systemUser_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="systemUser_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
 
-        <!-- 修改 -->
-        <update id="editSystemUserById">
-            UPDATE tb_system_user
-            <set>
-                <include refid="systemUser_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id = #{id}
-        </update>
+    <!--  批量新增用户角色关系 -->
+    <insert id="addUserRoles">
+        INSERT INTO tb_user_role(user_id, role_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.userId}, #{item.roleId})
+        </foreach>
+    </insert>
 
-        <!-- 批量修改 -->
-        <update id="editSystemUserByIds">
-            UPDATE tb_system_user
-            <set>
-                <include refid="systemUser_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id IN
-            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 删除用户角色关系 -->
+    <delete id="delUserRolesByUserId">
+        delete from tb_user_role where user_id = #{userId}
+    </delete>
 
-        <!-- 删除 -->
-        <update id="delSystemUserById">
+    <!-- 修改 -->
+    <update id="editSystemUserById">
+        UPDATE tb_system_user
+        <set>
+            <include refid="systemUser_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="editSystemUserByIds">
+        UPDATE tb_system_user
+        <set>
+            <include refid="systemUser_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 删除 -->
+    <update id="delSystemUserById">
             update tb_system_user SET status = 0 WHERE id = #{id}
         </update>
 
-        <!-- 批量删除 -->
-        <update id="delSystemUserByIds">
-            UPDATE tb_system_user SET status = 0 WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量删除 -->
+    <update id="delSystemUserByIds">
+        UPDATE tb_system_user SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 真删除 -->
-        <delete id="delSystemUserRealById">
+    <!-- 真删除 -->
+    <delete id="delSystemUserRealById">
             DELETE FROM tb_system_user WHERE id = #{id}
         </delete>
 
-        <!-- 真批量删除 -->
-        <delete id="delSystemUserRealByIds">
-            DELETE FROM tb_system_user WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </delete>
+    <!-- 真批量删除 -->
+    <delete id="delSystemUserRealByIds">
+        DELETE FROM tb_system_user WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
-        <!-- 清空 -->
-        <delete id="delSystemUserReals">
+    <!-- 清空 -->
+    <delete id="delSystemUserReals">
             DELETE FROM tb_system_user
         </delete>
 
-        <!-- 查询管理列表 -->
-        <select id="getSystemUsers" parameterType="Map" resultType="Map">
-            SELECT <include refid="systemUser_select_cond" />, b.attach_url userIconUrl
-            FROM tb_system_user a left join tb_attachment b on b.id = a.user_icon
-            <where>
-                <include refid="systemUser_where_if" />
-                AND a.status in (1, 2)
-            </where>
-            ORDER BY a.status ASC, a.create_time DESC
-        </select>
+    <!-- 查询管理列表 -->
+    <select id="getSystemUsers" parameterType="Map" resultType="Map">
+        SELECT<include refid="systemUser_select_cond"/>, b.attach_url userIconUrl
+        FROM tb_system_user a left join tb_attachment b on b.id = a.user_icon
+        <where>
+            <include refid="systemUser_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
 
-        <!-- 根据id查询系统用户表 -->
-        <select id="getSystemUserById" resultType="Map">
-            SELECT <include refid="systemUser_select_cond_one"/>
-            FROM tb_system_user a
-            WHERE a.status in (1, 2) and a.id = #{id}
-        </select>
+    <select id="getUserRolesByUserId" resultType="java.lang.String">
+        select a.role_id roleId
+        from tb_user_role a left join tb_system_role b on a.role_id = b.id
+        where a.user_id = #{userId}
+    </select>
+
+    <!-- 根据id查询系统用户表 -->
+    <select id="getSystemUserById" resultType="Map">
+        SELECT
+        <include refid="systemUser_select_cond_one"/>
+        FROM tb_system_user a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
 
 
-        <!-- 查询的选择项, 增删字段时调整 -->
-        <sql id="systemUser_select_cond">
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="systemUser_select_cond">
             a.id id
                             
                                             
@@ -142,8 +183,8 @@
                                     , a.update_time updateTime
                                     </sql>
 
-        <!-- (单个)查询的选择项, 增删字段时调整 -->
-        <sql id="systemUser_select_cond_one">
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="systemUser_select_cond_one">
             a.id id
                                                                             , a.account account
                                                                 , a.user_name userName
@@ -171,88 +212,88 @@
                                                                 , a.update_time updateTime
                                     </sql>
 
-        <!-- 查询条件 -->
-        <sql id="systemUser_where_if">
-                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
-                    AND a.id = #{id}
-                </if>
-                                                            <if test="account != null and account != '' and account != 'null' and account != 'undefined'">
-                    AND a.account = #{account}
-                </if>
-                                                            <if test="userName != null and userName != '' and userName != 'null' and userName != 'undefined'">
-                    AND a.user_name = #{userName}
-                </if>
-                                                            <if test="password != null and password != '' and password != 'null' and password != 'undefined'">
-                    AND a.password = #{password}
-                </if>
-                                                            <if test="salt != null and salt != '' and salt != 'null' and salt != 'undefined'">
-                    AND a.salt = #{salt}
-                </if>
-                                                            <if test="nickName != null and nickName != '' and nickName != 'null' and nickName != 'undefined'">
-                    AND a.nick_name = #{nickName}
-                </if>
-                                                            <if test="userIcon != null and userIcon != '' and userIcon != 'null' and userIcon != 'undefined'">
-                    AND a.user_icon = #{userIcon}
-                </if>
-                                                            <if test="lastLoginTime != null and lastLoginTime != '' and lastLoginTime != 'null' and lastLoginTime != 'undefined'">
-                    AND a.last_login_time = #{lastLoginTime}
-                </if>
-                                                            <if test="age != null">
-                    AND a.age = #{age}
-                </if>
-                                                            <if test="sex != null">
-                    AND a.sex = #{sex}
-                </if>
-                                                            <if test="marryFlag != null">
-                    AND a.marry_flag = #{marryFlag}
-                </if>
-                                                            <if test="education != null">
-                    AND a.education = #{education}
-                </if>
-                                                            <if test="phone != null and phone != '' and phone != 'null' and phone != 'undefined'">
-                    AND a.phone = #{phone}
-                </if>
-                                                            <if test="email != null and email != '' and email != 'null' and email != 'undefined'">
-                    AND a.email = #{email}
-                </if>
-                                                            <if test="prov != null and prov != '' and prov != 'null' and prov != 'undefined'">
-                    AND a.prov = #{prov}
-                </if>
-                                                            <if test="city != null and city != '' and city != 'null' and city != 'undefined'">
-                    AND a.city = #{city}
-                </if>
-                                                            <if test="dist != null and dist != '' and dist != 'null' and dist != 'undefined'">
-                    AND a.dist = #{dist}
-                </if>
-                                                            <if test="address != null and address != '' and address != 'null' and address != 'undefined'">
-                    AND a.address = #{address}
-                </if>
-                                                            <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
-                    AND a.idcard = #{idCard}
-                </if>
-                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
-                    AND a.remark = #{remark}
-                </if>
-                                                            <if test="status != null">
-                    AND a.status = #{status}
-                </if>
-                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
-                    AND a.create_user_id = #{createUserId}
-                </if>
-                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
-                    AND a.create_time = #{createTime}
-                </if>
-                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
-                    AND a.update_user_id = #{updateUserId}
-                </if>
-                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
-                    AND a.update_time = #{updateTime}
-                </if>
-                                    </sql>
+    <!-- 查询条件 -->
+    <sql id="systemUser_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="account != null and account != '' and account != 'null' and account != 'undefined'">
+            AND a.account = #{account}
+        </if>
+        <if test="userName != null and userName != '' and userName != 'null' and userName != 'undefined'">
+            AND a.user_name = #{userName}
+        </if>
+        <if test="password != null and password != '' and password != 'null' and password != 'undefined'">
+            AND a.password = #{password}
+        </if>
+        <if test="salt != null and salt != '' and salt != 'null' and salt != 'undefined'">
+            AND a.salt = #{salt}
+        </if>
+        <if test="nickName != null and nickName != '' and nickName != 'null' and nickName != 'undefined'">
+            AND a.nick_name = #{nickName}
+        </if>
+        <if test="userIcon != null and userIcon != '' and userIcon != 'null' and userIcon != 'undefined'">
+            AND a.user_icon = #{userIcon}
+        </if>
+        <if test="lastLoginTime != null and lastLoginTime != '' and lastLoginTime != 'null' and lastLoginTime != 'undefined'">
+            AND a.last_login_time = #{lastLoginTime}
+        </if>
+        <if test="age != null">
+            AND a.age = #{age}
+        </if>
+        <if test="sex != null">
+            AND a.sex = #{sex}
+        </if>
+        <if test="marryFlag != null">
+            AND a.marry_flag = #{marryFlag}
+        </if>
+        <if test="education != null">
+            AND a.education = #{education}
+        </if>
+        <if test="phone != null and phone != '' and phone != 'null' and phone != 'undefined'">
+            AND a.phone = #{phone}
+        </if>
+        <if test="email != null and email != '' and email != 'null' and email != 'undefined'">
+            AND a.email = #{email}
+        </if>
+        <if test="prov != null and prov != '' and prov != 'null' and prov != 'undefined'">
+            AND a.prov = #{prov}
+        </if>
+        <if test="city != null and city != '' and city != 'null' and city != 'undefined'">
+            AND a.city = #{city}
+        </if>
+        <if test="dist != null and dist != '' and dist != 'null' and dist != 'undefined'">
+            AND a.dist = #{dist}
+        </if>
+        <if test="address != null and address != '' and address != 'null' and address != 'undefined'">
+            AND a.address = #{address}
+        </if>
+        <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
+            AND a.idcard = #{idCard}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
 
 
-        <!-- (批量)新增键, 增删字段时调整 -->
-        <sql id="systemUser_add_key">
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="systemUser_add_key">
             id
                                                         
                     , account
@@ -296,8 +337,8 @@
                     , status
                                                                                                                                                     </sql>
 
-        <!-- (批量)新增值, 增删字段时调整 -->
-        <sql id="systemUser_add_val">
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="systemUser_add_val">
             #{id}
                                                                             , #{account}
                                                                 , #{userName}
@@ -321,67 +362,67 @@
                                                                 , #{status}
                                                                                                                                                     </sql>
 
-        <!-- (批量修改的条件,增减字段时调整) -->
-        <sql id="systemUser_set_if">
-                                                                                                                                <if test="account != null and account != '' and account != 'null' and account != 'undefined'">
-                                account = #{account},
-                            </if>
-                                                                                                                                                                <if test="userName != null and userName != '' and userName != 'null' and userName != 'undefined'">
-                                user_name = #{userName},
-                            </if>
-                                                                                                                                                                <if test="password != null and password != '' and password != 'null' and password != 'undefined'">
-                                password = #{password},
-                            </if>
-                                                                                                                                                                <if test="salt != null and salt != '' and salt != 'null' and salt != 'undefined'">
-                                salt = #{salt},
-                            </if>
-                                                                                                                                                                <if test="nickName != null and nickName != '' and nickName != 'null' and nickName != 'undefined'">
-                                nick_name = #{nickName},
-                            </if>
-                                                                                                                                                                <if test="userIcon != null and userIcon != '' and userIcon != 'null' and userIcon != 'undefined'">
-                                user_icon = #{userIcon},
-                            </if>
-                                                                                                                                                                <if test="lastLoginTime != null and lastLoginTime != '' and lastLoginTime != 'null' and lastLoginTime != 'undefined'">
-                                last_login_time = #{lastLoginTime},
-                            </if>
-                                                                                                                                                                <if test="age != null">
-                                age = #{age},
-                            </if>
-                                                                                                                                                                <if test="sex != null">
-                                sex = #{sex},
-                            </if>
-                                                                                                                                                                <if test="marryFlag != null">
-                                marry_flag = #{marryFlag},
-                            </if>
-                                                                                                                                                                <if test="education != null">
-                                education = #{education},
-                            </if>
-                                                                                                                                                                <if test="phone != null and phone != '' and phone != 'null' and phone != 'undefined'">
-                                phone = #{phone},
-                            </if>
-                                                                                                                                                                <if test="email != null and email != '' and email != 'null' and email != 'undefined'">
-                                email = #{email},
-                            </if>
-                                                                                                                                                                <if test="prov != null and prov != '' and prov != 'null' and prov != 'undefined'">
-                                prov = #{prov},
-                            </if>
-                                                                                                                                                                <if test="city != null and city != '' and city != 'null' and city != 'undefined'">
-                                city = #{city},
-                            </if>
-                                                                                                                                                                <if test="dist != null and dist != '' and dist != 'null' and dist != 'undefined'">
-                                dist = #{dist},
-                            </if>
-                                                                                                                                                                <if test="address != null and address != '' and address != 'null' and address != 'undefined'">
-                                address = #{address},
-                            </if>
-                                                                                                                                                                <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
-                                idcard = #{idCard},
-                            </if>
-                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
-                                remark = #{remark},
-                            </if>
-                                                                                                                                                                <if test="status != null">
-                                status = #{status},
-                            </if>
-                                                                                                                                                                                                                                                                                                                                                </sql>
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="systemUser_set_if">
+        <if test="account != null and account != '' and account != 'null' and account != 'undefined'">
+            account = #{account},
+        </if>
+        <if test="userName != null and userName != '' and userName != 'null' and userName != 'undefined'">
+            user_name = #{userName},
+        </if>
+        <if test="password != null and password != '' and password != 'null' and password != 'undefined'">
+            password = #{password},
+        </if>
+        <if test="salt != null and salt != '' and salt != 'null' and salt != 'undefined'">
+            salt = #{salt},
+        </if>
+        <if test="nickName != null and nickName != '' and nickName != 'null' and nickName != 'undefined'">
+            nick_name = #{nickName},
+        </if>
+        <if test="userIcon != null and userIcon != '' and userIcon != 'null' and userIcon != 'undefined'">
+            user_icon = #{userIcon},
+        </if>
+        <if test="lastLoginTime != null and lastLoginTime != '' and lastLoginTime != 'null' and lastLoginTime != 'undefined'">
+            last_login_time = #{lastLoginTime},
+        </if>
+        <if test="age != null">
+            age = #{age},
+        </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+        <if test="marryFlag != null">
+            marry_flag = #{marryFlag},
+        </if>
+        <if test="education != null">
+            education = #{education},
+        </if>
+        <if test="phone != null and phone != '' and phone != 'null' and phone != 'undefined'">
+            phone = #{phone},
+        </if>
+        <if test="email != null and email != '' and email != 'null' and email != 'undefined'">
+            email = #{email},
+        </if>
+        <if test="prov != null and prov != '' and prov != 'null' and prov != 'undefined'">
+            prov = #{prov},
+        </if>
+        <if test="city != null and city != '' and city != 'null' and city != 'undefined'">
+            city = #{city},
+        </if>
+        <if test="dist != null and dist != '' and dist != 'null' and dist != 'undefined'">
+            dist = #{dist},
+        </if>
+        <if test="address != null and address != '' and address != 'null' and address != 'undefined'">
+            address = #{address},
+        </if>
+        <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
+            idcard = #{idCard},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+    </sql>
 </mapper>

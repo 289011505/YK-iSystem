@@ -1,6 +1,7 @@
 package com.yksys.isystem.service.admin.mapper;
 
 import com.yksys.isystem.common.pojo.SystemUser;
+import com.yksys.isystem.common.pojo.UserRole;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -92,4 +93,23 @@ public interface SystemUserMapper {
      * @return 结果集合
      */
     List<Map<String, Object>> getSystemUsers(Map<String, Object> map);
+
+    /**
+     * 新增用户角色关系
+     * @param list
+     */
+    void addUserRoles(@Param(value = "list") List<UserRole> list);
+
+    /**
+     * 根据userId删除用户角色关系
+     * @param userId
+     */
+    void delUserRolesByUserId(String userId);
+
+    /**
+     * 根据userId获取角色列表
+     * @param userId
+     * @return
+     */
+    List<String> getUserRolesByUserId(String userId);
 }
