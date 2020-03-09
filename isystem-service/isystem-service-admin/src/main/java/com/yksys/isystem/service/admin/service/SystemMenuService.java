@@ -1,4 +1,5 @@
 package com.yksys.isystem.service.admin.service;
+import com.yksys.isystem.common.model.tree.SystemMenuTreeNode;
 import com.yksys.isystem.common.pojo.SystemMenu;
 
 import java.util.List;
@@ -32,14 +33,14 @@ public interface SystemMenuService {
      * @param map 参数
      * @return
      */
-    List<Map<String, Object>> getSystemMenus(int start, int pageSize, Map<String, Object> map);
+    List<SystemMenuTreeNode> getSystemMenus(int start, int pageSize, Map<String, Object> map);
 
     /**
      * 获取所有系统菜单表
      * @param map 参数
      * @return
      */
-    List<Map<String, Object>> getSystemMenus(Map<String, Object> map);
+    List<SystemMenuTreeNode> getSystemMenus(Map<String, Object> map);
 
     /**
      * 修改系统菜单表

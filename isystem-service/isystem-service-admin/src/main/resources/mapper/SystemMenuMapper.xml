@@ -90,9 +90,9 @@
         </delete>
 
     <!-- 查询管理列表 -->
-    <select id="getSystemMenus" parameterType="Map" resultType="Map">
+    <select id="getSystemMenus" parameterType="Map" resultType="com.yksys.isystem.common.model.tree.SystemMenuTreeNode">
         SELECT
-        <include refid="systemMenu_select_cond"/>, b.id authorityId, b.authority authority
+        <include refid="systemMenu_select_cond"/>, b.id authorityId, b.authority authority,
         c.id apiId, c.api_name apiName
         FROM tb_system_menu a LEFT JOIN `tb_system_authority` b on a.id = b.`menu_id` and b.status = 1
         left join `tb_system_api` c on c.id = b.`api_id` and c.status = 1

@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.admin.mapper;
 
+import com.yksys.isystem.common.model.tree.SystemMenuTreeNode;
 import com.yksys.isystem.common.pojo.SystemMenu;
 import org.apache.ibatis.annotations.Param;
 
@@ -91,5 +92,5 @@ public interface SystemMenuMapper {
      * @param map 页面表单
      * @return 结果集合
      */
-    List<Map<String, Object>> getSystemMenus(Map<String, Object> map);
+    List<SystemMenuTreeNode> getSystemMenus(Map<String, Object> map);
 }

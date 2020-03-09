@@ -14,11 +14,9 @@ import java.util.List;
  **/
 @Data
 public class TreeNode implements Serializable {
-    private static final long serialVersionUID = -8612833223848423094L;
+    private static final long serialVersionUID = 3653935496381503312L;
     //唯一标识
     private String id;
-    //名称
-    private String name;
     //父id
     private String pid;
     //层级

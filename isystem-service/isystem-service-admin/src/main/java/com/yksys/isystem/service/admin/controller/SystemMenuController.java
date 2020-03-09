@@ -2,6 +2,7 @@ package com.yksys.isystem.service.admin.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.model.tree.SystemMenuTreeNode;
 import com.yksys.isystem.common.pojo.SystemApi;
 import com.yksys.isystem.common.pojo.SystemAuthority;
 import com.yksys.isystem.common.pojo.SystemMenu;
@@ -120,7 +121,7 @@ public class SystemMenuController {
     public Result getSystemMenus(@RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                  @RequestParam(value = "pageSize", required = false, defaultValue = "30") int pageSize,
                                  @RequestParam Map<String, Object> map) {
-        List<Map<String, Object>> list = systemMenuService.getSystemMenus(start, pageSize, map);
+        List<SystemMenuTreeNode> list = systemMenuService.getSystemMenus(start, pageSize, map);
         return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
     }
 
