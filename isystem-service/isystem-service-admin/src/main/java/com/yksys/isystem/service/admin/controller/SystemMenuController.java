@@ -42,18 +42,8 @@ public class SystemMenuController {
      */
     @PostMapping("/addSystemMenu")
     public Result addSystemMenu(@RequestBody SystemMenuVo systemMenuVo) {
-        //新增菜单
         SystemMenu systemMenu = systemMenuVo.convert();
-        systemMenu = systemMenuService.addSystemMenu(systemMenu);
-        //新增api
-        SystemApi systemApi = systemMenuVo.getSystemApiVo().convert();
-        systemApi = systemApiService.addSystemApi(systemApi);
-        //新增authority
-        SystemAuthority systemAuthority = systemMenuVo.getSystemAuthorityVo().convert();
-        systemAuthority.setApiId(systemApi.getId());
-        systemAuthority.setMenuId(systemMenu.getId());
-        systemAuthorityService.addSystemAuthority(systemAuthority);
-        return new Result(HttpStatus.OK.value(), "新增成功");
+        return new Result(HttpStatus.OK.value(), "新增成功", systemMenuService.addSystemMenu(systemMenu));
     }
 
     /**
@@ -96,7 +86,7 @@ public class SystemMenuController {
      */
     @DeleteMapping("/delSystemMenu/{ids}")
     public Result delSystemMenuByIds(@PathVariable("ids") String[] ids) {
-        systemMenuService.delSystemMenuByIs(Arrays.asList(ids));
+        systemMenuService.delSystemMenuByIds(Arrays.asList(ids));
         return new Result(HttpStatus.OK.value(), "批量删除成功");
     }
 
@@ -111,6 +101,16 @@ public class SystemMenuController {
     }
 
     /**
+     * 获取所有的系统菜单树形结构(不分页)
+     * @param map 参数
+     * @return
+     */
+    @GetMapping("/getSystemMenusNodeList")
+    public Result getSystemMenusNodeList(@RequestParam Map<String, Object> map) {
+        return new Result(HttpStatus.OK.value(), "获取成功", systemMenuService.getSystemMenusNodeList(map));
+    }
+
+    /**
      * 获取所有系统菜单表
      * @param start 开始记录
      * @param pageSize 分页大小
@@ -121,8 +121,8 @@ public class SystemMenuController {
     public Result getSystemMenus(@RequestParam(value = "start", required = false, defaultValue = "0") int start,
                                  @RequestParam(value = "pageSize", required = false, defaultValue = "30") int pageSize,
                                  @RequestParam Map<String, Object> map) {
-        List<SystemMenuTreeNode> list = systemMenuService.getSystemMenus(start, pageSize, map);
-        return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
+        List<Map<String, Object>> list = systemMenuService.getSystemMenus(start, pageSize, map);
+        return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage<>(list));
     }
 
 }

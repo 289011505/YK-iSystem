@@ -46,10 +46,6 @@ public class SystemMenuVo implements Serializable {
     private String icon;
     //服务id
     private String serviceId;
-    //api
-    private SystemApiVo systemApiVo;
-    //authority
-    private SystemAuthorityVo systemAuthorityVo;
 
     public SystemMenu convert() {
         SystemMenuVoConvert systemMenuVoConvert = new SystemMenuVoConvert();

@@ -90,12 +90,22 @@
         </delete>
 
     <!-- 查询管理列表 -->
-    <select id="getSystemMenus" parameterType="Map" resultType="com.yksys.isystem.common.model.tree.SystemMenuTreeNode">
+    <select id="getSystemMenusNodeList" parameterType="Map" resultType="com.yksys.isystem.common.model.tree.SystemMenuTreeNode">
         SELECT
-        <include refid="systemMenu_select_cond"/>, b.id authorityId, b.authority authority,
-        c.id apiId, c.api_name apiName
-        FROM tb_system_menu a LEFT JOIN `tb_system_authority` b on a.id = b.`menu_id` and b.status = 1
-        left join `tb_system_api` c on c.id = b.`api_id` and c.status = 1
+        <include refid="systemMenu_select_cond"/>, IFNULL(d.menu_name, '顶级菜单') pMenuName
+        FROM tb_system_menu a left join tb_system_menu d on d.id = a.pid
+        <where>
+            <include refid="systemMenu_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
+
+    <!-- 查询管理列表 -->
+    <select id="getSystemMenus" parameterType="Map" resultType="Map">
+        SELECT
+        <include refid="systemMenu_select_cond"/>
+        FROM tb_system_menu a
         <where>
             <include refid="systemMenu_where_if"/>
             AND a.status in (1, 2)

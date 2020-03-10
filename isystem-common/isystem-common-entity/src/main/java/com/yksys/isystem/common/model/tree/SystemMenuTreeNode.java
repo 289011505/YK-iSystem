@@ -39,4 +39,5 @@ public class SystemMenuTreeNode extends TreeNode implements Serializable {
     private String authority;
     private String apiId;
     private String apiName;
+    private String pMenuName;
 }

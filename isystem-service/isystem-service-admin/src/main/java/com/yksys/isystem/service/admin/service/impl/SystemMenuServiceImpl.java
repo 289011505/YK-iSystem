@@ -42,15 +42,15 @@ public class SystemMenuServiceImpl implements SystemMenuService {
     }
 
     @Override
-    public List<SystemMenuTreeNode> getSystemMenus(int start, int pageSize, Map<String, Object> map) {
+    public List<Map<String, Object>> getSystemMenus(int start, int pageSize, Map<String, Object> map) {
         PageHelper.startPage(start, pageSize);
         return this.getSystemMenus(map);
     }
 
     @Override
-    public List<SystemMenuTreeNode> getSystemMenus(Map<String, Object> map) {
-        List<SystemMenuTreeNode> systemMenus = systemMenuMapper.getSystemMenus(map);
-        return TreeNodeUtil.getTreeNodeList(systemMenus);
+    public List<Map<String, Object>> getSystemMenus(Map<String, Object> map) {
+        List<Map<String, Object>> systemMenus = systemMenuMapper.getSystemMenus(map);
+        return systemMenus;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SystemMenuServiceImpl implements SystemMenuService {
     }
 
     @Override
-    public void delSystemMenuByIs(List<String> ids) {
+    public void delSystemMenuByIds(List<String> ids) {
         systemMenuMapper.delSystemMenuByIds(ids);
     }
 
@@ -76,6 +76,12 @@ public class SystemMenuServiceImpl implements SystemMenuService {
     @Override
     public void delSystemMenuRealByIds(List<String> ids) {
         systemMenuMapper.delSystemMenuRealByIds(ids);
+    }
+
+    @Override
+    public List<SystemMenuTreeNode> getSystemMenusNodeList(Map<String, Object> map) {
+        List<SystemMenuTreeNode> systemMenus = systemMenuMapper.getSystemMenusNodeList(map);
+        return TreeNodeUtil.getTreeNodeList(systemMenus);
     }
 
 }

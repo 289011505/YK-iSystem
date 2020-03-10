@@ -92,5 +92,12 @@ public interface SystemMenuMapper {
      * @param map 页面表单
      * @return 结果集合
      */
-    List<SystemMenuTreeNode> getSystemMenus(Map<String, Object> map);
+    List<SystemMenuTreeNode> getSystemMenusNodeList(Map<String, Object> map);
+
+    /**
+     * 获取所有系统菜单表.
+     * @param map 页面表单
+     * @return 结果集合
+     */
+    List<Map<String, Object>> getSystemMenus(Map<String, Object> map);
 }

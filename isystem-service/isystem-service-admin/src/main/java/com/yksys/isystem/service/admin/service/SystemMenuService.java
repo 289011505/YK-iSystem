@@ -33,14 +33,14 @@ public interface SystemMenuService {
      * @param map 参数
      * @return
      */
-    List<SystemMenuTreeNode> getSystemMenus(int start, int pageSize, Map<String, Object> map);
+    List<Map<String, Object>> getSystemMenus(int start, int pageSize, Map<String, Object> map);
 
     /**
      * 获取所有系统菜单表
      * @param map 参数
      * @return
      */
-    List<SystemMenuTreeNode> getSystemMenus(Map<String, Object> map);
+    List<Map<String, Object>> getSystemMenus(Map<String, Object> map);
 
     /**
      * 修改系统菜单表
@@ -58,7 +58,7 @@ public interface SystemMenuService {
      * 批量删除(软删除)
      * @param ids
      */
-    void delSystemMenuByIs(List<String> ids);
+    void delSystemMenuByIds(List<String> ids);
 
     /**
      * 根据id删除系统菜单表(真删除)
@@ -71,4 +71,11 @@ public interface SystemMenuService {
      * @param ids
      */
     void delSystemMenuRealByIds(List<String> ids);
+
+    /**
+     * 获取菜单数据树形结构
+     * @param map
+     * @return
+     */
+    List<SystemMenuTreeNode> getSystemMenusNodeList(Map<String, Object> map);
 }
