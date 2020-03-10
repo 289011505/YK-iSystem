@@ -92,8 +92,9 @@
     <!-- 查询管理列表 -->
     <select id="getSystemAuthorities" parameterType="Map" resultType="Map">
         SELECT
-        <include refid="systemAuthority_select_cond"/>, b.api_code apiCode
+        <include refid="systemAuthority_select_cond"/>, b.api_code apiCode, c.menu_name menuName
         FROM tb_system_authority a left join tb_system_api b on b.id = a.api_id
+        left join tb_system_menu c on c.id = a.menu_id
         <where>
             <include refid="systemAuthority_where_if"/>
             AND a.status in (1, 2)
