@@ -29,7 +29,7 @@ public class SystemAuthorityVo implements Serializable {
     //备注
     private String remark;
     //状态:0  已禁用 1 正在使用
-    private Integer status;
+    private int status;
 
     public SystemAuthority convert() {
         SystemAuthorityVoConvert systemAuthorityVoConvert = new SystemAuthorityVoConvert();

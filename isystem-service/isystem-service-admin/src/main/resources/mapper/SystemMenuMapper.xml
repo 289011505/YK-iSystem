@@ -92,12 +92,14 @@
     <!-- 查询管理列表 -->
     <select id="getSystemMenusNodeList" parameterType="Map" resultType="com.yksys.isystem.common.model.tree.SystemMenuTreeNode">
         SELECT
-        <include refid="systemMenu_select_cond"/>, IFNULL(d.menu_name, '顶级菜单') pMenuName
+        <include refid="systemMenu_select_cond"/>, IFNULL(d.menu_name, '顶级菜单') pMenuName, c.id authorityId, c.authority authority
         FROM tb_system_menu a left join tb_system_menu d on d.id = a.pid
+        left join tb_system_authority c on c.menu_id = a.id and c.status =1
         <where>
             <include refid="systemMenu_where_if"/>
             AND a.status in (1, 2)
         </where>
+        GROUP BY a.id
         ORDER BY a.status ASC, a.create_time DESC
     </select>
 

@@ -33,6 +33,24 @@
         </foreach>
     </insert>
 
+    <insert id="addAuthorityRoles">
+         INSERT INTO tb_authority_role(role_id, authority_id)
+         values
+         <foreach collection="list" item="item" index="index" separator=",">
+             (#{item.roleId}, #{item.authorityId})
+         </foreach>
+    </insert>
+
+    <delete id="delAuthorityRolesByRoleId">
+        delete from tb_authority_role where role_id = #{roleId}
+    </delete>
+
+    <select id="getAuthorityRolesByRoleId" resultType="java.lang.String">
+        select a.authority_id authorityId
+        from tb_authority_role a
+        where a.role_id = #{roleId}
+    </select>
+
     <!-- 修改 -->
     <update id="editSystemRoleById">
         UPDATE tb_system_role

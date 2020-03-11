@@ -2,6 +2,8 @@ package com.yksys.isystem.service.admin.service.impl;
 
 
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Lists;
+import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.pojo.AuthorityRole;
 import com.yksys.isystem.common.pojo.SystemRole;
@@ -31,7 +33,24 @@ public class SystemRoleServiceImpl implements SystemRoleService {
         systemRole.setId(AppUtil.randomId());
         systemRole.setStatus(1);
         systemRoleMapper.addSystemRole(systemRole);
+
+        //添加权限角色关系
+        if (CollectionUtils.isEmpty(systemRole.getAuthorityIds())) {
+            throw new ParameterException("权限集合为空, 请选择权限菜单!");
+        }
+        addAuthorityRole(systemRole);
         return systemRole;
+    }
+
+    private void addAuthorityRole(SystemRole systemRole) {
+        List<AuthorityRole> list = Lists.newArrayList();
+        systemRole.getAuthorityIds().forEach(authorityId -> {
+            AuthorityRole authorityRole = new AuthorityRole();
+            authorityRole.setRoleId(systemRole.getId());
+            authorityRole.setAuthorityId(authorityId);
+            list.add(authorityRole);
+        });
+        systemRoleMapper.addAuthorityRoles(list);
     }
 
     @Override
@@ -47,12 +66,22 @@ public class SystemRoleServiceImpl implements SystemRoleService {
 
     @Override
     public List<Map<String, Object>> getSystemRoles(Map<String, Object> map) {
-        return systemRoleMapper.getSystemRoles(map);
+        List<Map<String, Object>> systemRoles = systemRoleMapper.getSystemRoles(map);
+        systemRoles.forEach(systemRole -> {
+            systemRole.put("authorityIds", systemRoleMapper.getAuthorityRolesByRoleId(systemRole.get("id").toString()));
+        });
+        return systemRoles;
     }
 
     @Override
     public void editSystemRole(SystemRole systemRole) {
         systemRoleMapper.editSystemRoleById(systemRole);
+
+        //删除权限, 再添加权限
+        systemRoleMapper.delAuthorityRolesByRoleId(systemRole.getId());
+        if (!CollectionUtils.isEmpty(systemRole.getAuthorityIds())) {
+            addAuthorityRole(systemRole);
+        }
     }
 
     @Override

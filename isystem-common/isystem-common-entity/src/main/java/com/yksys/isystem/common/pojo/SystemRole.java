@@ -2,6 +2,8 @@ package com.yksys.isystem.common.pojo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @program: YK-iSystem
  * @description:
@@ -20,4 +22,6 @@ public class SystemRole {
     private String remark;
     //状态
     private int status;
+    //权限id
+    private List<String> authorityIds;
 }

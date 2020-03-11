@@ -105,4 +105,22 @@ public interface SystemRoleMapper {
      * @param roleId
      */
     void delRoleAuth(String roleId);
+    /**
+     * 新增权限角色关系
+     * @param list
+     */
+    void addAuthorityRoles(@Param(value = "list") List<AuthorityRole> list);
+
+    /**
+     * 根据roleId删除权限角色关系
+     * @param roleId
+     */
+    void delAuthorityRolesByRoleId(String roleId);
+
+    /**
+     * 获取权限角色
+     * @param id
+     * @return
+     */
+    List<String> getAuthorityRolesByRoleId(String id);
 }

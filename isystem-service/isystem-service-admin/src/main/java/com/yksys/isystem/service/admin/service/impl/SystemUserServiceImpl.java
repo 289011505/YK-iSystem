@@ -4,6 +4,7 @@ package com.yksys.isystem.service.admin.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.core.utils.PinYinUtil;
 import com.yksys.isystem.common.core.utils.StringUtil;
@@ -55,9 +56,10 @@ public class SystemUserServiceImpl implements SystemUserService {
         systemUserMapper.addSystemUser(systemUser);
 
         //添加用户角色关系
-        if (!CollectionUtils.isEmpty(systemUser.getRoles())) {
-            addUserRoles(systemUser);
+        if (CollectionUtils.isEmpty(systemUser.getRoles())) {
+            throw new ParameterException("角色集合为空, 请选择角色!");
         }
+        addUserRoles(systemUser);
         return systemUser;
     }
 
