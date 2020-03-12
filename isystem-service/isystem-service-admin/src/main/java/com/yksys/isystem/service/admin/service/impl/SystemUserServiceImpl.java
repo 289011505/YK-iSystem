@@ -56,8 +56,8 @@ public class SystemUserServiceImpl implements SystemUserService {
         systemUserMapper.addSystemUser(systemUser);
 
         //添加用户角色关系
-        if (CollectionUtils.isEmpty(systemUser.getRoles())) {
-            throw new ParameterException("角色集合为空, 请选择角色!");
+        if (StringUtil.isBlank(systemUser.getRoleId())) {
+            throw new ParameterException("角色为空, 请选择角色!");
         }
         addUserRoles(systemUser);
         return systemUser;
@@ -65,12 +65,16 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     private void addUserRoles(SystemUser systemUser) {
         List<UserRole> list = Lists.newArrayList();
-        systemUser.getRoles().forEach(roleId -> {
-            UserRole userRole = new UserRole();
-            userRole.setUserId(systemUser.getId());
-            userRole.setRoleId(roleId);
-            list.add(userRole);
-        });
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(systemUser.getRoleId());
+        userRole.setUserId(systemUser.getId());
+        list.add(userRole);
+//        systemUser.getRoles().forEach(roleId -> {
+//            UserRole userRole = new UserRole();
+//            userRole.setUserId(systemUser.getId());
+//            userRole.setRoleId(roleId);
+//            list.add(userRole);
+//        });
         systemUserMapper.addUserRoles(list);
     }
 
@@ -89,7 +93,7 @@ public class SystemUserServiceImpl implements SystemUserService {
     public List<Map<String, Object>> getSystemUsers(Map<String, Object> map) {
         List<Map<String, Object>> systemUsers = systemUserMapper.getSystemUsers(map);
         systemUsers.forEach(systemUser -> {
-            systemUser.put("roles", systemUserMapper.getUserRolesByUserId(systemUser.get("id").toString()));
+            systemUser.put("roleId", systemUserMapper.getUserRolesByUserId(systemUser.get("id").toString()));
         });
         return systemUsers;
     }
@@ -100,7 +104,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
         //先删除用户角色关系, 再添加
         systemUserMapper.delUserRolesByUserId(systemUser.getId());
-        if (!CollectionUtils.isEmpty(systemUser.getRoles())) {
+        if (!StringUtil.isBlank(systemUser.getRoleId())) {
             addUserRoles(systemUser);
         }
     }

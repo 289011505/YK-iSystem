@@ -2,6 +2,7 @@ package com.yksys.isystem.zuul.filter;
 
 import com.google.common.collect.Sets;
 import com.yksys.isystem.common.core.constants.ComConstants;
+import com.yksys.isystem.common.core.security.YkUserDetails;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.zuul.configuration.ApiGatewayProperties;
 import com.yksys.isystem.zuul.locator.ResourceLocator;
@@ -89,7 +90,11 @@ public class AccessManager {
         if (authentication == null) {
             return false;
         }
-        if (ComConstants.ROOT_ADMIN.equals(authentication.getName())) {
+        YkUserDetails principal = (YkUserDetails) authentication.getPrincipal();
+        if (CollectionUtils.isEmpty(principal.getRoles())) {
+            return false;
+        }
+        if (ComConstants.ROOT_ADMIN.equals(principal.getRoles().get(0))) {
             //超级管理员账号, 直接放行
             return true;
         }

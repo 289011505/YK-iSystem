@@ -16,6 +16,7 @@
         <module>isystem-service-generate</module>
         <module>isystem-service-system</module>
         <module>isystem-service-business</module>
+        <module>isystem-service-workflow</module>
     </modules>
 
     <dependencies>

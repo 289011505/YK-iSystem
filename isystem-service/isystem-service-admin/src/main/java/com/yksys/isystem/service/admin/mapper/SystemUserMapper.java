@@ -111,5 +111,5 @@ public interface SystemUserMapper {
      * @param userId
      * @return
      */
-    List<String> getUserRolesByUserId(String userId);
+    String getUserRolesByUserId(String userId);
 }

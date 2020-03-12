@@ -62,7 +62,7 @@ public class SystemUserVo implements Serializable {
     //状态:0  已禁用 1 正在使用
     private Integer status;
     //角色列表
-    private List<String> roles;
+    private String roleId;
 
     public SystemUser convert() {
         SystemUserVoConvert systemUserVoConvert = new SystemUserVoConvert();
