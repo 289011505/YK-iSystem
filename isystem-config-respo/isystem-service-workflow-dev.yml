@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: isystem-service-workflow
+
+server:
+  port: 8507
