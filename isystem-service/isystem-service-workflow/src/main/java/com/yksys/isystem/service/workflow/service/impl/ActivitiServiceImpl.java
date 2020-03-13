@@ -2,6 +2,7 @@ package com.yksys.isystem.service.workflow.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.pagehelper.PageInfo;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.vo.ActivitiModelVo;
 import com.yksys.isystem.service.workflow.service.ActivitiService;
@@ -31,9 +32,10 @@ public class ActivitiServiceImpl implements ActivitiService {
     @Autowired
     private ObjectMapper objectMapper;
     @Override
-    public List<Model> getModels(int start, int pageSize, Map<String, Object> map) {
-        List<Model> models = repositoryService.createModelQuery().orderByCreateTime().desc().listPage(start - 1, pageSize);
-        return models;
+    public PageInfo<Model> getModels(int start, int pageSize, Map<String, Object> map) {
+        List<Model> models = repositoryService.createModelQuery().orderByCreateTime().desc().listPage(start, pageSize);
+        PageInfo pageList = new PageInfo<>(models);
+        return pageList;
     }
 
     @Override
@@ -81,5 +83,23 @@ public class ActivitiServiceImpl implements ActivitiService {
     @Override
     public void delModel(String id) {
         repositoryService.deleteModel(id);
+    }
+
+    @Override
+    public void delModelByIds(String[] ids) {
+        if (ids.length != 0) {
+            for (String id : ids) {
+                this.delModel(id);
+            }
+        }
+    }
+
+    @Override
+    public void synchronizeData() {
+        //同步用户
+
+        //同步角色(组)
+
+        //同步用户-用户组关联
     }
 }

@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.workflow.service;
 
+import com.github.pagehelper.PageInfo;
 import com.yksys.isystem.common.vo.ActivitiModelVo;
 import org.activiti.engine.repository.Model;
 
@@ -23,7 +24,7 @@ public interface ActivitiService {
      * @param map
      * @return
      */
-    List<Model> getModels(int start, int pageSize, Map<String, Object> map);
+    PageInfo<Model> getModels(int start, int pageSize, Map<String, Object> map);
 
     /**
      * 获取所有模型列表
@@ -46,4 +47,15 @@ public interface ActivitiService {
      * @param id
      */
     void delModel(String id);
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    void delModelByIds(String[] ids);
+
+    /**
+     * 同步用户, 角色数据 到Activiti表中
+     */
+    void synchronizeData();
 }

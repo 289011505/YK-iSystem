@@ -1,6 +1,6 @@
 package com.yksys.isystem.service.workflow;
 
-import org.mybatis.spring.annotation.MapperScan;
+import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -12,10 +12,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author: YuKai Fan
  * @create: 2020-03-12 15:47
  **/
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @EnableEurekaClient
 @EnableFeignClients
-@MapperScan(basePackages = {"com.yksys.isystem.service.workflow.mapper"})
 public class ServiceWorkflowApplication {
 
     public static void main(String[] args) {
