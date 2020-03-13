@@ -1,6 +1,8 @@
 spring:
   application:
     name: isystem-service-workflow
+  activiti:
+    check-process-definitions: false
 
 server:
   port: 8507
