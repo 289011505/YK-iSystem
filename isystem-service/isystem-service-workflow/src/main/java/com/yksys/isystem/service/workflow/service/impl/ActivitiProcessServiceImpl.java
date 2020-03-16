@@ -16,7 +16,9 @@ import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -55,13 +57,15 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             processDefinition.setDeploymentTime(TimeUtil.parseTime(deployment.getDeploymentTime()));
 
             //根据流程定义id查询流程实例
-            ExecutionEntity executionEntity = (ExecutionEntity) runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).singleResult();
-            if (executionEntity == null) {//如果实例为空则表示未启动流程实例
-                processDefinition.setStatus(0);
-            } else if (executionEntity.isActive()){
+            List<ProcessInstance> activateList = runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).active().list();
+            List<ProcessInstance> suspendList = runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).suspended().list();
+            List<ProcessInstance> list = runtimeService.createProcessInstanceQuery().processDefinitionId(processDefinition.getId()).list();
+            if (!CollectionUtils.isEmpty(activateList)) {
                 processDefinition.setStatus(1);
-            } else {
+            } else if (!CollectionUtils.isEmpty(suspendList)) {
                 processDefinition.setStatus(3);
+            } else if (!CollectionUtils.isEmpty(list)) {
+                processDefinition.setStatus(0);
             }
         });
         PageInfo pageList = new PageInfo<>(processDefinitions);
