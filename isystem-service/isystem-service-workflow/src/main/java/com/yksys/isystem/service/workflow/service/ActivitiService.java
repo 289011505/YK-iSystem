@@ -58,4 +58,10 @@ public interface ActivitiService {
      * 同步用户, 角色数据 到Activiti表中
      */
     void synchronizeData();
+
+    /**
+     * 根据模型id部署
+     * @param id
+     */
+    void deployByModelId(String id);
 }

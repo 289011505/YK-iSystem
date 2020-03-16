@@ -143,4 +143,9 @@ public class SystemUserServiceImpl implements SystemUserService {
         return fileUploadService.uploadOSSByFile(fileModel.getFile(), bucketVo);
     }
 
+    @Override
+    public List<Map<String, Object>> getAllUserRoles() {
+        return systemUserMapper.getAllUserRoles();
+    }
+
 }

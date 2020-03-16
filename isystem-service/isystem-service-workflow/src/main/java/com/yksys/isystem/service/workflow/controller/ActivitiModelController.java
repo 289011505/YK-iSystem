@@ -96,4 +96,15 @@ public class ActivitiModelController {
         activitiService.synchronizeData();
         return new Result(HttpStatus.OK.value(), "同步成功");
     }
+
+    /**
+     * 根据模型id部署
+     * @param id
+     * @return
+     */
+    @PostMapping("/deployByModelId/{id}")
+    public Result deployByModelId(@PathVariable("id") String id) {
+        activitiService.deployByModelId(id);
+        return new Result(HttpStatus.OK.value(), "部署成功");
+    }
 }

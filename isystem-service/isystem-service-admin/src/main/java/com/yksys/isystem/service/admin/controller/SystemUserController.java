@@ -140,4 +140,13 @@ public class SystemUserController {
         return result;
     }
 
+    /**
+     * 获取所有角色-用户关系列表
+     * @return
+     */
+    @GetMapping("/getAllUserRoles")
+    public Result getAllUserRoles() {
+        return new Result(HttpStatus.OK.value(), "获取成功", systemUserService.getAllUserRoles());
+    }
+
 }

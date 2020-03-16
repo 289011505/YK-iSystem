@@ -47,6 +47,12 @@
         delete from tb_user_role where user_id = #{userId}
     </delete>
 
+    <!-- 获取所有的用户角色关联数据 -->
+    <select id="getAllUserRoles" resultType="Map">
+        SELECT a.id id, a.user_id userId, a.role_id roleId
+        FROM tb_user_role a
+    </select>
+
     <!-- 修改 -->
     <update id="editSystemUserById">
         UPDATE tb_system_user

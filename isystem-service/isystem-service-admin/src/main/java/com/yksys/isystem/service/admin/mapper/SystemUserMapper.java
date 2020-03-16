@@ -112,4 +112,10 @@ public interface SystemUserMapper {
      * @return
      */
     String getUserRolesByUserId(String userId);
+
+    /**
+     * 获取所有角色-用户关系列表
+     * @return
+     */
+    List<Map<String, Object>> getAllUserRoles();
 }
