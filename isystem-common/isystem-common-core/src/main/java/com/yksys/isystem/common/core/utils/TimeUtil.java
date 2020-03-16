@@ -1,8 +1,11 @@
 package com.yksys.isystem.common.core.utils;
 
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * @program: YK-iSystem
@@ -39,6 +42,26 @@ public final class TimeUtil {
      */
     public static String parseTime(LocalDateTime time) {
         return DEFAULT_DATETIME_FORMATTER.format(time);
+    }
+
+    /**
+     * 时间转 String
+     * @return
+     */
+    public static String parseTime(Date date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        String dataStr = sdf.format(date);
+        return dataStr;
+    }
+
+    /**
+     * 时间转 String
+     * @return
+     */
+    public static String parseTime(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dataStr = sdf.format(date);
+        return dataStr;
     }
 
     /**

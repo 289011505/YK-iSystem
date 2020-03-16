@@ -67,7 +67,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // Fegin访问不需要认证
-                .antMatchers("/", "/api/systemUser/editSystemUser").permitAll()
+                .antMatchers("/",
+                        "/api/systemUser/editSystemUser",
+                        "/api/systemUser/getSystemUsers/noPage",
+                        "/api/systemUser/getAllUserRoles",
+                        "/api/systemRole/getSystemRoles/noPage").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

@@ -80,4 +80,9 @@ public interface SystemUserService {
      * @return
      */
     Result updateUserIcon(HttpServletRequest request) throws IOException;
+    /**
+     * 获取所有角色-用户关系列表
+     * @return
+     */
+    List<Map<String, Object>> getAllUserRoles();
 }
