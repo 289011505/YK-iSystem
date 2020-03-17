@@ -125,38 +125,6 @@ public class ActivitiTaskController {
                                @RequestBody Map<String, Object> map) {
 
         activitiTaskService.handleTask(taskId, pass, map);
-        Map<String, Object> variables = activitiTaskService.getVariables(taskId);
-
-        //处理当前节点信息
-        map.put("createTime", new Date());
-        map.put("userId", AppSession.getCurrentUserId());
-        map.put("userName", AppSession.getCurrentUser().getUsername());
-        map.put("pass", pass);
-
-        Map<String, Object> taskInfo = Maps.newHashMap();
-        taskInfo.put("pass", pass);
-        //判断是否已经拒绝过一次
-        Object alreadyNo = variables.get("alreadyNo");
-        if (alreadyNo != null && (boolean) alreadyNo && (!pass)) {//如果之前已经拒绝过,再次申请，直接结束流程
-            taskInfo.put("approve", -1);
-        } else {
-            if (pass) {
-                taskInfo.put("approve", 1); //通过下一节点
-            } else {
-                taskInfo.put("approve", 0); //不通过
-            }
-        }
-
-        List<Map<String, Object>> approveMsgList = Lists.newArrayList();
-        Object o = variables.get(ActivitiConstant.APPROVAL_MESSAGE);
-        if (o != null) {
-            approveMsgList = (List<Map<String, Object>>) o;
-        }
-        approveMsgList.add(map);
-
-        taskInfo.put(ActivitiConstant.APPROVAL_MESSAGE, approveMsgList);
-
-        activitiTaskService.completeTask(taskId, taskInfo);
         return new Result(HttpStatus.OK.value(), pass?"通过":"驳回");
     }
 
