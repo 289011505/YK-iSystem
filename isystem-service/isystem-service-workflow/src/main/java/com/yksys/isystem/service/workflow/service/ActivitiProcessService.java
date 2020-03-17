@@ -1,7 +1,9 @@
 package com.yksys.isystem.service.workflow.service;
 
 import com.github.pagehelper.PageInfo;
+import com.yksys.isystem.service.workflow.entity.HistoryProcessInstanceEntity;
 import com.yksys.isystem.service.workflow.entity.ProcessDefinition;
+import com.yksys.isystem.service.workflow.entity.ProcessInstanceEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -20,14 +22,14 @@ public interface ActivitiProcessService {
      * @param map
      * @return
      */
-    PageInfo<ProcessDefinition> getActProcessDeploys(int start, int pageSize, Map<String, Object> map);
+    PageInfo<ProcessInstanceEntity> getActProcessDeploys(int start, int pageSize, Map<String, Object> map);
 
     /**
      * 获取所有流程列表
      * @param map
      * @return
      */
-    List<ProcessDefinition> getActProcessDeploys(Map<String, Object> map);
+    List<ProcessInstanceEntity> getActProcessDeploys(Map<String, Object> map);
 
     /**
      * 删除流程定义 级联 删除流程节点绑定信息
@@ -39,5 +41,32 @@ public interface ActivitiProcessService {
      * 启动流程
      * @param deploymentId
      */
-    void startProcess(String deploymentId);
+    String startProcess(String deploymentId);
+
+    /**
+     * 删除流程实例
+     * @param processInstanceId
+     */
+    void deleteProcessInstance(String processInstanceId, String reason);
+
+    /**
+     * 挂起流程
+     * @param processInstanceId
+     */
+    void pendProcess(String processInstanceId);
+
+    /**
+     * 激活流程
+     * @param processInstanceId
+     */
+    void activateProcess(String processInstanceId);
+
+    /**
+     * 获取历史流程列表
+     * @param start
+     * @param pageSize
+     * @param map
+     * @return
+     */
+    PageInfo<HistoryProcessInstanceEntity> getHistoryProcess(int start, int pageSize, Map<String, Object> map);
 }
