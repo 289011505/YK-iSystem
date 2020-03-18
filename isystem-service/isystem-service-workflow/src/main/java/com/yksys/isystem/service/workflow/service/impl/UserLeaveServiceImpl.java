@@ -40,13 +40,13 @@ public class UserLeaveServiceImpl implements UserLeaveService {
         userLeave.setId(AppUtil.randomId());
         userLeave.setStatus(1);
         userLeave.setUserId(AppSession.getCurrentUserId());
-        userLeave.setUrlPath(userLeave.getUrlPath() + "/" + userLeave.getId());
+//        userLeave.setUrlPath(userLeave.getUrlPath() + "/" + userLeave.getId());
 
         //根据processDefinitionKey启动流程实例
         Map<String, Object> map = Maps.newHashMap();
         map.put("baseTask", userLeave);
 
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("leaveProcess", map);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", map);
         userLeave.setProcessInstanceId(processInstance.getId());
 
         userLeaveMapper.addUserLeave(userLeave);
