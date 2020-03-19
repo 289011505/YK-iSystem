@@ -1,9 +1,7 @@
 package com.yksys.isystem.service.workflow.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.yksys.isystem.common.core.constants.ActivitiConstant;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.utils.MapUtil;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -95,8 +92,8 @@ public class ActivitiTaskController {
      * @param pass        是否通过标识
      * @return
      */
-    @PutMapping("/updateTask/{taskId}/{type}/{flag}")
-    public Result getTasks(@RequestBody Map<String, Object> map, @PathVariable("taskId") String taskId,
+    @PutMapping("/updateTask/{taskId}/{type}/{pass}")
+    public Result updateTask(@RequestBody Map<String, Object> map, @PathVariable("taskId") String taskId,
                            @PathVariable("type") String type, @PathVariable("pass") boolean pass) {
 
         Map<String, Object> variable = Maps.newHashMap();
@@ -109,7 +106,7 @@ public class ActivitiTaskController {
 
         //受理后, 任务列表数据减少
         activitiTaskService.completeTask(taskId, variable);
-        return new Result(HttpStatus.OK.value(), "更新任务成功");
+        return new Result(HttpStatus.OK.value(), pass?"重新申请成功":"已取消申请");
     }
 
     /**

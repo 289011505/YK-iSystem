@@ -9,4 +9,7 @@ package com.yksys.isystem.common.core.constants;
 public class ActivitiConstant {
     //请假审批信息参数
     public static final String APPROVAL_MESSAGE = "approval_message";
+
+    //申请businessKey前缀
+    public static final String BUSINESS_KEY_LEAVE = "leave:";
 }

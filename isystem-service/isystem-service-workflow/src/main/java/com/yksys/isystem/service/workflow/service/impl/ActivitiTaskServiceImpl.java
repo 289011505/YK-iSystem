@@ -9,12 +9,13 @@ import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.utils.Base64Util;
 import com.yksys.isystem.common.core.utils.StringUtil;
-import com.yksys.isystem.service.workflow.entity.BaseTask;
+import com.yksys.isystem.common.pojo.BaseTask;
 import com.yksys.isystem.service.workflow.entity.TaskEntity;
 import com.yksys.isystem.service.workflow.service.ActivitiTaskService;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.*;
 import org.activiti.engine.history.*;
+import org.activiti.engine.identity.User;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -55,6 +56,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     private ProcessEngineFactoryBean processEngine;
     @Autowired
     private ProcessEngineConfiguration processEngineConfiguration;
+    @Autowired
+    private IdentityService identityService;
 
     @Override
     public PageInfo<TaskEntity> getTasks(int start, int pageSize, Map<String, Object> map) {
@@ -85,7 +88,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
             TaskEntity taskEntity = new TaskEntity(task);
             taskEntity.setReason(baseTask.getReason());
             taskEntity.setUrlPath(baseTask.getUrlPath());
-            taskEntity.setUserName(AppSession.getCurrentUser().getUsername());
+            taskEntity.setStartTime(baseTask.getStartTime());
+            taskEntity.setEndTime(baseTask.getEndTime());
+            //获取办理人信息
+            User handleUser = identityService.createUserQuery().userId(baseTask.getUserId()).singleResult();
+            taskEntity.setUserName(handleUser.getFirstName());
             //判断当前办理人是否是自己
             if (userId.equals(baseTask.getUserId())) {
                 if (variables.containsKey("flag") && StringUtil.isNotBlank(variables.get("flag"))) {

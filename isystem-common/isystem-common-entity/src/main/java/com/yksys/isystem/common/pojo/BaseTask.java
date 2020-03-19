@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.workflow.entity;
+package com.yksys.isystem.common.pojo;
 
 import lombok.Data;
 
@@ -24,5 +24,9 @@ public abstract class BaseTask implements Serializable {
     private String createUserId;
     private String updateTime;
     private String updateUserId;
+    //开始时间
+    private String startTime;
+    //结束时间
+    private String endTime;
 
 }

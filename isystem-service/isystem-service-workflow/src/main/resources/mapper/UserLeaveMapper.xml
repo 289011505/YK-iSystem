@@ -2,94 +2,115 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yksys.isystem.service.workflow.mapper.UserLeaveMapper">
-        <!-- 新增 -->
-        <insert id="addUserLeave">
-            INSERT INTO tb_user_leave(<include refid="userLeave_add_key"><property name="alias" value="" /></include>)
-            VALUES (<include refid="userLeave_add_val"><property name="alias" value="" /></include>)
-        </insert>
+    <!-- 新增 -->
+    <insert id="addUserLeave">
+        INSERT INTO tb_user_leave(
+        <include refid="userLeave_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="userLeave_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
 
-        <!-- 批量新增 -->
-        <insert id="addUserLeaves">
-            INSERT INTO tb_user_leave(<include refid="userLeave_add_key"><property name="alias" value="" /></include>)
-            VALUES
-            <foreach collection="list" item="item" index="index" separator=",">
-                (<include refid="userLeave_add_val"><property name="alias" value="item."/></include>)
-            </foreach>
-        </insert>
+    <!-- 批量新增 -->
+    <insert id="addUserLeaves">
+        INSERT INTO tb_user_leave(
+        <include refid="userLeave_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="userLeave_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
 
-        <!-- 修改 -->
-        <update id="editUserLeaveById">
-            UPDATE tb_user_leave
-            <set>
-                <include refid="userLeave_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id = #{id}
-        </update>
+    <!-- 修改 -->
+    <update id="editUserLeaveById">
+        UPDATE tb_user_leave
+        <set>
+            <include refid="userLeave_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
 
-        <!-- 批量修改 -->
-        <update id="editUserLeaveByIds">
-            UPDATE tb_user_leave
-            <set>
-                <include refid="userLeave_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id IN
-            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量修改 -->
+    <update id="editUserLeaveByIds">
+        UPDATE tb_user_leave
+        <set>
+            <include refid="userLeave_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 删除 -->
-        <update id="delUserLeaveById">
+    <!-- 删除 -->
+    <update id="delUserLeaveById">
             update tb_user_leave SET status = 0 WHERE id = #{id}
         </update>
 
-        <!-- 批量删除 -->
-        <update id="delUserLeaveByIds">
-            UPDATE tb_user_leave SET status = 0 WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量删除 -->
+    <update id="delUserLeaveByIds">
+        UPDATE tb_user_leave SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 真删除 -->
-        <delete id="delUserLeaveRealById">
+    <!-- 真删除 -->
+    <delete id="delUserLeaveRealById">
             DELETE FROM tb_user_leave WHERE id = #{id}
         </delete>
 
-        <!-- 真批量删除 -->
-        <delete id="delUserLeaveRealByIds">
-            DELETE FROM tb_user_leave WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </delete>
+    <!-- 真批量删除 -->
+    <delete id="delUserLeaveRealByIds">
+        DELETE FROM tb_user_leave WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
-        <!-- 清空 -->
-        <delete id="delUserLeaveReals">
+    <!-- 清空 -->
+    <delete id="delUserLeaveReals">
             DELETE FROM tb_user_leave
         </delete>
 
-        <!-- 查询管理列表 -->
-        <select id="getUserLeaves" parameterType="Map" resultType="Map">
-            SELECT <include refid="userLeave_select_cond" />
-            FROM tb_user_leave a
-            <where>
-                <include refid="userLeave_where_if" />
-                AND a.status in (1, 2)
-            </where>
-            ORDER BY a.status ASC, a.create_time DESC
-        </select>
+    <!-- 查询管理列表 -->
+    <select id="getUserLeaves" parameterType="Map" resultType="Map">
+        SELECT<include refid="userLeave_select_cond"/>, b.user_name userName
+        FROM tb_user_leave a left join tb_system_user b on a.user_id = b.id
+        <where>
+            <include refid="userLeave_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
 
-        <!-- 根据id查询用户请假申请表 -->
-        <select id="getUserLeaveById" resultType="Map">
-            SELECT <include refid="userLeave_select_cond_one"/>
-            FROM tb_user_leave a
-            WHERE a.status in (1, 2) and a.id = #{id}
-        </select>
+    <!-- 根据id查询用户请假申请表 -->
+    <select id="getUserLeaveById" resultType="Map">
+        SELECT
+        <include refid="userLeave_select_cond_one"/>, b.user_name userName
+        FROM tb_user_leave a left join tb_system_user b on a.user_id = b.id
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
 
 
-        <!-- 查询的选择项, 增删字段时调整 -->
-        <sql id="userLeave_select_cond">
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="userLeave_select_cond">
             a.id id
                             
                                             
@@ -116,10 +137,11 @@
                                     , a.update_user_id updateUserId
                                             
                                     , a.update_time updateTime
+                                    , a.leave_type leaveType
                                     </sql>
 
-        <!-- (单个)查询的选择项, 增删字段时调整 -->
-        <sql id="userLeave_select_cond_one">
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="userLeave_select_cond_one">
             a.id id
                                                                             , a.user_id userId
                                                                 , a.start_time startTime
@@ -133,54 +155,58 @@
                                                                 , a.create_time createTime
                                                                 , a.update_user_id updateUserId
                                                                 , a.update_time updateTime
+                                                                , a.leave_type leaveType
                                     </sql>
 
-        <!-- 查询条件 -->
-        <sql id="userLeave_where_if">
-                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
-                    AND a.id = #{id}
-                </if>
-                                                            <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
-                    AND a.user_id = #{userId}
-                </if>
-                                                            <if test="startTime != null and startTime != '' and startTime != 'null' and startTime != 'undefined'">
-                    AND a.start_time = #{startTime}
-                </if>
-                                                            <if test="endTime != null and endTime != '' and endTime != 'null' and endTime != 'undefined'">
-                    AND a.end_time = #{endTime}
-                </if>
-                                                            <if test="reason != null and reason != '' and reason != 'null' and reason != 'undefined'">
-                    AND a.reason = #{reason}
-                </if>
-                                                            <if test="leaveDays != null">
-                    AND a.leave_days = #{leaveDays}
-                </if>
-                                                            <if test="processInstanceId != null and processInstanceId != '' and processInstanceId != 'null' and processInstanceId != 'undefined'">
-                    AND a.process_instance_Id = #{processInstanceId}
-                </if>
-                                                            <if test="urlPath != null and urlPath != '' and urlPath != 'null' and urlPath != 'undefined'">
-                    AND a.url_path = #{urlPath}
-                </if>
-                                                            <if test="status != null">
-                    AND a.status = #{status}
-                </if>
-                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
-                    AND a.create_user_id = #{createUserId}
-                </if>
-                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
-                    AND a.create_time = #{createTime}
-                </if>
-                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
-                    AND a.update_user_id = #{updateUserId}
-                </if>
-                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
-                    AND a.update_time = #{updateTime}
-                </if>
-                                    </sql>
+    <!-- 查询条件 -->
+    <sql id="userLeave_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
+            AND a.user_id = #{userId}
+        </if>
+        <if test="startTime != null and startTime != '' and startTime != 'null' and startTime != 'undefined'">
+            AND a.start_time = #{startTime}
+        </if>
+        <if test="endTime != null and endTime != '' and endTime != 'null' and endTime != 'undefined'">
+            AND a.end_time = #{endTime}
+        </if>
+        <if test="reason != null and reason != '' and reason != 'null' and reason != 'undefined'">
+            AND a.reason = #{reason}
+        </if>
+        <if test="leaveDays != null">
+            AND a.leave_days = #{leaveDays}
+        </if>
+        <if test="processInstanceId != null and processInstanceId != '' and processInstanceId != 'null' and processInstanceId != 'undefined'">
+            AND a.process_instance_Id = #{processInstanceId}
+        </if>
+        <if test="urlPath != null and urlPath != '' and urlPath != 'null' and urlPath != 'undefined'">
+            AND a.url_path = #{urlPath}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+        <if test="leaveType != null">
+            AND a.leave_type = #{leaveType},
+        </if>
+    </sql>
 
 
-        <!-- (批量)新增键, 增删字段时调整 -->
-        <sql id="userLeave_add_key">
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="userLeave_add_key">
             id
                                                         
                     , user_id
@@ -198,10 +224,12 @@
                     , url_path
                                             
                     , status
+
+                    , leave_type
                                                                                                                                                     </sql>
 
-        <!-- (批量)新增值, 增删字段时调整 -->
-        <sql id="userLeave_add_val">
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="userLeave_add_val">
             #{id}
                                                                             , #{userId}
                                                                 , #{startTime}
@@ -211,33 +239,37 @@
                                                                 , #{processInstanceId}
                                                                 , #{urlPath}
                                                                 , #{status}
+                                                                , #{leaveType}
                                                                                                                                                     </sql>
 
-        <!-- (批量修改的条件,增减字段时调整) -->
-        <sql id="userLeave_set_if">
-                                                                                                                                <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
-                                user_id = #{userId},
-                            </if>
-                                                                                                                                                                <if test="startTime != null and startTime != '' and startTime != 'null' and startTime != 'undefined'">
-                                start_time = #{startTime},
-                            </if>
-                                                                                                                                                                <if test="endTime != null and endTime != '' and endTime != 'null' and endTime != 'undefined'">
-                                end_time = #{endTime},
-                            </if>
-                                                                                                                                                                <if test="reason != null and reason != '' and reason != 'null' and reason != 'undefined'">
-                                reason = #{reason},
-                            </if>
-                                                                                                                                                                <if test="leaveDays != null">
-                                leave_days = #{leaveDays},
-                            </if>
-                                                                                                                                                                <if test="processInstanceId != null and processInstanceId != '' and processInstanceId != 'null' and processInstanceId != 'undefined'">
-                                process_instance_Id = #{processInstanceId},
-                            </if>
-                                                                                                                                                                <if test="urlPath != null and urlPath != '' and urlPath != 'null' and urlPath != 'undefined'">
-                                url_path = #{urlPath},
-                            </if>
-                                                                                                                                                                <if test="status != null">
-                                status = #{status},
-                            </if>
-                                                                                                                                                                                                                                                                                                                                                </sql>
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="userLeave_set_if">
+        <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
+            user_id = #{userId},
+        </if>
+        <if test="startTime != null and startTime != '' and startTime != 'null' and startTime != 'undefined'">
+            start_time = #{startTime},
+        </if>
+        <if test="endTime != null and endTime != '' and endTime != 'null' and endTime != 'undefined'">
+            end_time = #{endTime},
+        </if>
+        <if test="reason != null and reason != '' and reason != 'null' and reason != 'undefined'">
+            reason = #{reason},
+        </if>
+        <if test="leaveDays != null">
+            leave_days = #{leaveDays},
+        </if>
+        <if test="processInstanceId != null and processInstanceId != '' and processInstanceId != 'null' and processInstanceId != 'undefined'">
+            process_instance_Id = #{processInstanceId},
+        </if>
+        <if test="urlPath != null and urlPath != '' and urlPath != 'null' and urlPath != 'undefined'">
+            url_path = #{urlPath},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="leaveType != null">
+            leave_type = #{leaveType},
+        </if>
+    </sql>
 </mapper>

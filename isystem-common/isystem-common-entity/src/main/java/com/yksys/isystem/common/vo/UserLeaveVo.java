@@ -36,6 +36,8 @@ public class UserLeaveVo implements Serializable {
     private String urlPath;
     //状态:0  已禁用 1 正在使用
     private Integer status;
+    //请假类型
+    private Integer leaveType;
 
     public UserLeave convert() {
         UserLeaveVoConvert userLeaveVoConvert = new UserLeaveVoConvert();

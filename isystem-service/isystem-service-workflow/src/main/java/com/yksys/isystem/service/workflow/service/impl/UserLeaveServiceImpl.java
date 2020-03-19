@@ -3,6 +3,7 @@ package com.yksys.isystem.service.workflow.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
+import com.yksys.isystem.common.core.constants.ActivitiConstant;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.pojo.UserLeave;
@@ -46,7 +47,7 @@ public class UserLeaveServiceImpl implements UserLeaveService {
         Map<String, Object> map = Maps.newHashMap();
         map.put("baseTask", userLeave);
 
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", map);
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", ActivitiConstant.BUSINESS_KEY_LEAVE + userLeave.getId(), map);
         userLeave.setProcessInstanceId(processInstance.getId());
 
         userLeaveMapper.addUserLeave(userLeave);
@@ -81,6 +82,7 @@ public class UserLeaveServiceImpl implements UserLeaveService {
                     if (task != null) {
                         //当前任务的审批阶段
                         userLeave.put("taskName", task.getName());
+                        userLeave.put("taskId", task.getId());
                     }
                 }
 
