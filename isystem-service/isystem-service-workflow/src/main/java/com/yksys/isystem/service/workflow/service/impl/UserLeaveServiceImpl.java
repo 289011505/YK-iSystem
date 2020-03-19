@@ -46,6 +46,7 @@ public class UserLeaveServiceImpl implements UserLeaveService {
         //根据processDefinitionKey启动流程实例
         Map<String, Object> map = Maps.newHashMap();
         map.put("baseTask", userLeave);
+        map.put("workflowType", "leave");
 
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("process", ActivitiConstant.BUSINESS_KEY_LEAVE + userLeave.getId(), map);
         userLeave.setProcessInstanceId(processInstance.getId());

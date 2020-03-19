@@ -10,6 +10,7 @@ import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.utils.Base64Util;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.pojo.BaseTask;
+import com.yksys.isystem.common.pojo.UserLeave;
 import com.yksys.isystem.service.workflow.entity.TaskEntity;
 import com.yksys.isystem.service.workflow.service.ActivitiTaskService;
 import org.activiti.bpmn.model.BpmnModel;
@@ -83,33 +84,49 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
 
         List<TaskEntity> list = Lists.newArrayList();
         taskList.forEach(task -> {
-            Map<String, Object> variables = taskService.getVariables(task.getId());
-            BaseTask baseTask = (BaseTask) variables.get("baseTask");
-            TaskEntity taskEntity = new TaskEntity(task);
-            taskEntity.setReason(baseTask.getReason());
-            taskEntity.setUrlPath(baseTask.getUrlPath());
-            taskEntity.setStartTime(baseTask.getStartTime());
-            taskEntity.setEndTime(baseTask.getEndTime());
-            //获取办理人信息
-            User handleUser = identityService.createUserQuery().userId(baseTask.getUserId()).singleResult();
-            taskEntity.setUserName(handleUser.getFirstName());
-            //判断当前办理人是否是自己
-            if (userId.equals(baseTask.getUserId())) {
-                if (variables.containsKey("flag") && StringUtil.isNotBlank(variables.get("flag"))) {
-                    //判断流程是否通过
-                    taskEntity.setStatus((boolean)variables.get("flag") ? 1 : 2);
-                } else {
-                    taskEntity.setStatus(1);
-                }
-            } else { // 办理人不是自己, 状态为2
-                taskEntity.setStatus(2);
-            }
-
-            list.add(taskEntity);
+            list.add(getTaskValues(userId, task));
         });
         PageInfo<TaskEntity> pageList = new PageInfo<>(list);
         pageList.setTotal(total);
         return pageList;
+    }
+
+    private TaskEntity getTaskValues(String userId, Task task) {
+        Map<String, Object> variables = taskService.getVariables(task.getId());
+        boolean flag = true;
+        TaskEntity taskEntity = new TaskEntity(task);
+        if ("leave".equals(variables.get("workflowType"))) {
+            UserLeave userLeave = (UserLeave) variables.get("baseTask");
+            taskEntity.setReason(userLeave.getReason());
+            taskEntity.setStartTime(userLeave.getStartTime());
+            taskEntity.setEndTime(userLeave.getEndTime());
+
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("leaveDays", userLeave.getLeaveDays());
+            map.put("leaveType", userLeave.getLeaveType());
+            taskEntity.setParams(map);
+
+            if (!userId.equals(userLeave.getUserId())) {
+                flag = false;
+            }
+        } else {
+            throw new ParameterException("工作流参数错误!");
+        }
+        //获取办理人信息
+        taskEntity.setUserName(AppSession.getCurrentUser().getUsername());
+        //判断当前办理人是否是自己
+        if (flag) {
+            if (variables.containsKey("flag") && StringUtil.isNotBlank(variables.get("flag"))) {
+                //判断流程是否通过
+                taskEntity.setStatus((boolean)variables.get("flag") ? 1 : 2);
+            } else {
+                taskEntity.setStatus(1);
+            }
+        } else { // 办理人不是自己, 状态为2
+            taskEntity.setStatus(2);
+        }
+
+        return taskEntity;
     }
 
     @Override

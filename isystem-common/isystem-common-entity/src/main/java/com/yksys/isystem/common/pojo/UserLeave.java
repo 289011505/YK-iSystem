@@ -12,7 +12,7 @@ import lombok.Data;
  * @create 2020-03-17 16:08:06
  */
 @Data
-public class UserLeave extends BaseTask implements Serializable {
+public class UserLeave implements Serializable {
     private static final long serialVersionUID = 1L;
 
     //请假标识
@@ -29,5 +29,11 @@ public class UserLeave extends BaseTask implements Serializable {
     private Integer status;
     //请假类型
     private Integer leaveType;
+    //开始时间
+    private String startTime;
+    //结束时间
+    private String endTime;
+    //实例id
+    private String processInstanceId;
 
 }

@@ -6,6 +6,7 @@ import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.task.Task;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @program: project_base
@@ -31,6 +32,8 @@ public class TaskEntity {
     private String userName;
     private String reason;
     private String urlPath;
+
+    private Map<String, Object> params;
 
     //任务状态
     private int status;
