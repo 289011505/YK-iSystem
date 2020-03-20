@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.workflow.entity;
 
+import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.core.utils.TimeUtil;
 import lombok.Data;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -33,6 +34,8 @@ public class TaskEntity {
     private String reason;
     private String urlPath;
 
+    private String businessKey;
+
     private Map<String, Object> params;
 
     //任务状态
@@ -61,7 +64,7 @@ public class TaskEntity {
         this.processDefinitionId = t.getProcessDefinitionId();
         this.description = t.getDescription();
         this.category = t.getCategory();
-        this.startTime = TimeUtil.parseTime(t.getStartTime());
-        this.endTime = TimeUtil.parseTime(t.getEndTime());
+        this.startTime = StringUtil.isBlank(t.getStartTime())?"":TimeUtil.parseTime(t.getStartTime());
+        this.endTime = StringUtil.isBlank(t.getEndTime())?"":TimeUtil.parseTime(t.getEndTime());
     }
 }

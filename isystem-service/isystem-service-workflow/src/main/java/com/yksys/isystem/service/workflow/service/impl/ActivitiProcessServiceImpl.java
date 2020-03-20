@@ -87,10 +87,11 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             processInstances = runtimeService.createProcessInstanceQuery().listPage((start - 1) * pageSize, pageSize*start);
         }
         processInstances.forEach(processInstance -> {
-            Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(processInstance.getDeploymentId()).singleResult();
             ProcessInstanceEntity processInstanceEntity = new ProcessInstanceEntity((ExecutionEntity) processInstance);
-            processInstanceEntity.setDeploymentName(deployment.getName());
-            processInstanceEntity.setDeploymentTime(TimeUtil.parseTime(deployment.getDeploymentTime()));
+//            Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(processInstance.getDeploymentId()).singleResult();
+//            ProcessInstanceEntity processInstanceEntity = new ProcessInstanceEntity((ExecutionEntity) processInstance);
+//            processInstanceEntity.setDeploymentName(deployment.getName());
+//            processInstanceEntity.setDeploymentTime(TimeUtil.parseTime(deployment.getDeploymentTime()));
 
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(processInstance.getDeploymentId()).singleResult();
             processInstanceEntity.setDiagramResourceName(processDefinition.getDiagramResourceName());
@@ -103,7 +104,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             } else if (processInstanceEntity.isEnded()) {
                 processInstanceEntity.setStatus(0);
             }
-
+//
             list.add(processInstanceEntity);
         });
         PageInfo pageList = new PageInfo<>(list);

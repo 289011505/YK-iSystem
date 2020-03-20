@@ -11,6 +11,7 @@ import com.yksys.isystem.common.core.utils.Base64Util;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.pojo.BaseTask;
 import com.yksys.isystem.common.pojo.UserLeave;
+import com.yksys.isystem.service.workflow.entity.HistoryTaskEntity;
 import com.yksys.isystem.service.workflow.entity.TaskEntity;
 import com.yksys.isystem.service.workflow.service.ActivitiTaskService;
 import org.activiti.bpmn.model.BpmnModel;
@@ -75,11 +76,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
             total = taskList.size();
         }
         if (start == 1) {
-            taskList =  taskService.createTaskQuery()
-                    .taskCandidateOrAssigned(userId).listPage(start - 1, pageSize*start);
+            taskList = taskService.createTaskQuery()
+                    .taskCandidateOrAssigned(userId).listPage(start - 1, pageSize * start);
         } else {
-            taskList =  taskService.createTaskQuery()
-                    .taskCandidateOrAssigned(userId).listPage((start - 1) * pageSize, pageSize*start);
+            taskList = taskService.createTaskQuery()
+                    .taskCandidateOrAssigned(userId).listPage((start - 1) * pageSize, pageSize * start);
         }
 
         List<TaskEntity> list = Lists.newArrayList();
@@ -98,13 +99,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         if ("leave".equals(variables.get("workflowType"))) {
             UserLeave userLeave = (UserLeave) variables.get("baseTask");
             taskEntity.setReason(userLeave.getReason());
-            taskEntity.setStartTime(userLeave.getStartTime());
-            taskEntity.setEndTime(userLeave.getEndTime());
-
-            Map<String, Object> map = Maps.newHashMap();
-            map.put("leaveDays", userLeave.getLeaveDays());
-            map.put("leaveType", userLeave.getLeaveType());
-            taskEntity.setParams(map);
+            taskEntity.setBusinessKey(ActivitiConstant.BUSINESS_KEY_LEAVE + userLeave.getId());
+            taskEntity.setUserName(userLeave.getUserId());
 
             if (!userId.equals(userLeave.getUserId())) {
                 flag = false;
@@ -112,13 +108,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         } else {
             throw new ParameterException("工作流参数错误!");
         }
-        //获取办理人信息
-        taskEntity.setUserName(AppSession.getCurrentUser().getUsername());
         //判断当前办理人是否是自己
         if (flag) {
             if (variables.containsKey("flag") && StringUtil.isNotBlank(variables.get("flag"))) {
                 //判断流程是否通过
-                taskEntity.setStatus((boolean)variables.get("flag") ? 1 : 2);
+                taskEntity.setStatus((boolean) variables.get("flag") ? 1 : 2);
             } else {
                 taskEntity.setStatus(1);
             }
@@ -130,7 +124,50 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     }
 
     @Override
-    public PageInfo<TaskEntity> getDoneTasks(int start, int pageSize, Map<String, Object> map) {
+    public Map<String, Object> getApplicationMatters(String taskId) {
+        Map<String, Object> variables = taskService.getVariables(taskId);
+
+        if (CollectionUtils.isEmpty(variables)) {
+            throw new ParameterException("该任务错误, 无变量参数");
+        }
+        Map<String, Object> map = getProcessVariables(variables);
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        map.put("processInstanceId", task.getProcessInstanceId());
+        return map;
+    }
+
+    private Map<String, Object> getProcessVariables(Map<String, Object> variables) {
+        Map<String, Object> map = Maps.newHashMap();
+        if ("leave".equals(variables.get("workflowType"))) {
+            UserLeave userLeave = (UserLeave) variables.get("baseTask");
+            map.put("reason", userLeave.getReason());
+            map.put("startTime", userLeave.getStartTime());
+            map.put("endTime", userLeave.getEndTime());
+            map.put("leaveDays", userLeave.getLeaveDays());
+            map.put("leaveType", userLeave.getLeaveType());
+            map.put("applyUserName", userLeave.getUserId());
+        }
+
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> getHisApplicationMatters(String executionId) {
+        List<HistoricVariableInstance> list = historyService.createHistoricVariableInstanceQuery().
+                executionId(executionId).list();
+
+        Map<String, Object> variables = Maps.newHashMap();
+        list.forEach(historicVariableInstance -> {
+            variables.put(historicVariableInstance.getVariableName(), historicVariableInstance.getValue());
+        });
+        Map<String, Object> map = getProcessVariables(variables);
+        List<HistoricTaskInstance> list1 = historyService.createHistoricTaskInstanceQuery().executionId(executionId).list();
+        map.put("processInstanceId", list1.get(0).getProcessInstanceId());
+        return map;
+    }
+
+    @Override
+    public PageInfo<HistoryTaskEntity> getDoneTasks(int start, int pageSize, Map<String, Object> map) {
         String userId = map.get("userId").toString();
         List<HistoricTaskInstance> historicTaskList = historyService.createHistoricTaskInstanceQuery()
                 .taskAssignee(userId).list();
@@ -139,20 +176,23 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
             total = historicTaskList.size();
         }
         if (start == 1) {
-            historicTaskList =  historyService.createHistoricTaskInstanceQuery()
-                    .taskAssignee(userId).listPage(start - 1, pageSize*start);
+            historicTaskList = historyService.createHistoricTaskInstanceQuery()
+                    .taskAssignee(userId).listPage(start - 1, pageSize * start);
         } else {
-            historicTaskList =  historyService.createHistoricTaskInstanceQuery()
-                    .taskAssignee(userId).listPage((start - 1) * pageSize, pageSize*start);
+            historicTaskList = historyService.createHistoricTaskInstanceQuery()
+                    .taskAssignee(userId).listPage((start - 1) * pageSize, pageSize * start);
         }
-        List<TaskEntity> list = Lists.newArrayList();
+        List<HistoryTaskEntity> list = Lists.newArrayList();
 
         historicTaskList.forEach(historicTaskInstance -> {
-            TaskEntity taskEntity = new TaskEntity(historicTaskInstance);
-            list.add(taskEntity);
+            HistoryTaskEntity historyTaskEntity = new HistoryTaskEntity(historicTaskInstance);
+            User user = identityService.createUserQuery().userId(historicTaskInstance.getAssignee()).singleResult();
+            historyTaskEntity.setAssignee(user.getFirstName());
+
+            list.add(historyTaskEntity);
         });
 
-        PageInfo<TaskEntity> pageList = new PageInfo<>(list);
+        PageInfo<HistoryTaskEntity> pageList = new PageInfo(list);
         pageList.setTotal(total);
         return pageList;
     }
@@ -166,12 +206,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     public void handleTask(String taskId, boolean pass, Map<String, Object> map) {
         try {
             Map<String, Object> variables = this.getVariables(taskId);
-
             //处理当前节点信息
             map.put("createTime", new Date());
             map.put("userId", AppSession.getCurrentUserId());
             map.put("userName", AppSession.getCurrentUser().getUsername());
             map.put("pass", pass);
+
+            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+            //任务节点
+            map.put("taskName", task.getName());
 
             Map<String, Object> taskInfo = Maps.newHashMap();
             taskInfo.put("pass", pass);
@@ -249,28 +292,25 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
                 approvalList = (List<Map<String, Object>>) o;
             }
         } else {
-            List<HistoricDetail> list = historyService.createHistoricDetailQuery()
-                    .processInstanceId(processInstanceId).list();
+            List<HistoricVariableInstance> list = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
 
-            HistoricVariableUpdate variableUpdate;
-            for (HistoricDetail historicDetail : list) {
-                variableUpdate = (HistoricVariableUpdate) historicDetail;
-                String variableName = variableUpdate.getVariableName();
+            for (HistoricVariableInstance historicVariableInstance : list) {
+                String variableName = historicVariableInstance.getVariableName();
                 if (ActivitiConstant.APPROVAL_MESSAGE.equals(variableName)) {
                     approvalList.clear();
-                    approvalList.addAll((List<Map<String, Object>>)variableUpdate.getValue());
+                    approvalList.addAll((List<Map<String, Object>>) historicVariableInstance.getValue());
                 }
             }
         }
         return approvalList;
     }
+
     /**
+     * @return
      * @Description 获取当前流程图，历史流程
-     *
      * @Author YuKai Fan
      * @Date 19:50 2019/8/9
      * @Param isCurrent:是否获取当前流程
-     * @return
      **/
     private InputStream generateImageStream(String processInstanceId, boolean isCurrent) {
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
@@ -317,7 +357,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
 
         InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png",
                 executedActivityIdList, highLightedFlows, "宋体",
-                "微软雅黑","黑体", null, 1.0,
+                "微软雅黑", "黑体", null, 1.0,
                 currentActivityIdList);
 
         return imageStream;

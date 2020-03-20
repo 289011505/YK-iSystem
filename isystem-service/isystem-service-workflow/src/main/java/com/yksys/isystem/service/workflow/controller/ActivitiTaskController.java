@@ -6,6 +6,7 @@ import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.utils.MapUtil;
 import com.yksys.isystem.common.pojo.UserLeave;
+import com.yksys.isystem.service.workflow.entity.HistoryTaskEntity;
 import com.yksys.isystem.service.workflow.entity.TaskEntity;
 import com.yksys.isystem.service.workflow.service.ActivitiTaskService;
 import com.yksys.isystem.service.workflow.service.UserLeaveService;
@@ -79,7 +80,7 @@ public class ActivitiTaskController {
                            @RequestParam(value = "pageSize", required = false, defaultValue = "30") int pageSize,
                            @RequestParam Map<String, Object> map) {
         map.put("userId", AppSession.getCurrentUserId());
-        PageInfo<TaskEntity> pageList = activitiTaskService.getDoneTasks(start, pageSize, map);
+        PageInfo<HistoryTaskEntity> pageList = activitiTaskService.getDoneTasks(start, pageSize, map);
         return new Result(HttpStatus.OK.value(), "获取成功", pageList);
     }
 
@@ -122,7 +123,29 @@ public class ActivitiTaskController {
                                @RequestBody Map<String, Object> map) {
 
         activitiTaskService.handleTask(taskId, pass, map);
-        return new Result(HttpStatus.OK.value(), pass?"通过":"驳回");
+        return new Result(HttpStatus.OK.value(), pass?"审批通过成功":"审批驳回成功");
+    }
+
+    /**
+     * 获取申请事项
+     * @param taskId
+     * @return
+     */
+    @GetMapping("/getApplicationMatters/{taskId}")
+    public Result getApplicationMatters(@PathVariable("taskId") String taskId) {
+        Map<String, Object> map = activitiTaskService.getApplicationMatters(taskId);
+        return new Result(HttpStatus.OK.value(), "获取成功", map);
+    }
+
+    /**
+     * 获取历史申请事项
+     * @param executionId
+     * @return
+     */
+    @GetMapping("/getHisApplicationMatters/{executionId}")
+    public Result getHisApplicationMatters(@PathVariable("executionId") String executionId) {
+        Map<String, Object> map = activitiTaskService.getHisApplicationMatters(executionId);
+        return new Result(HttpStatus.OK.value(), "获取成功", map);
     }
 
     /**

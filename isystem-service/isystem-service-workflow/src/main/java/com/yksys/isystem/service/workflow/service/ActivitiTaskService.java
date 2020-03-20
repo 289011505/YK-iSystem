@@ -1,6 +1,7 @@
 package com.yksys.isystem.service.workflow.service;
 
 import com.github.pagehelper.PageInfo;
+import com.yksys.isystem.service.workflow.entity.HistoryTaskEntity;
 import com.yksys.isystem.service.workflow.entity.TaskEntity;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ public interface ActivitiTaskService {
      * @param map
      * @return
      */
-    PageInfo<TaskEntity> getDoneTasks(int start, int pageSize, Map<String, Object> map);
+    PageInfo<HistoryTaskEntity> getDoneTasks(int start, int pageSize, Map<String, Object> map);
 
     /**
      * 获取已办任务列表
@@ -79,4 +80,18 @@ public interface ActivitiTaskService {
      * @return
      */
     List<Map<String, Object>> getApproveInfo(String processInstanceId);
+
+    /**
+     * 获取申请事项
+     * @param taskId
+     * @return
+     */
+    Map<String, Object> getApplicationMatters(String taskId);
+
+    /**
+     * 获取历史申请事项
+     * @param executionId
+     * @return
+     */
+    Map<String, Object> getHisApplicationMatters(String executionId);
 }
