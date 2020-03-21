@@ -29,5 +29,6 @@ public class HistoryProcessInstanceEntity {
         this.startUserId = e.getStartUserId();
         this.duration = e.getDescription();
         this.businessKey = e.getBusinessKey();
+        this.endTime = TimeUtil.parseTime(e.getEndTime());
     }
 }

@@ -188,23 +188,23 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     public PageInfo<HistoryProcessInstanceEntity> getHistoryProcess(int start, int pageSize, Map<String, Object> map) {
         List<HistoryProcessInstanceEntity> list = Lists.newArrayList();
         List<HistoricProcessInstance> historicProcessInstances = historyService.createHistoricProcessInstanceQuery().list();
-        int total = 0;
-        if (!CollectionUtils.isEmpty(historicProcessInstances)) {
-            total = historicProcessInstances.size();
-        }
-        if (start == 1) {
-            historicProcessInstances = historyService.createHistoricProcessInstanceQuery().listPage(start - 1, pageSize*start);
-        } else {
-            historicProcessInstances = historyService.createHistoricProcessInstanceQuery().listPage((start - 1) * pageSize, pageSize*start);
-        }
-        //过滤已经结束的流程
+//        int total = 0;
+//        if (!CollectionUtils.isEmpty(historicProcessInstances)) {
+//            total = historicProcessInstances.size();
+//        }
+//        if (start == 1) {
+//            historicProcessInstances = historyService.createHistoricProcessInstanceQuery().listPage(start - 1, pageSize*start);
+//        } else {
+//            historicProcessInstances = historyService.createHistoricProcessInstanceQuery().listPage((start - 1) * pageSize, pageSize*start);
+//        }
+        //过滤未结束的流程
         historicProcessInstances.stream().filter(historicProcessInstance -> StringUtil.isNotBlank(historicProcessInstance.getEndTime()))
                 .forEach(historicProcessInstance -> {
                             HistoryProcessInstanceEntity historyProcessInstanceEntity = new HistoryProcessInstanceEntity((HistoricProcessInstanceEntity) historicProcessInstance);
                             list.add(historyProcessInstanceEntity);
                 });
         PageInfo pageList = new PageInfo<>(list);
-        pageList.setTotal(total);
+//        pageList.setTotal(list.size());
         return pageList;
     }
 

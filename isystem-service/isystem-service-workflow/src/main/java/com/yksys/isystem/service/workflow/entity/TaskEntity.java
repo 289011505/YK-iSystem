@@ -38,6 +38,9 @@ public class TaskEntity {
 
     private Map<String, Object> params;
 
+    //任务名称
+    private String taskName;
+
     //任务状态
     private int status;
 
@@ -66,5 +69,6 @@ public class TaskEntity {
         this.category = t.getCategory();
         this.startTime = StringUtil.isBlank(t.getStartTime())?"":TimeUtil.parseTime(t.getStartTime());
         this.endTime = StringUtil.isBlank(t.getEndTime())?"":TimeUtil.parseTime(t.getEndTime());
+        this.taskName = t.getName();
     }
 }

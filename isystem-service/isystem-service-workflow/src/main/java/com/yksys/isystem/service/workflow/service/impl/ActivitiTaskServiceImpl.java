@@ -186,9 +186,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
 
         historicTaskList.forEach(historicTaskInstance -> {
             HistoryTaskEntity historyTaskEntity = new HistoryTaskEntity(historicTaskInstance);
-            User user = identityService.createUserQuery().userId(historicTaskInstance.getAssignee()).singleResult();
-            historyTaskEntity.setAssignee(user.getFirstName());
-
             list.add(historyTaskEntity);
         });
 
