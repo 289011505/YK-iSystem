@@ -7,6 +7,8 @@ import com.yksys.isystem.common.core.security.oauth2.client.Oauth2ClientProperti
 import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class LoginController {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -42,6 +45,7 @@ public class LoginController {
     @PostMapping("/login/token")
     public Result getLoginToken(@RequestBody SystemUserVo systemUserVo, @RequestHeader HttpHeaders headers) {
         Map result = getToken(systemUserVo.getAccount(), systemUserVo.getPassword(), null, headers);
+        logger.info("req:" + result.toString());
         if (!result.containsKey("access_token")) {
             return new Result(HttpStatus.UNAUTHORIZED.value(), "登陆失败", result);
         }
@@ -66,6 +70,7 @@ public class LoginController {
         // 强制移除 原来的请求头, 防止token失效
 //        headers.remove(HttpHeaders.AUTHORIZATION);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(postParameters, headers);
+        logger.info("req:" + request.toString());
         JSONObject result = restTemplate.postForObject(url, request, JSONObject.class);
         return result;
     }
