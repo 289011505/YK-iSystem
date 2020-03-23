@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.system.mapper.TaskMapper">
+    <select id="getJobs" resultType="com.yksys.isystem.common.model.TaskInfo" parameterType="Map">
+        SELECT
+                jd.JOB_NAME AS jobName,
+                jd.DESCRIPTION AS jobDescription,
+                jd.JOB_GROUP AS jobGroupName,
+                jd.JOB_CLASS_NAME AS jobClassName,
+                t.TRIGGER_NAME AS jobTrigger,
+                ct.CRON_EXPRESSION AS cronExpression,
+                t.TRIGGER_STATE AS jobStatus,
+                t.START_TIME AS startTime,
+                t.END_TIME AS endTime,
+                st.REPEAT_COUNT repeatCount,
+                st.REPEAT_INTERVAL repeatInterval,
+                jd.JOB_DATA data
+            FROM
+                QRTZ_JOB_DETAILS jd
+            JOIN QRTZ_TRIGGERS t
+            JOIN QRTZ_CRON_TRIGGERS ct
+            JOIN QRTZ_SIMPLE_TRIGGERS st ON jd.JOB_NAME = t.JOB_NAME
+            AND t.TRIGGER_NAME = st.TRIGGER_NAME
+            AND t.TRIGGER_GROUP = st.TRIGGER_GROUP
+            AND t.TRIGGER_NAME = ct.TRIGGER_NAME
+            AND t.TRIGGER_GROUP = ct.TRIGGER_GROUP
+    </select>
+</mapper>

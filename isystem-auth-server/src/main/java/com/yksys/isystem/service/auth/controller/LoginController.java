@@ -1,11 +1,11 @@
 package com.yksys.isystem.service.auth.controller;
 
+import com.yksys.isystem.common.core.annotation.ActionLog;
+import com.yksys.isystem.common.core.constants.LogTypeEnum;
 import com.yksys.isystem.common.core.dto.Result;
-import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.security.oauth2.client.AuthorizationParam;
 import com.yksys.isystem.common.core.security.oauth2.client.Oauth2ClientProperties;
 import com.yksys.isystem.common.vo.SystemUserVo;
-import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,9 +43,9 @@ public class LoginController {
      * @return
      */
     @PostMapping("/login/token")
+    @ActionLog(logType = LogTypeEnum.USER_LOGIN)
     public Result getLoginToken(@RequestBody SystemUserVo systemUserVo, @RequestHeader HttpHeaders headers) {
         Map result = getToken(systemUserVo.getAccount(), systemUserVo.getPassword(), null, headers);
-        logger.info("req:" + result.toString());
         if (!result.containsKey("access_token")) {
             return new Result(HttpStatus.UNAUTHORIZED.value(), "登陆失败", result);
         }

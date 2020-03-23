@@ -1,6 +1,7 @@
 package com.yksys.isystem.common.core.utils;
 
 import javax.xml.crypto.Data;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -33,6 +34,15 @@ public final class TimeUtil {
      */
     public static LocalDateTime parseTime(String timeStr) {
         return LocalDateTime.parse(timeStr, DEFAULT_DATETIME_FORMATTER);
+    }
+
+    /**
+     * String 转时间
+     * @param timeStr
+     * @return
+     */
+    public static Date parseTimeToDate(String timeStr) throws ParseException {
+        return new SimpleDateFormat(TimeFormat.LONG_DATE_PATTERN_LINE.name()).parse(timeStr);
     }
 
     /**
