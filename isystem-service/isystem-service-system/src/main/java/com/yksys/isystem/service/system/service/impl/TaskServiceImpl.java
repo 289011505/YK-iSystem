@@ -2,6 +2,7 @@ package com.yksys.isystem.service.system.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.core.utils.TimeUtil;
@@ -17,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @program: YK-iSystem
@@ -112,27 +114,98 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskInfo editSimpleJob(TaskInfo taskInfo) {
-        return null;
+        return editJob(taskInfo);
     }
 
     @Override
     public TaskInfo editCronJob(TaskInfo taskInfo) {
-        return null;
+        return editJob(taskInfo);
+    }
+
+    private TaskInfo editJob(TaskInfo taskInfo) {
+        String jobName = taskInfo.getJobName();
+        String jobGroupName = taskInfo.getJobGroupName();
+        String jobDescription = taskInfo.getJobDescription();
+        String cronExpression = taskInfo.getCronExpression();
+        JobDataMap dataMap = new JobDataMap();
+        if (!CollectionUtils.isEmpty(taskInfo.getData())) {
+            dataMap.putAll(taskInfo.getData());
+        }
+        try {
+            if (!checkExists(jobName, jobGroupName)) {
+                throw new ParameterException(String.format("任务不存在, jobName:[%s], jobGroup:[%s]", jobName, jobGroupName));
+            }
+            //触发器的key值
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
+            //job的key值
+            JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
+            Trigger trigger;
+            if (StringUtil.isBlank(cronExpression)) {
+                //简单调度
+                trigger = TriggerBuilder
+                        .newTrigger().withIdentity(triggerKey)
+                        .startAt(TimeUtil.parseTimeToDate(taskInfo.getStartTime()))
+                        .withSchedule(SimpleScheduleBuilder.simpleSchedule()
+                                .withIntervalInMilliseconds(taskInfo.getRepeatInterval()).withRepeatCount(taskInfo.getRepeatCount()))
+                        .endAt(TimeUtil.parseTimeToDate(taskInfo.getEndTime())).build();
+            } else {
+                CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
+                        .cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();
+                trigger = TriggerBuilder.newTrigger()
+                        .withIdentity(triggerKey)
+                        .withSchedule(scheduleBuilder).build();
+            }
+
+            JobDetail jobDetail = scheduler.getJobDetail(jobKey).getJobBuilder()
+                    .withDescription(jobDescription).usingJobData(dataMap).build();
+            Set<Trigger> triggerSet = Sets.newHashSet();
+            triggerSet.add(trigger);
+            scheduler.scheduleJob(jobDetail, triggerSet, true);
+        } catch (SchedulerException | ParseException e) {
+            e.printStackTrace();
+            throw new ParameterException("任务添加失败");
+        }
+        return taskInfo;
     }
 
     @Override
     public void deleteJob(String jobName, String jobGroup) {
-
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
+        try {
+            if (checkExists(jobName, jobGroup)) {
+                scheduler.pauseTrigger(triggerKey);
+                scheduler.unscheduleJob(triggerKey);
+            }
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            throw new ParameterException("删除任务错误");
+        }
     }
 
     @Override
     public void pauseJob(String jobName, String jobGroup) {
-
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
+        try {
+            if (checkExists(jobName, jobGroup)) {
+                scheduler.pauseTrigger(triggerKey);
+            }
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            throw new ParameterException("暂停任务错误");
+        }
     }
 
     @Override
     public void resumeJob(String jobName, String jobGroup) {
-
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
+        try {
+            if (checkExists(jobName, jobGroup)) {
+                scheduler.resumeTrigger(triggerKey);
+            }
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            throw new ParameterException("恢复任务错误");
+        }
     }
 
     /**

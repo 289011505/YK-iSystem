@@ -79,6 +79,11 @@ public class TaskInfoVo implements Serializable {
      */
     private Map<String, Object> data;
 
+    /**
+     * 任务类型
+     */
+    private String jobType;
+
     public TaskInfo convert() {
         TaskInfoVo.TaskInfoVoConvert taskInfoVoConvert = new TaskInfoVoConvert();
         TaskInfo taskInfo = taskInfoVoConvert.convert(this);
