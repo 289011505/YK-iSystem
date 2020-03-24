@@ -37,32 +37,32 @@ public interface TaskService {
     List<TaskInfo> getJobs(int start, int pageSize, Map<String, Object> map);
 
     /**
-     * 添加简单任务
+     * 添加本地任务
      * @param taskInfo
      * @return
      */
-    TaskInfo addSimpleJob(TaskInfo taskInfo);
+    TaskInfo addLocalJob(TaskInfo taskInfo);
 
     /**
-     * 添加cron表达式任务
+     * 修改本地任务
      * @param taskInfo
      * @return
      */
-    TaskInfo addCronJob(TaskInfo taskInfo);
+    TaskInfo editLocalJob(TaskInfo taskInfo);
 
     /**
-     * 修改简单任务
+     * 添加远程任务
      * @param taskInfo
      * @return
      */
-    TaskInfo editSimpleJob(TaskInfo taskInfo);
+    TaskInfo addHttpJob(TaskInfo taskInfo);
 
     /**
-     * 修改cron任务
+     * 修改远程任务
      * @param taskInfo
      * @return
      */
-    TaskInfo editCronJob(TaskInfo taskInfo);
+    TaskInfo editHttpJob(TaskInfo taskInfo);
 
     /**
      * 删除定时任务

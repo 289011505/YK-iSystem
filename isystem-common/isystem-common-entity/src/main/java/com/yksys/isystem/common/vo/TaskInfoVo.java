@@ -2,90 +2,60 @@ package com.yksys.isystem.common.vo;
 
 import com.google.common.base.Converter;
 import com.yksys.isystem.common.model.TaskInfo;
-import com.yksys.isystem.common.pojo.SystemUser;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Map;
 
+
 /**
- * @program: YK-iSystem
- * @description: 定时任务详情
- * @author: YuKai Fan
- * @create: 2020-03-23 14:43
- **/
+ * 定时任务调度表 vo类
+ *
+ * @author YuKai Fan
+ * @create 2020-03-24 13:56:49
+ */
 @Data
 public class TaskInfoVo implements Serializable {
-    private static final long serialVersionUID = -1071950623325765774L;
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * 任务id
-     */
+    //任务标识
     private String id;
-    /**
-     * 任务名称
-     */
+    //任务名称
     private String jobName;
-    /**
-     * 任务描述
-     */
+    //任务描述
     private String jobDescription;
-    /**
-     * 任务类名
-     */
+    //任务类名
     private String jobClassName;
-    /**
-     * 任务分组名称
-     */
+    //任务分组名称
     private String jobGroupName;
-    /**
-     * 任务状态
-     */
-    private String jobStatus;
-    /**
-     * 任务类型 SimpleTrigger-简单任务, CronTrigger-表达式
-     */
+    //任务类型 simple-简单任务, cron-表达式
     private String jobTrigger;
-    /**
-     * 任务表达式
-     */
+    //任务性质 远程or本地
+    private String taskProp;
+    //计划策略 0=默认,1=立即触发执行,2=触发一次执行,3=不触发立即执行
+    private String misfirePolicy;
+    //任务表达式
     private String cronExpression;
-    /**
-     * 创建时间
-     */
-    private String createTime;
-    /**
-     * 间隔时间(毫秒)
-     */
-    private Long repeatInterval;
-    /**
-     * 重复次数
-     */
+    //间隔时间(毫秒)
+    private Integer repeatInterval;
+    //重复次数
     private Integer repeatCount;
-
-    /**
-     * 起始时间
-     */
+    //开始时间
     private String startTime;
-
-    /**
-     * 终止时间
-     */
+    //结束时间
     private String endTime;
-
-    /**
-     * 执行数据
-     */
+    //执行数据
     private Map<String, Object> data;
-
-    /**
-     * 任务类型
-     */
-    private String jobType;
+    //是否并发执行（1允许 0禁止）
+    private String concurrent;
+    //状态:0  已禁用 1 正在使用
+    private Integer status;
+    //备注
+    private String remark;
 
     public TaskInfo convert() {
-        TaskInfoVo.TaskInfoVoConvert taskInfoVoConvert = new TaskInfoVoConvert();
+        TaskInfoVoConvert taskInfoVoConvert = new TaskInfoVoConvert();
         TaskInfo taskInfo = taskInfoVoConvert.convert(this);
         return taskInfo;
     }
@@ -104,6 +74,5 @@ public class TaskInfoVo implements Serializable {
             return null;
         }
     }
-
 
 }

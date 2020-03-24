@@ -42,7 +42,7 @@ public final class TimeUtil {
      * @return
      */
     public static Date parseTimeToDate(String timeStr) throws ParseException {
-        return new SimpleDateFormat(TimeFormat.LONG_DATE_PATTERN_LINE.name()).parse(timeStr);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(timeStr);
     }
 
     /**

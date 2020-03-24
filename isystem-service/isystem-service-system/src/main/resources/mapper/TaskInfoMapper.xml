@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.system.mapper.TaskInfoMapper">
+        <!-- 新增 -->
+        <insert id="addTaskInfo">
+            INSERT INTO tb_task_info(<include refid="taskInfo_add_key"><property name="alias" value="" /></include>)
+            VALUES (<include refid="taskInfo_add_val"><property name="alias" value="" /></include>)
+        </insert>
+
+        <!-- 批量新增 -->
+        <insert id="addTaskInfos">
+            INSERT INTO tb_task_info(<include refid="taskInfo_add_key"><property name="alias" value="" /></include>)
+            VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (<include refid="taskInfo_add_val"><property name="alias" value="item."/></include>)
+            </foreach>
+        </insert>
+
+        <!-- 修改 -->
+        <update id="editTaskInfoById">
+            UPDATE tb_task_info
+            <set>
+                <include refid="taskInfo_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <!-- 批量修改 -->
+        <update id="editTaskInfoByIds">
+            UPDATE tb_task_info
+            <set>
+                <include refid="taskInfo_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 删除 -->
+        <update id="delTaskInfoById">
+            update tb_task_info SET status = 0 WHERE id = #{id}
+        </update>
+
+        <!-- 批量删除 -->
+        <update id="delTaskInfoByIds">
+            UPDATE tb_task_info SET status = 0 WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 真删除 -->
+        <delete id="delTaskInfoRealById">
+            DELETE FROM tb_task_info WHERE id = #{id}
+        </delete>
+
+        <!-- 真批量删除 -->
+        <delete id="delTaskInfoRealByIds">
+            DELETE FROM tb_task_info WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </delete>
+
+        <!-- 清空 -->
+        <delete id="delTaskInfoReals">
+            DELETE FROM tb_task_info
+        </delete>
+
+        <!-- 查询管理列表 -->
+        <select id="getTaskInfos" parameterType="Map" resultType="com.yksys.isystem.common.model.TaskInfo">
+            SELECT <include refid="taskInfo_select_cond" />
+            FROM tb_task_info a
+            <where>
+                <include refid="taskInfo_where_if" />
+                AND a.status in (1, 2)
+            </where>
+            ORDER BY a.status ASC, a.create_time DESC
+        </select>
+
+        <!-- 根据id查询定时任务调度表 -->
+        <select id="getTaskInfoById" resultType="Map">
+            SELECT <include refid="taskInfo_select_cond_one"/>
+            FROM tb_task_info a
+            WHERE a.status in (1, 2) and a.id = #{id}
+        </select>
+
+
+        <!-- 查询的选择项, 增删字段时调整 -->
+        <sql id="taskInfo_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.job_name jobName
+                                            
+                                    , a.job_description jobDescription
+                                            
+                                    , a.job_class_name jobClassName
+                                            
+                                    , a.job_group_name jobGroupName
+                                            
+                                    , a.job_trigger jobTrigger
+                                            
+                                    , a.task_prop taskProp
+                                            
+                                    , a.misfire_policy misfirePolicy
+                                            
+                                    , a.cron_expression cronExpression
+                                            
+                                    , a.repeat_interval repeatInterval
+                                            
+                                    , a.repeat_count repeatCount
+                                            
+                                    , a.start_time startTime
+                                            
+                                    , a.end_time endTime
+                                            
+                                    , a.data data
+                                            
+                                    , a.concurrent concurrent
+                                            
+                                    , a.status status
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+        <!-- (单个)查询的选择项, 增删字段时调整 -->
+        <sql id="taskInfo_select_cond_one">
+            a.id id
+                                                                            , a.job_name jobName
+                                                                , a.job_description jobDescription
+                                                                , a.job_class_name jobClassName
+                                                                , a.job_group_name jobGroupName
+                                                                , a.job_trigger jobTrigger
+                                                                , a.task_prop taskProp
+                                                                , a.misfire_policy misfirePolicy
+                                                                , a.cron_expression cronExpression
+                                                                , a.repeat_interval repeatInterval
+                                                                , a.repeat_count repeatCount
+                                                                , a.start_time startTime
+                                                                , a.end_time endTime
+                                                                , a.data data
+                                                                , a.concurrent concurrent
+                                                                , a.status status
+                                                                , a.remark remark
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+        <!-- 查询条件 -->
+        <sql id="taskInfo_where_if">
+                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                    AND a.id = #{id}
+                </if>
+                                                            <if test="jobName != null and jobName != '' and jobName != 'null' and jobName != 'undefined'">
+                    AND a.job_name = #{jobName}
+                </if>
+                                                            <if test="jobDescription != null and jobDescription != '' and jobDescription != 'null' and jobDescription != 'undefined'">
+                    AND a.job_description = #{jobDescription}
+                </if>
+                                                            <if test="jobClassName != null and jobClassName != '' and jobClassName != 'null' and jobClassName != 'undefined'">
+                    AND a.job_class_name = #{jobClassName}
+                </if>
+                                                            <if test="jobGroupName != null and jobGroupName != '' and jobGroupName != 'null' and jobGroupName != 'undefined'">
+                    AND a.job_group_name = #{jobGroupName}
+                </if>
+                                                            <if test="jobTrigger != null and jobTrigger != '' and jobTrigger != 'null' and jobTrigger != 'undefined'">
+                    AND a.job_trigger = #{jobTrigger}
+                </if>
+                                                            <if test="taskProp != null and taskProp != '' and taskProp != 'null' and taskProp != 'undefined'">
+                    AND a.task_prop = #{taskProp}
+                </if>
+                                                            <if test="misfirePolicy != null">
+                    AND a.misfire_policy = #{misfirePolicy}
+                </if>
+                                                            <if test="cronExpression != null and cronExpression != '' and cronExpression != 'null' and cronExpression != 'undefined'">
+                    AND a.cron_expression = #{cronExpression}
+                </if>
+                                                            <if test="repeatInterval != null">
+                    AND a.repeat_interval = #{repeatInterval}
+                </if>
+                                                            <if test="repeatCount != null">
+                    AND a.repeat_count = #{repeatCount}
+                </if>
+                                                            <if test="startTime != null and startTime != '' and startTime != 'null' and startTime != 'undefined'">
+                    AND a.start_time = #{startTime}
+                </if>
+                                                            <if test="endTime != null and endTime != '' and endTime != 'null' and endTime != 'undefined'">
+                    AND a.end_time = #{endTime}
+                </if>
+                                                            <if test="data != null and data != '' and data != 'null' and data != 'undefined'">
+                    AND a.data = #{data}
+                </if>
+                                                            <if test="concurrent != null">
+                    AND a.concurrent = #{concurrent}
+                </if>
+                                                            <if test="status != null">
+                    AND a.status = #{status}
+                </if>
+                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                    AND a.remark = #{remark}
+                </if>
+                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+                    AND a.create_user_id = #{createUserId}
+                </if>
+                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+                    AND a.create_time = #{createTime}
+                </if>
+                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+                    AND a.update_user_id = #{updateUserId}
+                </if>
+                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+                    AND a.update_time = #{updateTime}
+                </if>
+                                    </sql>
+
+
+        <!-- (批量)新增键, 增删字段时调整 -->
+        <sql id="taskInfo_add_key">
+            id
+                                                        
+                    , job_name
+                                            
+                    , job_description
+                                            
+                    , job_class_name
+                                            
+                    , job_group_name
+                                            
+                    , job_trigger
+                                            
+                    , task_prop
+                                            
+                    , misfire_policy
+                                            
+                    , cron_expression
+                                            
+                    , repeat_interval
+                                            
+                    , repeat_count
+                                            
+                    , start_time
+                                            
+                    , end_time
+                                            
+                    , data
+                                            
+                    , concurrent
+                                            
+                    , status
+                                            
+                    , remark
+                                                                                                                                                    </sql>
+
+        <!-- (批量)新增值, 增删字段时调整 -->
+        <sql id="taskInfo_add_val">
+            #{id}
+                                                                            , #{jobName}
+                                                                , #{jobDescription}
+                                                                , #{jobClassName}
+                                                                , #{jobGroupName}
+                                                                , #{jobTrigger}
+                                                                , #{taskProp}
+                                                                , #{misfirePolicy}
+                                                                , #{cronExpression}
+                                                                , #{repeatInterval}
+                                                                , #{repeatCount}
+                                                                , #{startTime}
+                                                                , #{endTime}
+                                                                , #{data}
+                                                                , #{concurrent}
+                                                                , #{status}
+                                                                , #{remark}
+                                                                                                                                                    </sql>
+
+        <!-- (批量修改的条件,增减字段时调整) -->
+        <sql id="taskInfo_set_if">
+                                                                                                                                <if test="jobName != null and jobName != '' and jobName != 'null' and jobName != 'undefined'">
+                                job_name = #{jobName},
+                            </if>
+                                                                                                                                                                <if test="jobDescription != null and jobDescription != '' and jobDescription != 'null' and jobDescription != 'undefined'">
+                                job_description = #{jobDescription},
+                            </if>
+                                                                                                                                                                <if test="jobClassName != null and jobClassName != '' and jobClassName != 'null' and jobClassName != 'undefined'">
+                                job_class_name = #{jobClassName},
+                            </if>
+                                                                                                                                                                <if test="jobGroupName != null and jobGroupName != '' and jobGroupName != 'null' and jobGroupName != 'undefined'">
+                                job_group_name = #{jobGroupName},
+                            </if>
+                                                                                                                                                                <if test="jobTrigger != null and jobTrigger != '' and jobTrigger != 'null' and jobTrigger != 'undefined'">
+                                job_trigger = #{jobTrigger},
+                            </if>
+                                                                                                                                                                <if test="taskProp != null and taskProp != '' and taskProp != 'null' and taskProp != 'undefined'">
+                                task_prop = #{taskProp},
+                            </if>
+                                                                                                                                                                <if test="misfirePolicy != null">
+                                misfire_policy = #{misfirePolicy},
+                            </if>
+                                                                                                                                                                <if test="cronExpression != null and cronExpression != '' and cronExpression != 'null' and cronExpression != 'undefined'">
+                                cron_expression = #{cronExpression},
+                            </if>
+                                                                                                                                                                <if test="repeatInterval != null">
+                                repeat_interval = #{repeatInterval},
+                            </if>
+                                                                                                                                                                <if test="repeatCount != null">
+                                repeat_count = #{repeatCount},
+                            </if>
+                                                                                                                                                                <if test="startTime != null and startTime != '' and startTime != 'null' and startTime != 'undefined'">
+                                start_time = #{startTime},
+                            </if>
+                                                                                                                                                                <if test="endTime != null and endTime != '' and endTime != 'null' and endTime != 'undefined'">
+                                end_time = #{endTime},
+                            </if>
+                                                                                                                                                                <if test="data != null and data != '' and data != 'null' and data != 'undefined'">
+                                data = #{data},
+                            </if>
+                                                                                                                                                                <if test="concurrent != null">
+                                concurrent = #{concurrent},
+                            </if>
+                                                                                                                                                                <if test="status != null">
+                                status = #{status},
+                            </if>
+                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                                remark = #{remark},
+                            </if>
+                                                                                                                                                                                                                                                                                                                                                </sql>
+</mapper>

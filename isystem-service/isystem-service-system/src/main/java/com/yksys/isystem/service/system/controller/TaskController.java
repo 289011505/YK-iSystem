@@ -1,11 +1,12 @@
 package com.yksys.isystem.service.system.controller;
 
+import com.yksys.isystem.common.core.constants.ScheduleConstant;
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.model.TaskInfo;
 import com.yksys.isystem.common.vo.TaskInfoVo;
+import com.yksys.isystem.service.system.service.TaskInfoService;
 import com.yksys.isystem.service.system.service.TaskService;
-import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class TaskController {
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private TaskInfoService taskInfoService;
 
     /**
      * 获取任务执行日志列表
@@ -60,14 +63,13 @@ public class TaskController {
      * @param taskInfoVo
      * @return
      */
-    @PostMapping("/addJob")
-    public Result addJob(@RequestBody TaskInfoVo taskInfoVo) {
+    @PostMapping("/addLocalJob")
+    public Result addLocalJob(@RequestBody TaskInfoVo taskInfoVo) {
         TaskInfo taskInfo = taskInfoVo.convert();
-        if ("simple".equals(taskInfoVo.getJobType())) {
-            taskInfo = taskService.addSimpleJob(taskInfo);
-        } else {
-            taskInfo = taskService.addCronJob(taskInfo);
-        }
+        taskInfo = taskInfoService.addTaskInfo(taskInfo);
+        taskInfo.setTaskProp(ScheduleConstant.LOCAL_TASK);
+        taskInfo = taskService.addLocalJob(taskInfo);
+
         return new Result(HttpStatus.OK.value(), "添加成功", taskInfo);
     }
 
@@ -76,14 +78,38 @@ public class TaskController {
      * @param taskInfoVo
      * @return
      */
-    @PutMapping("/editJob")
-    public Result editJob(@RequestBody TaskInfoVo taskInfoVo) {
+    @PutMapping("/editLocalJob")
+    public Result editLocalJob(@RequestBody TaskInfoVo taskInfoVo) {
         TaskInfo taskInfo = taskInfoVo.convert();
-        if ("simple".equals(taskInfoVo.getJobType())) {
-            taskInfo = taskService.editSimpleJob(taskInfo);
-        } else {
-            taskInfo = taskService.editCronJob(taskInfo);
-        }
+        taskInfoService.editTaskInfo(taskInfo);
+        taskInfo = taskService.editLocalJob(taskInfo);
+        return new Result(HttpStatus.OK.value(), "修改成功", taskInfo);
+    }
+
+    /**
+     * 添加远程定时任务
+     * @param taskInfoVo
+     * @return
+     */
+    @PostMapping("/addHttpJob")
+    public Result addHttpJob(@RequestBody TaskInfoVo taskInfoVo) {
+        TaskInfo taskInfo = taskInfoVo.convert();
+        taskInfo = taskInfoService.addTaskInfo(taskInfo);
+        taskInfo.setTaskProp(ScheduleConstant.HTTP_TASK);
+        taskInfo = taskService.addHttpJob(taskInfo);
+        return new Result(HttpStatus.OK.value(), "添加成功", taskInfo);
+    }
+
+    /**
+     * 修改远程定时任务
+     * @param taskInfoVo
+     * @return
+     */
+    @PutMapping("/editHttpJob")
+    public Result editHttpJob(@RequestBody TaskInfoVo taskInfoVo) {
+        TaskInfo taskInfo = taskInfoVo.convert();
+        taskInfoService.editTaskInfo(taskInfo);
+        taskInfo = taskService.editHttpJob(taskInfo);
         return new Result(HttpStatus.OK.value(), "修改成功", taskInfo);
     }
 
@@ -93,8 +119,10 @@ public class TaskController {
      * @param jobGroupName
      * @return
      */
-    @DeleteMapping("/deleteJob/{jobName}/{jobGroupName}")
-    public Result deleteJob(@PathVariable("jobName") String jobName, @PathVariable("jobGroupName") String jobGroupName) {
+    @DeleteMapping("/deleteJob/{jobName}/{jobGroupName}/{id}")
+    public Result deleteJob(@PathVariable("jobName") String jobName, @PathVariable("jobGroupName") String jobGroupName,
+                            @PathVariable("id") String id) {
+        taskInfoService.delTaskInfoById(id);
         taskService.deleteJob(jobName, jobGroupName);
         return new Result(HttpStatus.OK.value(), "删除成功");
     }
@@ -105,8 +133,13 @@ public class TaskController {
      * @param jobGroupName
      * @return
      */
-    @PutMapping("/pauseJob/{jobName}/{jobGroupName}")
-    public Result pauseJob(@PathVariable("jobName") String jobName, @PathVariable("jobGroupName") String jobGroupName) {
+    @PutMapping("/pauseJob/{jobName}/{jobGroupName}/{id}")
+    public Result pauseJob(@PathVariable("jobName") String jobName, @PathVariable("jobGroupName") String jobGroupName,
+                           @PathVariable("id") String id) {
+        TaskInfo taskInfo = new TaskInfo();
+        taskInfo.setId(id);
+        taskInfo.setStatus(2);//暂停任务
+        taskInfoService.editTaskInfo(taskInfo);
         taskService.pauseJob(jobName, jobGroupName);
         return new Result(HttpStatus.OK.value(), "暂停成功");
     }
@@ -117,8 +150,13 @@ public class TaskController {
      * @param jobGroupName
      * @return
      */
-    @PutMapping("/resumeJob/{jobName}/{jobGroupName}")
-    public Result resumeJob(@PathVariable("jobName") String jobName, @PathVariable("jobGroupName") String jobGroupName) {
+    @PutMapping("/resumeJob/{jobName}/{jobGroupName}/{id}")
+    public Result resumeJob(@PathVariable("jobName") String jobName, @PathVariable("jobGroupName") String jobGroupName,
+                            @PathVariable("id") String id) {
+        TaskInfo taskInfo = new TaskInfo();
+        taskInfo.setId(id);
+        taskInfo.setStatus(1);//恢复任务
+        taskInfoService.editTaskInfo(taskInfo);
         taskService.resumeJob(jobName, jobGroupName);
         return new Result(HttpStatus.OK.value(), "恢复成功");
     }
