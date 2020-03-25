@@ -535,4 +535,14 @@ public class RedisUtil {
             return 0;
         }
     }
+
+    /**
+     * 根据前缀获取key列表
+     * @param prefix
+     * @return
+     */
+    public Set<String> getByPrefix(String prefix) {
+        Set keys = redisTemplate.keys(prefix + "*");
+        return keys;
+    }
 }
