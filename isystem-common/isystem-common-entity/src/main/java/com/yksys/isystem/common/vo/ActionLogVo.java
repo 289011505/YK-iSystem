@@ -26,6 +26,8 @@ public class ActionLogVo implements Serializable {
     private String type;
     //操作ip
     private String ipAddr;
+    //操作时间
+    private String actionTime;
     //项目名称
     private String projectName;
     //输入参数

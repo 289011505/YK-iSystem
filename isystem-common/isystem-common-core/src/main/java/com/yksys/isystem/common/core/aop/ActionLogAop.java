@@ -82,7 +82,7 @@ public class ActionLogAop {
             map.put("ipAddr", getIpAddr(requestAttributes.getRequest()));
         }
         try {
-            map.put("outParam", JsonUtil.objectToJson(proceed));
+            map.put("outputParam", JsonUtil.objectToJson(proceed));
             //打印log
             logger.info(logTypeEnum.getName() + ":" + map.toString());
         } catch (Throwable e) {

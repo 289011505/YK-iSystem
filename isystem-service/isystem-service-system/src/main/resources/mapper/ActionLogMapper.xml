@@ -2,94 +2,116 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yksys.isystem.service.system.mapper.ActionLogMapper">
-        <!-- 新增 -->
-        <insert id="addActionLog">
-            INSERT INTO tb_action_log(<include refid="actionLog_add_key"><property name="alias" value="" /></include>)
-            VALUES (<include refid="actionLog_add_val"><property name="alias" value="" /></include>)
-        </insert>
+    <!-- 新增 -->
+    <insert id="addActionLog">
+        INSERT INTO tb_action_log(
+        <include refid="actionLog_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="actionLog_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
 
-        <!-- 批量新增 -->
-        <insert id="addActionLogs">
-            INSERT INTO tb_action_log(<include refid="actionLog_add_key"><property name="alias" value="" /></include>)
-            VALUES
-            <foreach collection="list" item="item" index="index" separator=",">
-                (<include refid="actionLog_add_val"><property name="alias" value="item."/></include>)
-            </foreach>
-        </insert>
+    <!-- 批量新增 -->
+    <insert id="addActionLogs">
+        INSERT INTO tb_action_log(
+        <include refid="actionLog_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="actionLog_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
 
-        <!-- 修改 -->
-        <update id="editActionLogById">
-            UPDATE tb_action_log
-            <set>
-                <include refid="actionLog_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id = #{id}
-        </update>
+    <!-- 修改 -->
+    <update id="editActionLogById">
+        UPDATE tb_action_log
+        <set>
+            <include refid="actionLog_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
 
-        <!-- 批量修改 -->
-        <update id="editActionLogByIds">
-            UPDATE tb_action_log
-            <set>
-                <include refid="actionLog_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id IN
-            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量修改 -->
+    <update id="editActionLogByIds">
+        UPDATE tb_action_log
+        <set>
+            <include refid="actionLog_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 删除 -->
-        <update id="delActionLogById">
+    <!-- 删除 -->
+    <update id="delActionLogById">
             update tb_action_log SET status = 0 WHERE id = #{id}
         </update>
 
-        <!-- 批量删除 -->
-        <update id="delActionLogByIds">
-            UPDATE tb_action_log SET status = 0 WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量删除 -->
+    <update id="delActionLogByIds">
+        UPDATE tb_action_log SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 真删除 -->
-        <delete id="delActionLogRealById">
+    <!-- 真删除 -->
+    <delete id="delActionLogRealById">
             DELETE FROM tb_action_log WHERE id = #{id}
         </delete>
 
-        <!-- 真批量删除 -->
-        <delete id="delActionLogRealByIds">
-            DELETE FROM tb_action_log WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </delete>
+    <!-- 真批量删除 -->
+    <delete id="delActionLogRealByIds">
+        DELETE FROM tb_action_log WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
-        <!-- 清空 -->
-        <delete id="delActionLogReals">
+    <!-- 清空 -->
+    <delete id="delActionLogReals">
             DELETE FROM tb_action_log
         </delete>
 
-        <!-- 查询管理列表 -->
-        <select id="getActionLogs" parameterType="Map" resultType="Map">
-            SELECT <include refid="actionLog_select_cond" />
-            FROM tb_action_log a
-            <where>
-                <include refid="actionLog_where_if" />
-                AND a.status in (1, 2)
-            </where>
-            ORDER BY a.status ASC, a.create_time DESC
-        </select>
+    <!-- 查询管理列表 -->
+    <select id="getActionLogs" parameterType="Map" resultType="Map">
+        SELECT
+        <include refid="actionLog_select_cond"/>
+        FROM tb_action_log a
+        <where>
+            <include refid="actionLog_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.create_time DESC
+    </select>
 
-        <!-- 根据id查询操作日志表 -->
-        <select id="getActionLogById" resultType="Map">
-            SELECT <include refid="actionLog_select_cond_one"/>
-            FROM tb_action_log a
-            WHERE a.status in (1, 2) and a.id = #{id}
-        </select>
+    <!-- 根据id查询操作日志表 -->
+    <select id="getActionLogById" resultType="Map">
+        SELECT
+        <include refid="actionLog_select_cond_one"/>
+        FROM tb_action_log a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
 
 
-        <!-- 查询的选择项, 增删字段时调整 -->
-        <sql id="actionLog_select_cond">
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="actionLog_select_cond">
             a.id id
                             
                                             
@@ -98,6 +120,9 @@
                                     , a.type type
                                             
                                     , a.ip_addr ipAddr
+
+
+                                    , DATE_FORMAT(a.action_time,'%Y-%m-%d %H:%i') actionTime
                                             
                                     , a.project_name projectName
                                             
@@ -120,12 +145,13 @@
                                     , a.update_time updateTime
                                     </sql>
 
-        <!-- (单个)查询的选择项, 增删字段时调整 -->
-        <sql id="actionLog_select_cond_one">
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="actionLog_select_cond_one">
             a.id id
                                                                             , a.name name
                                                                 , a.type type
                                                                 , a.ip_addr ipAddr
+                                                                , a.action_time actionTime
                                                                 , a.project_name projectName
                                                                 , a.input_param inputParam
                                                                 , a.output_param outputParam
@@ -138,55 +164,58 @@
                                                                 , a.update_time updateTime
                                     </sql>
 
-        <!-- 查询条件 -->
-        <sql id="actionLog_where_if">
-                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
-                    AND a.id = #{id}
-                </if>
-                                                            <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
-                    AND a.name = #{name}
-                </if>
-                                                            <if test="type != null and type != '' and type != 'null' and type != 'undefined'">
-                    AND a.type = #{type}
-                </if>
-                                                            <if test="ipAddr != null and ipAddr != '' and ipAddr != 'null' and ipAddr != 'undefined'">
-                    AND a.ip_addr = #{ipAddr}
-                </if>
-                                                            <if test="projectName != null and projectName != '' and projectName != 'null' and projectName != 'undefined'">
-                    AND a.project_name = #{projectName}
-                </if>
-                                                            <if test="inputParam != null and inputParam != '' and inputParam != 'null' and inputParam != 'undefined'">
-                    AND a.input_param = #{inputParam}
-                </if>
-                                                            <if test="outputParam != null and outputParam != '' and outputParam != 'null' and outputParam != 'undefined'">
-                    AND a.output_param = #{outputParam}
-                </if>
-                                                            <if test="exceptionInfo != null and exceptionInfo != '' and exceptionInfo != 'null' and exceptionInfo != 'undefined'">
-                    AND a.exception_info = #{exceptionInfo}
-                </if>
-                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
-                    AND a.remark = #{remark}
-                </if>
-                                                            <if test="status != null">
-                    AND a.status = #{status}
-                </if>
-                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
-                    AND a.create_user_id = #{createUserId}
-                </if>
-                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
-                    AND a.create_time = #{createTime}
-                </if>
-                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
-                    AND a.update_user_id = #{updateUserId}
-                </if>
-                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
-                    AND a.update_time = #{updateTime}
-                </if>
-                                    </sql>
+    <!-- 查询条件 -->
+    <sql id="actionLog_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
+            AND a.name = #{name}
+        </if>
+        <if test="type != null and type != '' and type != 'null' and type != 'undefined'">
+            AND a.type = #{type}
+        </if>
+        <if test="ipAddr != null and ipAddr != '' and ipAddr != 'null' and ipAddr != 'undefined'">
+            AND a.ip_addr = #{ipAddr}
+        </if>
+        <if test="actionTime != null and actionTime != '' and actionTime != 'null' and actionTime != 'undefined'">
+            AND a.action_time = #{actionTime}
+        </if>
+        <if test="projectName != null and projectName != '' and projectName != 'null' and projectName != 'undefined'">
+            AND a.project_name = #{projectName}
+        </if>
+        <if test="inputParam != null and inputParam != '' and inputParam != 'null' and inputParam != 'undefined'">
+            AND a.input_param = #{inputParam}
+        </if>
+        <if test="outputParam != null and outputParam != '' and outputParam != 'null' and outputParam != 'undefined'">
+            AND a.output_param = #{outputParam}
+        </if>
+        <if test="exceptionInfo != null and exceptionInfo != '' and exceptionInfo != 'null' and exceptionInfo != 'undefined'">
+            AND a.exception_info = #{exceptionInfo}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
 
 
-        <!-- (批量)新增键, 增删字段时调整 -->
-        <sql id="actionLog_add_key">
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="actionLog_add_key">
             id
                                                         
                     , name
@@ -194,6 +223,8 @@
                     , type
                                             
                     , ip_addr
+                                            
+                    , action_time
                                             
                     , project_name
                                             
@@ -208,12 +239,13 @@
                     , status
                                                                                                                                                     </sql>
 
-        <!-- (批量)新增值, 增删字段时调整 -->
-        <sql id="actionLog_add_val">
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="actionLog_add_val">
             #{id}
                                                                             , #{name}
                                                                 , #{type}
                                                                 , #{ipAddr}
+                                                                , #{actionTime}
                                                                 , #{projectName}
                                                                 , #{inputParam}
                                                                 , #{outputParam}
@@ -222,34 +254,37 @@
                                                                 , #{status}
                                                                                                                                                     </sql>
 
-        <!-- (批量修改的条件,增减字段时调整) -->
-        <sql id="actionLog_set_if">
-                                                                                                                                <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
-                                name = #{name},
-                            </if>
-                                                                                                                                                                <if test="type != null and type != '' and type != 'null' and type != 'undefined'">
-                                type = #{type},
-                            </if>
-                                                                                                                                                                <if test="ipAddr != null and ipAddr != '' and ipAddr != 'null' and ipAddr != 'undefined'">
-                                ip_addr = #{ipAddr},
-                            </if>
-                                                                                                                                                                <if test="projectName != null and projectName != '' and projectName != 'null' and projectName != 'undefined'">
-                                project_name = #{projectName},
-                            </if>
-                                                                                                                                                                <if test="inputParam != null and inputParam != '' and inputParam != 'null' and inputParam != 'undefined'">
-                                input_param = #{inputParam},
-                            </if>
-                                                                                                                                                                <if test="outputParam != null and outputParam != '' and outputParam != 'null' and outputParam != 'undefined'">
-                                output_param = #{outputParam},
-                            </if>
-                                                                                                                                                                <if test="exceptionInfo != null and exceptionInfo != '' and exceptionInfo != 'null' and exceptionInfo != 'undefined'">
-                                exception_info = #{exceptionInfo},
-                            </if>
-                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
-                                remark = #{remark},
-                            </if>
-                                                                                                                                                                <if test="status != null">
-                                status = #{status},
-                            </if>
-                                                                                                                                                                                                                                                                                                                                                </sql>
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="actionLog_set_if">
+        <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
+            name = #{name},
+        </if>
+        <if test="type != null and type != '' and type != 'null' and type != 'undefined'">
+            type = #{type},
+        </if>
+        <if test="ipAddr != null and ipAddr != '' and ipAddr != 'null' and ipAddr != 'undefined'">
+            ip_addr = #{ipAddr},
+        </if>
+        <if test="actionTime != null and actionTime != '' and actionTime != 'null' and actionTime != 'undefined'">
+            action_time = #{actionTime},
+        </if>
+        <if test="projectName != null and projectName != '' and projectName != 'null' and projectName != 'undefined'">
+            project_name = #{projectName},
+        </if>
+        <if test="inputParam != null and inputParam != '' and inputParam != 'null' and inputParam != 'undefined'">
+            input_param = #{inputParam},
+        </if>
+        <if test="outputParam != null and outputParam != '' and outputParam != 'null' and outputParam != 'undefined'">
+            output_param = #{outputParam},
+        </if>
+        <if test="exceptionInfo != null and exceptionInfo != '' and exceptionInfo != 'null' and exceptionInfo != 'undefined'">
+            exception_info = #{exceptionInfo},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+    </sql>
 </mapper>

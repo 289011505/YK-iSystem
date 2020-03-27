@@ -11,7 +11,7 @@ spring:
       label: master
       server:
         git:
-          uri: https://github.com/Forever1996Fyk/YK-iSystem.git
+          uri: git@github.com:Forever1996Fyk/YK-iSystem.git
           search-paths: isystem-config-respo
           username: michaelkai@aliyun.com
           password: fyk961222..

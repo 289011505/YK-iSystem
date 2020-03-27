@@ -6,6 +6,7 @@ import com.yksys.isystem.common.core.utils.MapUtil;
 import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.common.pojo.ActionLog;
 import com.yksys.isystem.service.system.mapper.ActionLogMapper;
+import com.yksys.isystem.service.system.service.ActionLogService;
 import com.yksys.isystem.service.system.service.SystemTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Service
 public class SystemTaskServiceImpl implements SystemTaskService {
     @Autowired
-    private ActionLogMapper actionLogMapper;
+    private ActionLogService actionLogService;
     @Autowired
     private RedisUtil redisUtil;
 
@@ -37,8 +38,9 @@ public class SystemTaskServiceImpl implements SystemTaskService {
             Map<String, Object> map = (Map<String, Object>) redisUtil.get(key);
             if (!CollectionUtils.isEmpty(map)) {
                 ActionLog actionLog = MapUtil.mapToObject(ActionLog.class, map, false);
-                actionLog.setId(AppUtil.randomId());
-                actionLogMapper.addActionLog(actionLog);
+                actionLogService.addActionLog(actionLog);
+
+                redisUtil.del(key);
             }
         });
     }

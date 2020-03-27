@@ -1,5 +1,6 @@
 package com.yksys.isystem.common.core.configure.auto;
 
+import com.yksys.isystem.common.core.interceptor.SqlAppendInterceptor;
 import com.yksys.isystem.common.core.security.http.YkRestTemplate;
 import com.yksys.isystem.common.core.security.oauth2.client.Oauth2ClientProperties;
 import com.yksys.isystem.common.core.utils.SpringContextUtil;
@@ -46,5 +47,11 @@ public class AutoConfiguration {
         SpringContextUtil springContextUtil = new SpringContextUtil();
         logger.info("springContextUtil [{}]", springContextUtil);
         return springContextUtil;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(SqlAppendInterceptor.class)
+    public SqlAppendInterceptor sqlAppendInterceptor() {
+        return new SqlAppendInterceptor();
     }
 }

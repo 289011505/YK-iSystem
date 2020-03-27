@@ -77,7 +77,7 @@
                 <include refid="taskInfo_where_if" />
                 AND a.status in (1, 2)
             </where>
-            ORDER BY a.status ASC, a.create_time DESC
+            ORDER BY a.create_time DESC
         </select>
 
         <!-- 根据id查询定时任务调度表 -->

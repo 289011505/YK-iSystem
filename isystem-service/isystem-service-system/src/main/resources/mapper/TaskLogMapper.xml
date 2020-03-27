@@ -101,9 +101,9 @@
                                             
                                     , a.job_message jobMessage
                                             
-                                    , a.start_time startTime
+                                    , DATE_FORMAT(a.start_time,'%Y-%m-%d %H:%i') startTime
                                             
-                                    , a.end_time endTime
+                                    , DATE_FORMAT(a.end_time,'%Y-%m-%d %H:%i') endTime
                                             
                                     , a.exception_info exceptionInfo
                                             
