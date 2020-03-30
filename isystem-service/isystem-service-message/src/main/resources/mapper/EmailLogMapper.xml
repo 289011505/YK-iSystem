@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.message.mapper.EmailLogMapper">
+        <!-- 新增 -->
+        <insert id="addEmailLog">
+            INSERT INTO tb_email_log(<include refid="emailLog_add_key"><property name="alias" value="" /></include>)
+            VALUES (<include refid="emailLog_add_val"><property name="alias" value="" /></include>)
+        </insert>
+
+        <!-- 批量新增 -->
+        <insert id="addEmailLogs">
+            INSERT INTO tb_email_log(<include refid="emailLog_add_key"><property name="alias" value="" /></include>)
+            VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (<include refid="emailLog_add_val"><property name="alias" value="item."/></include>)
+            </foreach>
+        </insert>
+
+        <!-- 修改 -->
+        <update id="editEmailLogById">
+            UPDATE tb_email_log
+            <set>
+                <include refid="emailLog_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <!-- 批量修改 -->
+        <update id="editEmailLogByIds">
+            UPDATE tb_email_log
+            <set>
+                <include refid="emailLog_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 删除 -->
+        <update id="delEmailLogById">
+            update tb_email_log SET status = 0 WHERE id = #{id}
+        </update>
+
+        <!-- 批量删除 -->
+        <update id="delEmailLogByIds">
+            UPDATE tb_email_log SET status = 0 WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 真删除 -->
+        <delete id="delEmailLogRealById">
+            DELETE FROM tb_email_log WHERE id = #{id}
+        </delete>
+
+        <!-- 真批量删除 -->
+        <delete id="delEmailLogRealByIds">
+            DELETE FROM tb_email_log WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </delete>
+
+        <!-- 清空 -->
+        <delete id="delEmailLogReals">
+            DELETE FROM tb_email_log
+        </delete>
+
+        <!-- 查询管理列表 -->
+        <select id="getEmailLogs" parameterType="Map" resultType="Map">
+            SELECT <include refid="emailLog_select_cond" />
+            FROM tb_email_log a
+            <where>
+                <include refid="emailLog_where_if" />
+                AND a.status in (1, 2)
+            </where>
+            ORDER BY a.status ASC, a.create_time DESC
+        </select>
+
+        <!-- 根据id查询邮件日志表 -->
+        <select id="getEmailLogById" resultType="Map">
+            SELECT <include refid="emailLog_select_cond_one"/>
+            FROM tb_email_log a
+            WHERE a.status in (1, 2) and a.id = #{id}
+        </select>
+
+
+        <!-- 查询的选择项, 增删字段时调整 -->
+        <sql id="emailLog_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.subject subject
+                                            
+                                    , a.recipients recipients
+                                            
+                                    , a.cc cc
+                                            
+                                    , a.content content
+                                            
+                                    , a.attachment attachment
+                                            
+                                    , a.send_num sendNum
+                                            
+                                    , a.error error
+                                            
+                                    , a.result result
+                                            
+                                    , a.config_id configId
+                                            
+                                    , a.tpl_id tplId
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+        <!-- (单个)查询的选择项, 增删字段时调整 -->
+        <sql id="emailLog_select_cond_one">
+            a.id id
+                                                                            , a.subject subject
+                                                                , a.recipients recipients
+                                                                , a.cc cc
+                                                                , a.content content
+                                                                , a.attachment attachment
+                                                                , a.send_num sendNum
+                                                                , a.error error
+                                                                , a.result result
+                                                                , a.config_id configId
+                                                                , a.tpl_id tplId
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+        <!-- 查询条件 -->
+        <sql id="emailLog_where_if">
+                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                    AND a.id = #{id}
+                </if>
+                                                            <if test="subject != null and subject != '' and subject != 'null' and subject != 'undefined'">
+                    AND a.subject = #{subject}
+                </if>
+                                                            <if test="recipients != null and recipients != '' and recipients != 'null' and recipients != 'undefined'">
+                    AND a.recipients = #{recipients}
+                </if>
+                                                            <if test="cc != null and cc != '' and cc != 'null' and cc != 'undefined'">
+                    AND a.cc = #{cc}
+                </if>
+                                                            <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+                    AND a.content = #{content}
+                </if>
+                                                            <if test="attachment != null and attachment != '' and attachment != 'null' and attachment != 'undefined'">
+                    AND a.attachment = #{attachment}
+                </if>
+                                                            <if test="sendNum != null">
+                    AND a.send_num = #{sendNum}
+                </if>
+                                                            <if test="error != null and error != '' and error != 'null' and error != 'undefined'">
+                    AND a.error = #{error}
+                </if>
+                                                            <if test="result != null">
+                    AND a.result = #{result}
+                </if>
+                                                            <if test="configId != null and configId != '' and configId != 'null' and configId != 'undefined'">
+                    AND a.config_id = #{configId}
+                </if>
+                                                            <if test="tplId != null and tplId != '' and tplId != 'null' and tplId != 'undefined'">
+                    AND a.tpl_id = #{tplId}
+                </if>
+                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                    AND a.remark = #{remark}
+                </if>
+                                                            <if test="status != null">
+                    AND a.status = #{status}
+                </if>
+                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+                    AND a.create_user_id = #{createUserId}
+                </if>
+                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+                    AND a.create_time = #{createTime}
+                </if>
+                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+                    AND a.update_user_id = #{updateUserId}
+                </if>
+                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+                    AND a.update_time = #{updateTime}
+                </if>
+                                    </sql>
+
+
+        <!-- (批量)新增键, 增删字段时调整 -->
+        <sql id="emailLog_add_key">
+            id
+                                                        
+                    , subject
+                                            
+                    , recipients
+                                            
+                    , cc
+                                            
+                    , content
+                                            
+                    , attachment
+                                            
+                    , send_num
+                                            
+                    , error
+                                            
+                    , result
+                                            
+                    , config_id
+                                            
+                    , tpl_id
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+        <!-- (批量)新增值, 增删字段时调整 -->
+        <sql id="emailLog_add_val">
+            #{id}
+                                                                            , #{subject}
+                                                                , #{recipients}
+                                                                , #{cc}
+                                                                , #{content}
+                                                                , #{attachment}
+                                                                , #{sendNum}
+                                                                , #{error}
+                                                                , #{result}
+                                                                , #{configId}
+                                                                , #{tplId}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+        <!-- (批量修改的条件,增减字段时调整) -->
+        <sql id="emailLog_set_if">
+                                                                                                                                <if test="subject != null and subject != '' and subject != 'null' and subject != 'undefined'">
+                                subject = #{subject},
+                            </if>
+                                                                                                                                                                <if test="recipients != null and recipients != '' and recipients != 'null' and recipients != 'undefined'">
+                                recipients = #{recipients},
+                            </if>
+                                                                                                                                                                <if test="cc != null and cc != '' and cc != 'null' and cc != 'undefined'">
+                                cc = #{cc},
+                            </if>
+                                                                                                                                                                <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+                                content = #{content},
+                            </if>
+                                                                                                                                                                <if test="attachment != null and attachment != '' and attachment != 'null' and attachment != 'undefined'">
+                                attachment = #{attachment},
+                            </if>
+                                                                                                                                                                <if test="sendNum != null">
+                                send_num = #{sendNum},
+                            </if>
+                                                                                                                                                                <if test="error != null and error != '' and error != 'null' and error != 'undefined'">
+                                error = #{error},
+                            </if>
+                                                                                                                                                                <if test="result != null">
+                                result = #{result},
+                            </if>
+                                                                                                                                                                <if test="configId != null and configId != '' and configId != 'null' and configId != 'undefined'">
+                                config_id = #{configId},
+                            </if>
+                                                                                                                                                                <if test="tplId != null and tplId != '' and tplId != 'null' and tplId != 'undefined'">
+                                tpl_id = #{tplId},
+                            </if>
+                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                                remark = #{remark},
+                            </if>
+                                                                                                                                                                <if test="status != null">
+                                status = #{status},
+                            </if>
+                                                                                                                                                                                                                                                                                                                                                </sql>
+</mapper>

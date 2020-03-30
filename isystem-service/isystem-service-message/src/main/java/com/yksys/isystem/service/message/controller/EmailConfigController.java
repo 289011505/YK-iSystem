@@ -1,0 +1,109 @@
+package com.yksys.isystem.service.message.controller;
+
+import com.yksys.isystem.common.core.dto.DataTableViewPage;
+import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.pojo.EmailConfig;
+import com.yksys.isystem.common.vo.EmailConfigVo;
+import com.yksys.isystem.service.message.service.EmailConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+
+/**
+ * @program: YK-iSystem
+ * @description: 邮箱配置表
+ * @author: YuKai Fan
+ * @create: 2020-03-30 20:49:36
+ *
+ */
+@RestController
+@RequestMapping("/api/emailConfig")
+public class EmailConfigController {
+    @Autowired
+    private EmailConfigService emailConfigService;
+
+    /**
+     * 新增邮箱配置表
+     * @return
+     */
+    @PostMapping("/addEmailConfig")
+    public Result addEmailConfig(@RequestBody EmailConfigVo emailConfigVo) {
+        EmailConfig emailConfig = emailConfigVo.convert();
+        return new Result(HttpStatus.OK.value(), "新增成功", emailConfigService.addEmailConfig(emailConfig));
+    }
+
+    /**
+     * 根据id查询邮箱配置表
+     * @param id
+     * @return
+     */
+    @GetMapping("/getEmailConfigById")
+    public Result getEmailConfigById(@RequestParam String id) {
+        return new Result(HttpStatus.OK.value(), "查询成功", emailConfigService.getEmailConfigById(id));
+    }
+
+    /**
+     * 更新邮箱配置表
+     *
+     * @return
+     */
+    @PutMapping("/editEmailConfig")
+    public Result editEmailConfig(@RequestBody EmailConfigVo emailConfigVo) {
+        EmailConfig emailConfig = emailConfigVo.convert();
+        emailConfigService.editEmailConfig(emailConfig);
+        return new Result(HttpStatus.OK.value(), "更新成功");
+    }
+
+    /**
+     * 根据id删除邮箱配置表
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/delEmailConfig")
+    public Result delEmailConfigById(@RequestParam String id) {
+        emailConfigService.delEmailConfigById(id);
+        return new Result(HttpStatus.OK.value(), "删除成功");
+    }
+
+    /**
+     * 根据ids批量删除邮箱配置表
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/delEmailConfig/{ids}")
+    public Result delEmailConfigByIds(@PathVariable("ids") String[] ids) {
+        emailConfigService.delEmailConfigByIs(Arrays.asList(ids));
+        return new Result(HttpStatus.OK.value(), "批量删除成功");
+    }
+
+    /**
+     * 获取所有的邮箱配置表(不分页)
+     * @param map 参数
+     * @return
+     */
+    @GetMapping("/getEmailConfigs/noPage")
+    public Result getEmailConfigs(@RequestParam Map<String, Object> map) {
+        return new Result(HttpStatus.OK.value(), "获取成功", emailConfigService.getEmailConfigs(map));
+    }
+
+    /**
+     * 获取所有邮箱配置表
+     * @param start 开始记录
+     * @param pageSize 分页大小
+     * @param map 参数
+     * @return
+     */
+    @GetMapping("/getEmailConfigs")
+    public Result getEmailConfigs(@RequestParam(value = "start", required = false, defaultValue = "0") int start,
+                                 @RequestParam(value = "pageSize", required = false, defaultValue = "30") int pageSize,
+                                 @RequestParam Map<String, Object> map) {
+        List<Map<String, Object>> list = emailConfigService.getEmailConfigs(start, pageSize, map);
+        return new Result(HttpStatus.OK.value(), "获取成功", new DataTableViewPage(list));
+    }
+
+}

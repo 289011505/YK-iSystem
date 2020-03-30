@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.message.mapper.EmailConfigMapper">
+        <!-- 新增 -->
+        <insert id="addEmailConfig">
+            INSERT INTO tb_email_config(<include refid="emailConfig_add_key"><property name="alias" value="" /></include>)
+            VALUES (<include refid="emailConfig_add_val"><property name="alias" value="" /></include>)
+        </insert>
+
+        <!-- 批量新增 -->
+        <insert id="addEmailConfigs">
+            INSERT INTO tb_email_config(<include refid="emailConfig_add_key"><property name="alias" value="" /></include>)
+            VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (<include refid="emailConfig_add_val"><property name="alias" value="item."/></include>)
+            </foreach>
+        </insert>
+
+        <!-- 修改 -->
+        <update id="editEmailConfigById">
+            UPDATE tb_email_config
+            <set>
+                <include refid="emailConfig_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <!-- 批量修改 -->
+        <update id="editEmailConfigByIds">
+            UPDATE tb_email_config
+            <set>
+                <include refid="emailConfig_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 删除 -->
+        <update id="delEmailConfigById">
+            update tb_email_config SET status = 0 WHERE id = #{id}
+        </update>
+
+        <!-- 批量删除 -->
+        <update id="delEmailConfigByIds">
+            UPDATE tb_email_config SET status = 0 WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 真删除 -->
+        <delete id="delEmailConfigRealById">
+            DELETE FROM tb_email_config WHERE id = #{id}
+        </delete>
+
+        <!-- 真批量删除 -->
+        <delete id="delEmailConfigRealByIds">
+            DELETE FROM tb_email_config WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </delete>
+
+        <!-- 清空 -->
+        <delete id="delEmailConfigReals">
+            DELETE FROM tb_email_config
+        </delete>
+
+        <!-- 查询管理列表 -->
+        <select id="getEmailConfigs" parameterType="Map" resultType="Map">
+            SELECT <include refid="emailConfig_select_cond" />
+            FROM tb_email_config a
+            <where>
+                <include refid="emailConfig_where_if" />
+                AND a.status in (1, 2)
+            </where>
+            ORDER BY a.status ASC, a.create_time DESC
+        </select>
+
+        <!-- 根据id查询邮箱配置表 -->
+        <select id="getEmailConfigById" resultType="Map">
+            SELECT <include refid="emailConfig_select_cond_one"/>
+            FROM tb_email_config a
+            WHERE a.status in (1, 2) and a.id = #{id}
+        </select>
+
+
+        <!-- 查询的选择项, 增删字段时调整 -->
+        <sql id="emailConfig_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.name name
+                                            
+                                    , a.protocol protocol
+                                            
+                                    , a.smtp_host smtpHost
+                                            
+                                    , a.smtp_user_name smtpUserName
+                                            
+                                    , a.smtp_password smtpPassword
+                                            
+                                    , a.is_default isDefault
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+        <!-- (单个)查询的选择项, 增删字段时调整 -->
+        <sql id="emailConfig_select_cond_one">
+            a.id id
+                                                                            , a.name name
+                                                                , a.protocol protocol
+                                                                , a.smtp_host smtpHost
+                                                                , a.smtp_user_name smtpUserName
+                                                                , a.smtp_password smtpPassword
+                                                                , a.is_default isDefault
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+        <!-- 查询条件 -->
+        <sql id="emailConfig_where_if">
+                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                    AND a.id = #{id}
+                </if>
+                                                            <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
+                    AND a.name = #{name}
+                </if>
+                                                            <if test="protocol != null and protocol != '' and protocol != 'null' and protocol != 'undefined'">
+                    AND a.protocol = #{protocol}
+                </if>
+                                                            <if test="smtpHost != null and smtpHost != '' and smtpHost != 'null' and smtpHost != 'undefined'">
+                    AND a.smtp_host = #{smtpHost}
+                </if>
+                                                            <if test="smtpUserName != null and smtpUserName != '' and smtpUserName != 'null' and smtpUserName != 'undefined'">
+                    AND a.smtp_user_name = #{smtpUserName}
+                </if>
+                                                            <if test="smtpPassword != null and smtpPassword != '' and smtpPassword != 'null' and smtpPassword != 'undefined'">
+                    AND a.smtp_password = #{smtpPassword}
+                </if>
+                                                            <if test="isDefault != null">
+                    AND a.is_default = #{isDefault}
+                </if>
+                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                    AND a.remark = #{remark}
+                </if>
+                                                            <if test="status != null">
+                    AND a.status = #{status}
+                </if>
+                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+                    AND a.create_user_id = #{createUserId}
+                </if>
+                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+                    AND a.create_time = #{createTime}
+                </if>
+                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+                    AND a.update_user_id = #{updateUserId}
+                </if>
+                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+                    AND a.update_time = #{updateTime}
+                </if>
+                                    </sql>
+
+
+        <!-- (批量)新增键, 增删字段时调整 -->
+        <sql id="emailConfig_add_key">
+            id
+                                                        
+                    , name
+                                            
+                    , protocol
+                                            
+                    , smtp_host
+                                            
+                    , smtp_user_name
+                                            
+                    , smtp_password
+                                            
+                    , is_default
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+        <!-- (批量)新增值, 增删字段时调整 -->
+        <sql id="emailConfig_add_val">
+            #{id}
+                                                                            , #{name}
+                                                                , #{protocol}
+                                                                , #{smtpHost}
+                                                                , #{smtpUserName}
+                                                                , #{smtpPassword}
+                                                                , #{isDefault}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+        <!-- (批量修改的条件,增减字段时调整) -->
+        <sql id="emailConfig_set_if">
+                                                                                                                                <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
+                                name = #{name},
+                            </if>
+                                                                                                                                                                <if test="protocol != null and protocol != '' and protocol != 'null' and protocol != 'undefined'">
+                                protocol = #{protocol},
+                            </if>
+                                                                                                                                                                <if test="smtpHost != null and smtpHost != '' and smtpHost != 'null' and smtpHost != 'undefined'">
+                                smtp_host = #{smtpHost},
+                            </if>
+                                                                                                                                                                <if test="smtpUserName != null and smtpUserName != '' and smtpUserName != 'null' and smtpUserName != 'undefined'">
+                                smtp_user_name = #{smtpUserName},
+                            </if>
+                                                                                                                                                                <if test="smtpPassword != null and smtpPassword != '' and smtpPassword != 'null' and smtpPassword != 'undefined'">
+                                smtp_password = #{smtpPassword},
+                            </if>
+                                                                                                                                                                <if test="isDefault != null">
+                                is_default = #{isDefault},
+                            </if>
+                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                                remark = #{remark},
+                            </if>
+                                                                                                                                                                <if test="status != null">
+                                status = #{status},
+                            </if>
+                                                                                                                                                                                                                                                                                                                                                </sql>
+</mapper>
