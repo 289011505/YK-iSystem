@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: isystem-service-message
+
+server:
+  port: 8508
