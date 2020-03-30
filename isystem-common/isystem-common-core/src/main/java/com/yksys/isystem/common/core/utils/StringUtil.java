@@ -2,14 +2,12 @@ package com.yksys.isystem.common.core.utils;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.springframework.lang.Nullable;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +18,69 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
 
     private static final char SEPARATOR = '_';
     private static final String CHARSET = "UTF-8";
+
+    public static String[] delimitedListToStringArray(@Nullable String str, @Nullable String delimiter) {
+        return delimitedListToStringArray(str, delimiter, (String)null);
+    }
+
+    /**
+     * 将字符串转成数组
+     * @param str
+     * @param delimiter
+     * @param charsToDelete
+     * @return
+     */
+    public static String[] delimitedListToStringArray(@Nullable String str, @Nullable String delimiter, @Nullable String charsToDelete) {
+        if (str == null) {
+            return new String[0];
+        } else if (delimiter == null) {
+            return new String[]{str};
+        } else {
+            List<String> result = new ArrayList();
+            int pos;
+            if (delimiter.isEmpty()) {
+                for(pos = 0; pos < str.length(); ++pos) {
+                    result.add(deleteAny(str.substring(pos, pos + 1), charsToDelete));
+                }
+            } else {
+                int delPos;
+                for(pos = 0; (delPos = str.indexOf(delimiter, pos)) != -1; pos = delPos + delimiter.length()) {
+                    result.add(deleteAny(str.substring(pos, delPos), charsToDelete));
+                }
+
+                if (str.length() > 0 && pos <= str.length()) {
+                    result.add(deleteAny(str.substring(pos), charsToDelete));
+                }
+            }
+
+            return toStringArray((Collection)result);
+        }
+    }
+
+    public static String[] toStringArray(@Nullable Collection<String> collection) {
+        return collection != null ? (String[])collection.toArray(new String[0]) : new String[0];
+    }
+
+    public static String deleteAny(String inString, @Nullable String charsToDelete) {
+        if (hasLength(inString) && hasLength(charsToDelete)) {
+            StringBuilder sb = new StringBuilder(inString.length());
+
+            for(int i = 0; i < inString.length(); ++i) {
+                char c = inString.charAt(i);
+                if (charsToDelete.indexOf(c) == -1) {
+                    sb.append(c);
+                }
+            }
+
+            return sb.toString();
+        } else {
+            return inString;
+        }
+    }
+
+    public static boolean hasLength(@Nullable String str) {
+        return str != null && !str.isEmpty();
+    }
 
     /**
      * 转换为字节数组
