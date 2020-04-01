@@ -30,7 +30,7 @@ public class EmailConfig implements Serializable {
     private String smtpUserName;
 
     //发件服务器密码
-    private String smtpPassWord;
+    private String smtpPassword;
 
     //是否默认
     private Integer isDefault;
@@ -38,11 +38,11 @@ public class EmailConfig implements Serializable {
     //状态
     private Integer status;
 
-    public EmailConfig(String protocol, String smtpHost, String smtpUserName, String smtpPassWord, Integer isDefault) {
+    public EmailConfig(String protocol, String smtpHost, String smtpUserName, String smtpPassword, Integer isDefault) {
         this.protocol = protocol;
         this.smtpHost = smtpHost;
         this.smtpUserName = smtpUserName;
-        this.smtpPassWord = smtpPassWord;
+        this.smtpPassword = smtpPassword;
         this.isDefault = isDefault;
     }
 

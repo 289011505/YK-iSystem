@@ -52,7 +52,7 @@ public class EmailExchanger implements MessageExchanger {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setHost(emailConfig.getSmtpHost());
         javaMailSender.setUsername(emailConfig.getSmtpUserName());
-        javaMailSender.setPassword(emailConfig.getSmtpPassWord());
+        javaMailSender.setPassword(emailConfig.getSmtpPassword());
         javaMailSender.setDefaultEncoding("UTF-8");
         Properties properties = new Properties();
         properties.setProperty("mail.smtp.auth", "true");
