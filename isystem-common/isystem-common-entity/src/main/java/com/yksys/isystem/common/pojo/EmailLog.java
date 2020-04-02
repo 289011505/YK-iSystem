@@ -32,8 +32,8 @@ public class EmailLog implements Serializable {
 		private String error;
 		//结果 0：失败 1：成功
 		private Integer result;
-		//发送配置id
-		private String configId;
+		//发送配置
+		private String config;
 		//模板id
 		private String tplId;
 		//备注

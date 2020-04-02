@@ -1,6 +1,5 @@
 package com.yksys.isystem.common.core.configure.auto;
 
-import com.yksys.isystem.common.core.aop.ActionLogAop;
 import com.yksys.isystem.common.core.redis.FastJsonRedisSerializer;
 import com.yksys.isystem.common.core.redis.StringRedisSerializer;
 import com.yksys.isystem.common.core.utils.RedisUtil;

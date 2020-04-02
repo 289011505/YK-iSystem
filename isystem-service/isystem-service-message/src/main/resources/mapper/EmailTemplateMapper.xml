@@ -71,8 +71,8 @@
 
         <!-- 查询管理列表 -->
         <select id="getEmailTemplates" parameterType="Map" resultType="Map">
-            SELECT <include refid="emailTemplate_select_cond" />
-            FROM tb_email_template a
+            SELECT <include refid="emailTemplate_select_cond" />, b.name configName
+            FROM tb_email_template a left join tb_email_config b on a.config_id = b.id
             <where>
                 <include refid="emailTemplate_where_if" />
                 AND a.status in (1, 2)

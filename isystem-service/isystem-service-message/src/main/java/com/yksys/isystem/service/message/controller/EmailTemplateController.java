@@ -2,6 +2,7 @@ package com.yksys.isystem.service.message.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.common.pojo.EmailTemplate;
 import com.yksys.isystem.common.vo.EmailTemplateVo;
 import com.yksys.isystem.service.message.service.EmailTemplateService;

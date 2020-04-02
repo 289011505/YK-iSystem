@@ -38,6 +38,9 @@ public class EmailConfig implements Serializable {
     //状态
     private Integer status;
 
+    //备注
+    private String remark;
+
     public EmailConfig(String protocol, String smtpHost, String smtpUserName, String smtpPassword, Integer isDefault) {
         this.protocol = protocol;
         this.smtpHost = smtpHost;

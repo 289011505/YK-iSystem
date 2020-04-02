@@ -70,4 +70,14 @@ public interface EmailConfigService {
      * @param ids
      */
     void delEmailConfigRealByIds(List<String> ids);
+
+    /**
+     * 加载缓存配置
+     */
+    void loadCacheConfig();
+
+    /**
+     * 获取缓存配置
+     */
+    List<EmailConfig> getCacheConfig();
 }

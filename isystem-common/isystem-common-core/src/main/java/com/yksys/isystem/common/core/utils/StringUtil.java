@@ -3,6 +3,7 @@ package com.yksys.isystem.common.core.utils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ObjectUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -19,8 +20,40 @@ public class StringUtil extends org.apache.commons.lang3.StringUtils {
     private static final char SEPARATOR = '_';
     private static final String CHARSET = "UTF-8";
 
+    /**
+     * 字符串根据符号 返回数组
+     * @param str
+     * @param delimiter
+     * @return
+     */
     public static String[] delimitedListToStringArray(@Nullable String str, @Nullable String delimiter) {
         return delimitedListToStringArray(str, delimiter, (String)null);
+    }
+
+    /**
+     * 数组根据符号 返回字符串
+     * @param arr
+     * @param delim
+     * @return
+     */
+    public static String arrayToDelimitedString(@Nullable Object[] arr, String delim) {
+        if (ObjectUtils.isEmpty(arr)) {
+            return "";
+        } else if (arr.length == 1) {
+            return ObjectUtils.nullSafeToString(arr[0]);
+        } else {
+            StringBuilder sb = new StringBuilder();
+
+            for(int i = 0; i < arr.length; ++i) {
+                if (i > 0) {
+                    sb.append(delim);
+                }
+
+                sb.append(arr[i]);
+            }
+
+            return sb.toString();
+        }
     }
 
     /**

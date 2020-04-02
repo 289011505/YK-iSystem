@@ -2,7 +2,10 @@ package com.yksys.isystem.service.message.service.impl;
 
 
 import com.github.pagehelper.PageHelper;
+import com.yksys.isystem.common.core.constants.RedisConstants;
 import com.yksys.isystem.common.core.utils.AppUtil;
+import com.yksys.isystem.common.core.utils.MapUtil;
+import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.common.pojo.EmailTemplate;
 import com.yksys.isystem.service.message.mapper.EmailTemplateMapper;
 import com.yksys.isystem.service.message.service.EmailTemplateService;
@@ -29,6 +32,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
         emailTemplate.setId(AppUtil.randomId());
         emailTemplate.setStatus(1);
         emailTemplateMapper.addEmailTemplate(emailTemplate);
+
         return emailTemplate;
     }
 
