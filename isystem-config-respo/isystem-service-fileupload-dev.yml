@@ -23,5 +23,5 @@ fdfs:
 oss:
   #暂时的外网节点, 如果发布到线上环境, 只要阿里云ESC服务器与oss服务器同一地域, 可以使用内网节点
   end-point: oss-cn-qingdao.aliyuncs.com
-  access-keyId: LTAIoc5iy7rzY5oF
-  access-keySecret: B7INLs3bwisLsUjcAcwNWx0RU4zCKI
+  access-keyId: xxxxxx
+  access-keySecret: xxxxxxx
