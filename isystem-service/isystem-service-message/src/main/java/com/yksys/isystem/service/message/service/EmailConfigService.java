@@ -79,5 +79,5 @@ public interface EmailConfigService {
     /**
      * 获取缓存配置
      */
-    List<EmailConfig> getCacheConfig();
+    List<EmailConfig> getCacheConfig() throws Exception;
 }

@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @program: YK-iSystem
@@ -17,6 +18,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan(basePackages = {"com.yksys.isystem.service.message.mapper"})
+@EnableSwagger2
 public class ServiceMessageApplication implements CommandLineRunner {
 
     public static void main(String[] args) {

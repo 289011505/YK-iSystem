@@ -5,6 +5,9 @@ import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.pojo.EmailConfig;
 import com.yksys.isystem.common.vo.EmailConfigVo;
 import com.yksys.isystem.service.message.service.EmailConfigService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ import java.util.Map;
  * @create: 2020-03-30 20:49:36
  *
  */
+@Api(tags = "邮件配置管理")
 @RestController
 @RequestMapping("/api/emailConfig")
 public class EmailConfigController {
@@ -31,8 +35,9 @@ public class EmailConfigController {
      * 新增邮箱配置表
      * @return
      */
+    @ApiOperation("新增邮箱配置")
     @PostMapping("/addEmailConfig")
-    public Result addEmailConfig(@RequestBody EmailConfigVo emailConfigVo) {
+    public Result addEmailConfig(@RequestBody @ApiParam(name = "邮件配置vo对象", required = true) EmailConfigVo emailConfigVo) {
         EmailConfig emailConfig = emailConfigVo.convert();
         return new Result(HttpStatus.OK.value(), "新增成功", emailConfigService.addEmailConfig(emailConfig));
     }

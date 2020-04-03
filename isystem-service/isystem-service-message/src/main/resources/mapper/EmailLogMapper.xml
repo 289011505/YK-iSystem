@@ -92,8 +92,9 @@
     <!-- 查询管理列表 -->
     <select id="getEmailLogs" parameterType="Map" resultType="Map">
         SELECT
-        <include refid="emailLog_select_cond"/>
+        <include refid="emailLog_select_cond"/>, b.name tplName
         FROM tb_email_log a
+        left join tb_email_template b on b.id = a.tpl_id
         <where>
             <include refid="emailLog_where_if"/>
             AND a.status in (1, 2)

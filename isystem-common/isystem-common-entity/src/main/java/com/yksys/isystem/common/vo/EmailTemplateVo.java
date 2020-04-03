@@ -34,6 +34,8 @@ public class EmailTemplateVo implements Serializable {
     private String remark;
     //状态:0  已禁用 1 正在使用
     private Integer status;
+    //类型
+    private Integer type;
 
     public EmailTemplate convert() {
         EmailTemplateVoConvert emailTemplateVoConvert = new EmailTemplateVoConvert();

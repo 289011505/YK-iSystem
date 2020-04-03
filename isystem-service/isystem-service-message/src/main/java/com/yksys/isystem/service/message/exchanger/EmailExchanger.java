@@ -2,9 +2,10 @@ package com.yksys.isystem.service.message.exchanger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yksys.isystem.common.core.constants.TemplateEnum;
 import com.yksys.isystem.common.core.exception.ParameterException;
-import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.core.utils.MapUtil;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.model.BaseMessage;
@@ -20,9 +21,6 @@ import com.yksys.isystem.service.message.service.EmailTemplateService;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +30,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.mail.MessagingException;
 import java.io.StringWriter;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -95,7 +92,15 @@ public class EmailExchanger implements MessageExchanger {
                 emailTemplate = MapUtil.mapToObject(EmailTemplate.class, template.get(0), false);
                 //根据配置id获取 邮件配置
                 emailConfig = configMap.get(emailTemplate.getConfigId());
-                String content = velocityTemplate(tplMessage.getTplParams(), emailTemplate.getTemplate());
+
+                //根据类型生成邮件模板
+                String content = null;
+                if (TemplateEnum.TXT_TPL.getType().equals(emailTemplate.getType())) {
+                    content = txtTemplate(tplMessage.getTplParams(), emailTemplate.getTemplate());
+
+                } else if (TemplateEnum.VELOCITY_TPL.getType().equals(emailTemplate.getType())) {
+                    content = velocityTemplate(tplMessage.getTplParams(), emailTemplate.getTemplate());
+                }
                 emailMessage.setContent(content);
             }
 
@@ -109,7 +114,7 @@ public class EmailExchanger implements MessageExchanger {
             logger.error("发送成功:{}", emailMessage.toString());
 
             result = 1;
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             error = e.getMessage();
             logger.error("发送失败:{}", e);
@@ -158,16 +163,13 @@ public class EmailExchanger implements MessageExchanger {
      */
     private String  velocityTemplate(Map params, String templateStr) {
         try {
-//            StringWriter writer = new StringWriter();
-//            VelocityContext context = new VelocityContext(params);
-//            Velocity.evaluate(context, writer, "", templateStr);
             //设置velocity资源加载器
             Properties prop = new Properties();
             prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
             Velocity.init(prop);
             VelocityContext context = new VelocityContext(params);
             StringWriter sw = new StringWriter();
-            Template tpl = Velocity.getTemplate("emailTemplate/registerEmail.html.vm", "UTF-8");
+            Template tpl = Velocity.getTemplate(templateStr, "UTF-8");
             tpl.merge(context, sw);
 
             return sw.toString();
@@ -175,5 +177,19 @@ public class EmailExchanger implements MessageExchanger {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 文本模板处理
+     * @param params
+     * @param templateStr
+     * @return
+     */
+    private String txtTemplate(Map params, String templateStr) {
+        StringWriter writer = new StringWriter();
+        VelocityContext context = new VelocityContext(params);
+        Velocity.evaluate(context, writer, "", templateStr);
+
+        return writer.toString();
     }
 }

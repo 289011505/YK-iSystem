@@ -19,11 +19,11 @@ import java.util.Map;
 
 
 /**
-* @program: YK-iSystem
-* @description:
-* @author: YuKai Fan
-* @create: 2019-12-03 20:05
-**/
+ * @program: YK-iSystem
+ * @description:
+ * @author: YuKai Fan
+ * @create: 2019-12-03 20:05
+ **/
 @Service
 public class EmailConfigServiceImpl implements EmailConfigService {
     @Autowired
@@ -98,20 +98,14 @@ public class EmailConfigServiceImpl implements EmailConfigService {
     }
 
     @Override
-    public List<EmailConfig> getCacheConfig() {
-        try {
-            List<Map<String, Object>> emailConfigs = (List<Map<String, Object>>) redisUtil.get(RedisConstants.EMAIL_CONFIG + "list");
-            List<EmailConfig> list = Lists.newArrayList();
-            emailConfigs.forEach(emailConfig -> {
-                EmailConfig ec = MapUtil.mapToObject(EmailConfig.class, emailConfig, false);
-                list.add(ec);
-            });
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    public List<EmailConfig> getCacheConfig() throws Exception {
+        List<Map<String, Object>> emailConfigs = (List<Map<String, Object>>) redisUtil.get(RedisConstants.EMAIL_CONFIG + "list");
+        List<EmailConfig> list = Lists.newArrayList();
+        emailConfigs.forEach(emailConfig -> {
+            EmailConfig ec = MapUtil.mapToObject(EmailConfig.class, emailConfig, false);
+            list.add(ec);
+        });
+        return list;
     }
 
 }

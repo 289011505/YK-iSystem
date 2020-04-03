@@ -2,94 +2,115 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yksys.isystem.service.message.mapper.EmailTemplateMapper">
-        <!-- 新增 -->
-        <insert id="addEmailTemplate">
-            INSERT INTO tb_email_template(<include refid="emailTemplate_add_key"><property name="alias" value="" /></include>)
-            VALUES (<include refid="emailTemplate_add_val"><property name="alias" value="" /></include>)
-        </insert>
+    <!-- 新增 -->
+    <insert id="addEmailTemplate">
+        INSERT INTO tb_email_template(
+        <include refid="emailTemplate_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="emailTemplate_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
 
-        <!-- 批量新增 -->
-        <insert id="addEmailTemplates">
-            INSERT INTO tb_email_template(<include refid="emailTemplate_add_key"><property name="alias" value="" /></include>)
-            VALUES
-            <foreach collection="list" item="item" index="index" separator=",">
-                (<include refid="emailTemplate_add_val"><property name="alias" value="item."/></include>)
-            </foreach>
-        </insert>
+    <!-- 批量新增 -->
+    <insert id="addEmailTemplates">
+        INSERT INTO tb_email_template(
+        <include refid="emailTemplate_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="emailTemplate_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
 
-        <!-- 修改 -->
-        <update id="editEmailTemplateById">
-            UPDATE tb_email_template
-            <set>
-                <include refid="emailTemplate_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id = #{id}
-        </update>
+    <!-- 修改 -->
+    <update id="editEmailTemplateById">
+        UPDATE tb_email_template
+        <set>
+            <include refid="emailTemplate_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
 
-        <!-- 批量修改 -->
-        <update id="editEmailTemplateByIds">
-            UPDATE tb_email_template
-            <set>
-                <include refid="emailTemplate_set_if"><property name="alias" value="" /></include>
-            </set>
-            WHERE id IN
-            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量修改 -->
+    <update id="editEmailTemplateByIds">
+        UPDATE tb_email_template
+        <set>
+            <include refid="emailTemplate_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 删除 -->
-        <update id="delEmailTemplateById">
+    <!-- 删除 -->
+    <update id="delEmailTemplateById">
             update tb_email_template SET status = 0 WHERE id = #{id}
         </update>
 
-        <!-- 批量删除 -->
-        <update id="delEmailTemplateByIds">
-            UPDATE tb_email_template SET status = 0 WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </update>
+    <!-- 批量删除 -->
+    <update id="delEmailTemplateByIds">
+        UPDATE tb_email_template SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 
-        <!-- 真删除 -->
-        <delete id="delEmailTemplateRealById">
+    <!-- 真删除 -->
+    <delete id="delEmailTemplateRealById">
             DELETE FROM tb_email_template WHERE id = #{id}
         </delete>
 
-        <!-- 真批量删除 -->
-        <delete id="delEmailTemplateRealByIds">
-            DELETE FROM tb_email_template WHERE id IN
-            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </delete>
+    <!-- 真批量删除 -->
+    <delete id="delEmailTemplateRealByIds">
+        DELETE FROM tb_email_template WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 
-        <!-- 清空 -->
-        <delete id="delEmailTemplateReals">
+    <!-- 清空 -->
+    <delete id="delEmailTemplateReals">
             DELETE FROM tb_email_template
         </delete>
 
-        <!-- 查询管理列表 -->
-        <select id="getEmailTemplates" parameterType="Map" resultType="Map">
-            SELECT <include refid="emailTemplate_select_cond" />, b.name configName
-            FROM tb_email_template a left join tb_email_config b on a.config_id = b.id
-            <where>
-                <include refid="emailTemplate_where_if" />
-                AND a.status in (1, 2)
-            </where>
-            ORDER BY a.status ASC, a.create_time DESC
-        </select>
+    <!-- 查询管理列表 -->
+    <select id="getEmailTemplates" parameterType="Map" resultType="Map">
+        SELECT<include refid="emailTemplate_select_cond"/>, b.name configName
+        FROM tb_email_template a left join tb_email_config b on a.config_id = b.id
+        <where>
+            <include refid="emailTemplate_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
 
-        <!-- 根据id查询邮件模板表 -->
-        <select id="getEmailTemplateById" resultType="Map">
-            SELECT <include refid="emailTemplate_select_cond_one"/>
-            FROM tb_email_template a
-            WHERE a.status in (1, 2) and a.id = #{id}
-        </select>
+    <!-- 根据id查询邮件模板表 -->
+    <select id="getEmailTemplateById" resultType="Map">
+        SELECT
+        <include refid="emailTemplate_select_cond_one"/>
+        FROM tb_email_template a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
 
 
-        <!-- 查询的选择项, 增删字段时调整 -->
-        <sql id="emailTemplate_select_cond">
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="emailTemplate_select_cond">
             a.id id
                             
                                             
@@ -98,6 +119,8 @@
                                     , a.code code
                                             
                                     , a.config_id configId
+
+                                    , a.type type
                                             
                                     , a.template template
                                             
@@ -116,13 +139,14 @@
                                     , a.update_time updateTime
                                     </sql>
 
-        <!-- (单个)查询的选择项, 增删字段时调整 -->
-        <sql id="emailTemplate_select_cond_one">
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="emailTemplate_select_cond_one">
             a.id id
                                                                             , a.name name
                                                                 , a.code code
                                                                 , a.config_id configId
                                                                 , a.template template
+                                                                , a.type type
                                                                 , a.params params
                                                                 , a.remark remark
                                                                 , a.status status
@@ -132,49 +156,52 @@
                                                                 , a.update_time updateTime
                                     </sql>
 
-        <!-- 查询条件 -->
-        <sql id="emailTemplate_where_if">
-                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
-                    AND a.id = #{id}
-                </if>
-                                                            <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
-                    AND a.name = #{name}
-                </if>
-                                                            <if test="code != null and code != '' and code != 'null' and code != 'undefined'">
-                    AND a.code = #{code}
-                </if>
-                                                            <if test="configId != null and configId != '' and configId != 'null' and configId != 'undefined'">
-                    AND a.config_id = #{configId}
-                </if>
-                                                            <if test="template != null and template != '' and template != 'null' and template != 'undefined'">
-                    AND a.template = #{template}
-                </if>
-                                                            <if test="params != null and params != '' and params != 'null' and params != 'undefined'">
-                    AND a.params = #{params}
-                </if>
-                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
-                    AND a.remark = #{remark}
-                </if>
-                                                            <if test="status != null">
-                    AND a.status = #{status}
-                </if>
-                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
-                    AND a.create_user_id = #{createUserId}
-                </if>
-                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
-                    AND a.create_time = #{createTime}
-                </if>
-                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
-                    AND a.update_user_id = #{updateUserId}
-                </if>
-                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
-                    AND a.update_time = #{updateTime}
-                </if>
-                                    </sql>
+    <!-- 查询条件 -->
+    <sql id="emailTemplate_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
+            AND a.name = #{name}
+        </if>
+        <if test="code != null and code != '' and code != 'null' and code != 'undefined'">
+            AND a.code = #{code}
+        </if>
+        <if test="configId != null and configId != '' and configId != 'null' and configId != 'undefined'">
+            AND a.config_id = #{configId}
+        </if>
+        <if test="type != null">
+            AND a.type = #{type}
+        </if>
+        <if test="template != null and template != '' and template != 'null' and template != 'undefined'">
+            AND a.template = #{template}
+        </if>
+        <if test="params != null and params != '' and params != 'null' and params != 'undefined'">
+            AND a.params = #{params}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
 
 
-        <!-- (批量)新增键, 增删字段时调整 -->
-        <sql id="emailTemplate_add_key">
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="emailTemplate_add_key">
             id
                                                         
                     , name
@@ -182,6 +209,8 @@
                     , code
                                             
                     , config_id
+
+                    , type
                                             
                     , template
                                             
@@ -192,40 +221,44 @@
                     , status
                                                                                                                                                     </sql>
 
-        <!-- (批量)新增值, 增删字段时调整 -->
-        <sql id="emailTemplate_add_val">
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="emailTemplate_add_val">
             #{id}
                                                                             , #{name}
                                                                 , #{code}
                                                                 , #{configId}
+                                                                , #{type}
                                                                 , #{template}
                                                                 , #{params}
                                                                 , #{remark}
                                                                 , #{status}
                                                                                                                                                     </sql>
 
-        <!-- (批量修改的条件,增减字段时调整) -->
-        <sql id="emailTemplate_set_if">
-                                                                                                                                <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
-                                name = #{name},
-                            </if>
-                                                                                                                                                                <if test="code != null and code != '' and code != 'null' and code != 'undefined'">
-                                code = #{code},
-                            </if>
-                                                                                                                                                                <if test="configId != null and configId != '' and configId != 'null' and configId != 'undefined'">
-                                config_id = #{configId},
-                            </if>
-                                                                                                                                                                <if test="template != null and template != '' and template != 'null' and template != 'undefined'">
-                                template = #{template},
-                            </if>
-                                                                                                                                                                <if test="params != null and params != '' and params != 'null' and params != 'undefined'">
-                                params = #{params},
-                            </if>
-                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
-                                remark = #{remark},
-                            </if>
-                                                                                                                                                                <if test="status != null">
-                                status = #{status},
-                            </if>
-                                                                                                                                                                                                                                                                                                                                                </sql>
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="emailTemplate_set_if">
+        <if test="name != null and name != '' and name != 'null' and name != 'undefined'">
+            name = #{name},
+        </if>
+        <if test="code != null and code != '' and code != 'null' and code != 'undefined'">
+            code = #{code},
+        </if>
+        <if test="configId != null and configId != '' and configId != 'null' and configId != 'undefined'">
+            config_id = #{configId},
+        </if>
+        <if test="template != null and template != '' and template != 'null' and template != 'undefined'">
+            template = #{template},
+        </if>
+        <if test="params != null and params != '' and params != 'null' and params != 'undefined'">
+            params = #{params},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+    </sql>
 </mapper>
