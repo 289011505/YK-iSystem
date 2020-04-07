@@ -61,6 +61,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authenticationEntryPoint(new YkAuthenticationEntryPoint())
                 .and()
                 .csrf().disable();
+        http.headers().frameOptions().disable();
         // 前置过滤器
         http.addFilterBefore(new PreRequestFilter(), AbstractPreAuthenticatedProcessingFilter.class);
     }

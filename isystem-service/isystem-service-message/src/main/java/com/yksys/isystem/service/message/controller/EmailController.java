@@ -58,7 +58,8 @@ public class EmailController {
      * @param recipients 接收人 多个用; 号隔开
      * @param cc 抄送人 多个用; 号隔开
      * @param subject 主题
-     * @param content 内容
+     * @param tplCode 模板编码
+     * @param tplParams 模板参数
      * @param attachUrls 附件地址
      * @return
      */

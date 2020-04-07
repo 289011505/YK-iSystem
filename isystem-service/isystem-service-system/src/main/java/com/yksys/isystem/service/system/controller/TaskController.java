@@ -5,6 +5,7 @@ import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.model.TaskInfo;
 import com.yksys.isystem.common.vo.TaskInfoVo;
+import com.yksys.isystem.service.system.http.HttpExecuteJob;
 import com.yksys.isystem.service.system.service.TaskInfoService;
 import com.yksys.isystem.service.system.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,7 @@ public class TaskController {
     @PostMapping("/addHttpJob")
     public Result addHttpJob(@RequestBody TaskInfoVo taskInfoVo) {
         TaskInfo taskInfo = taskInfoVo.convert();
+        taskInfo.setJobClassName(HttpExecuteJob.class.getName());
         taskInfo = taskInfoService.addTaskInfo(taskInfo);
         taskInfo.setTaskProp(ScheduleConstant.HTTP_TASK);
         taskInfo = taskService.addHttpJob(taskInfo);
@@ -108,6 +110,7 @@ public class TaskController {
     @PutMapping("/editHttpJob")
     public Result editHttpJob(@RequestBody TaskInfoVo taskInfoVo) {
         TaskInfo taskInfo = taskInfoVo.convert();
+        taskInfo.setJobClassName(HttpExecuteJob.class.getName());
         taskInfoService.editTaskInfo(taskInfo);
         taskInfo = taskService.editHttpJob(taskInfo);
         return new Result(HttpStatus.OK.value(), "修改成功", taskInfo);

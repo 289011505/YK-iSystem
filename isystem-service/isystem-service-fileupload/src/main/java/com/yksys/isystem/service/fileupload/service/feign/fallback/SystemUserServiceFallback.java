@@ -1,8 +1,6 @@
 package com.yksys.isystem.service.fileupload.service.feign.fallback;
 
-import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.hystrix.Fallback;
-import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.service.fileupload.service.feign.SystemUserService;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;

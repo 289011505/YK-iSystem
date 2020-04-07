@@ -2,6 +2,7 @@ package com.yksys.isystem.service.system.configuration;
 
 import com.yksys.isystem.service.system.listener.TaskLogsListener;
 import com.yksys.isystem.service.system.service.TaskLogService;
+import com.yksys.isystem.service.system.service.feign.EmailService;
 import com.yksys.isystem.service.system.task.TaskTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
@@ -31,7 +32,7 @@ public class SchedulerConfiguration implements SchedulerFactoryBeanCustomizer {
     }
 
     @Bean
-    public TaskLogsListener taskLogsListener(TaskLogService taskLogService) {
-        return new TaskLogsListener(taskLogService);
+    public TaskLogsListener taskLogsListener(TaskLogService taskLogService, EmailService emailService) {
+        return new TaskLogsListener(taskLogService, emailService);
     }
 }

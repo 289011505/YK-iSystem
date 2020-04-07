@@ -11,13 +11,15 @@ import lombok.Data;
  * @create ${datetime}
  */
 @Data
+@ApiModel(value = "${comments}pojo对象", description = "${comments}")
 public class ${className} implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 #foreach ($column in $columns)
 #if($column.attrname != 'createTime' && $column.attrname != 'updateTime' && $column.attrname != 'createUserId' && $column.attrname != 'updateUserId')
 	#if($column.comments.length() > 0)
-//$column.comments
+    //$column.comments
+	@ApiModelProperty(value = "$column.comments", dataType = "$column.attrType")
 	#end
 	private $column.attrType $column.attrname;
 	#end

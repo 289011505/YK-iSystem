@@ -47,6 +47,12 @@ public class AccessManager {
                 permitAll.addAll(apiGatewayProperties.getPermitAll());
             }
 
+            permitAll.add("/**/swagger-resources/**");
+            permitAll.add("/swagger-ui.html");
+            permitAll.add("/webjars/**");
+            permitAll.add("/**/v2/api-docs/**");
+            permitAll.add("/doc.html");
+
             if (!CollectionUtils.isEmpty(apiGatewayProperties.getAuthorityIgnores())) {
                 authorityIgnores.addAll(apiGatewayProperties.getAuthorityIgnores());
             }

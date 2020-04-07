@@ -1,4 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.yksys.isystem.common.core.configure.auto.AutoConfiguration,\
   com.yksys.isystem.common.core.configure.auto.RedisConfiguration,\
   com.yksys.isystem.common.core.configure.auto.FeignAutoConfiguration,\
-  com.yksys.isystem.common.core.configure.auto.AopConfiguration
+  com.yksys.isystem.common.core.configure.auto.AopConfiguration,\
+  com.yksys.isystem.common.core.configure.auto.WebMvcConfiguration,\
+  com.yksys.isystem.common.core.configure.auto.SwaggerAutoConfiguration

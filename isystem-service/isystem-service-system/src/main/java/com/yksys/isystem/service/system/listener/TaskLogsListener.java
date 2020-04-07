@@ -1,13 +1,13 @@
 package com.yksys.isystem.service.system.listener;
 
-import com.yksys.isystem.common.core.utils.SpringContextUtil;
+import com.yksys.isystem.common.core.constants.ScheduleConstant;
+import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.core.utils.TimeUtil;
+import com.yksys.isystem.common.model.TaskInfo;
 import com.yksys.isystem.common.pojo.TaskLog;
 import com.yksys.isystem.service.system.service.TaskLogService;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.JobListener;
+import com.yksys.isystem.service.system.service.feign.EmailService;
+import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,13 +26,16 @@ public class TaskLogsListener implements JobListener {
 
     private TaskLogService taskLogService;
 
+    private EmailService emailService;
+
     /**
      * 线程本地变量
      */
     private static ThreadLocal<LocalDateTime> threadLocal = new ThreadLocal<>();
 
-    public TaskLogsListener(TaskLogService taskLogService) {
+    public TaskLogsListener(TaskLogService taskLogService, EmailService emailService) {
         this.taskLogService = taskLogService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -69,6 +72,10 @@ public class TaskLogsListener implements JobListener {
         String jobName = jobDetail.getKey().getName();
         String jobGroup = jobDetail.getKey().getGroup();
         String jobClassName = jobDetail.getJobClass().getName();
+        JobDataMap dataMap = jobDetail.getJobDataMap();
+
+        //接收人邮箱
+        String alarmMail = dataMap.getString("alarmMail");
 
         taskLog.setJobName(jobName);
         taskLog.setJobClassName(jobClassName);
@@ -83,7 +90,16 @@ public class TaskLogsListener implements JobListener {
             taskLog.setStatus(2);
             taskLog.setExceptionInfo(e.getMessage());
 
-            //发送邮件 TODO
+            //发送邮件
+            if (StringUtil.isNotBlank(alarmMail)) {
+                String title = String.format("[%s]任务执行异常-%s", jobName, TimeUtil.getCurrentDatetime());
+                try {
+                    emailService.sendEmail(alarmMail, null, title, e.getMessage(), null);
+                } catch (Exception em) {
+                    logger.error("======>> send alarmMail error: {}", em);
+                }
+            }
+
         } else {
             taskLog.setStatus(1);
         }
