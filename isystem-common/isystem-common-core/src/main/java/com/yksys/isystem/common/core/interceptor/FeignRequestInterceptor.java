@@ -29,23 +29,23 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         if (request != null) {
             Map<String, String> headers = getHeaders(request);
             headers.forEach((key, value) -> requestTemplate.header(key, value));
-        }
-
-        if (request.getHeader(ComConstants.REQUEST_HEADER_ID) == null) {
-            requestTemplate.header(ComConstants.REQUEST_HEADER_ID, AppUtil.randomId());
-        }
-
-        // 设置request中的attribute到header:主要是设置自行设置的token、userId等信息，以便转发到Feign调用的服务
-        Enumeration<String> reqAttrbuteNames = request.getAttributeNames();
-        if (reqAttrbuteNames != null) {
-            while (reqAttrbuteNames.hasMoreElements()) {
-                String attrName = reqAttrbuteNames.nextElement();
-                String values = request.getAttribute(attrName).toString();
-                requestTemplate.header(attrName, values);
+            if (request.getHeader(ComConstants.REQUEST_HEADER_ID) == null) {
+                requestTemplate.header(ComConstants.REQUEST_HEADER_ID, AppUtil.randomId());
             }
-        }
 
-        log.debug("FeignRequestInterceptor: {}", request.toString());
+
+            // 设置request中的attribute到header:主要是设置自行设置的token、userId等信息，以便转发到Feign调用的服务
+            Enumeration<String> reqAttrbuteNames = request.getAttributeNames();
+            if (reqAttrbuteNames != null) {
+                while (reqAttrbuteNames.hasMoreElements()) {
+                    String attrName = reqAttrbuteNames.nextElement();
+                    String values = request.getAttribute(attrName).toString();
+                    requestTemplate.header(attrName, values);
+                }
+            }
+
+            log.debug("FeignRequestInterceptor: {}", request.toString());
+        }
 
     }
 

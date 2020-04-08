@@ -3,7 +3,6 @@ package com.yksys.isystem.service.system.configuration;
 import com.yksys.isystem.service.system.listener.TaskLogsListener;
 import com.yksys.isystem.service.system.service.TaskLogService;
 import com.yksys.isystem.service.system.service.feign.EmailService;
-import com.yksys.isystem.service.system.task.TaskTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
 import org.springframework.context.annotation.Bean;

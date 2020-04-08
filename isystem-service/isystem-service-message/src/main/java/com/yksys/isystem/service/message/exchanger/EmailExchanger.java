@@ -111,7 +111,7 @@ public class EmailExchanger implements MessageExchanger {
             //邮件发送
             JavaMailSenderImpl javaMailSender = buildMailSender(emailConfig);
             emailService.sendSimpleMail(javaMailSender, emailMessage);
-            logger.error("发送成功:{}", emailMessage.toString());
+            logger.info("发送成功:{}", emailMessage.toString());
 
             result = 1;
         } catch (Exception e) {

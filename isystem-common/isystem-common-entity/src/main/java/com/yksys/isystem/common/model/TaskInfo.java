@@ -43,7 +43,9 @@ public class TaskInfo implements Serializable {
     //结束时间
     private String endTime;
     //执行数据
-    private Map<String, Object> data;
+    private String data;
+    //执行数据
+    private Map<String, Object> dataMap;
     //是否并发执行（1允许 0禁止）
     private String concurrent;
     //状态:0  已禁用 1 正在使用

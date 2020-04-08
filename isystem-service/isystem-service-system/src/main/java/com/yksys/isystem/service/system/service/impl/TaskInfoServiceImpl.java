@@ -1,6 +1,7 @@
 package com.yksys.isystem.service.system.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.model.TaskInfo;
@@ -8,6 +9,7 @@ import com.yksys.isystem.service.system.mapper.TaskInfoMapper;
 import com.yksys.isystem.service.system.service.TaskInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,9 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     public TaskInfo addTaskInfo(TaskInfo taskInfo) {
         taskInfo.setId(AppUtil.randomId());
         taskInfo.setStatus(1);
+        if (!CollectionUtils.isEmpty(taskInfo.getDataMap())) {
+            taskInfo.setData(JSON.toJSONString(taskInfo.getDataMap()));
+        }
         taskInfoMapper.addTaskInfo(taskInfo);
         return taskInfo;
     }

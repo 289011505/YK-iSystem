@@ -1,6 +1,7 @@
 package com.yksys.isystem.service.system.service.feign;
 
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.service.system.service.feign.fallback.EmailServiceFallback;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @create: 2020-04-07 16:51
  **/
 @Component
-@FeignClient(value = "isystem-service-message")
+@FeignClient(value = "isystem-service-message", fallbackFactory = EmailServiceFallback.class)
 public interface EmailService {
     /**
      * 发送邮件
@@ -29,7 +30,7 @@ public interface EmailService {
      */
     @PostMapping("/api/email/sendEmail")
     Result sendEmail(@RequestParam(value = "recipients") String recipients,
-                     @RequestParam(value = "cc") String cc,
+                     @RequestParam(value = "cc", required = false) String cc,
                      @RequestParam(value = "subject") String subject,
                      @RequestParam(value = "content") String content,
                      @RequestParam(value = "attachUrls", required = false) List<Map<String, String>> attachUrls);
@@ -46,7 +47,7 @@ public interface EmailService {
      */
     @PostMapping("/api/email/sendTplEmail")
     Result sendTplEmail(@RequestParam(value = "recipients") String recipients,
-                        @RequestParam(value = "cc") String cc,
+                        @RequestParam(value = "cc", required = false) String cc,
                         @RequestParam(value = "subject") String subject,
                         @RequestParam(value = "tplCode") String tplCode,
                         @RequestParam(value = "tplParams") String tplParams,

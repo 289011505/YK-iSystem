@@ -3,4 +3,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.yksys.isystem
   com.yksys.isystem.common.core.configure.auto.FeignAutoConfiguration,\
   com.yksys.isystem.common.core.configure.auto.AopConfiguration,\
   com.yksys.isystem.common.core.configure.auto.WebMvcConfiguration,\
-  com.yksys.isystem.common.core.configure.auto.SwaggerAutoConfiguration
+  com.yksys.isystem.common.core.configure.auto.SwaggerAutoConfiguration,\
+  com.yksys.isystem.common.core.configure.auto.TransactionAdviceConfiguration

@@ -141,8 +141,8 @@ public class ScheduleUtil {
         String jobGroupName = taskInfo.getJobGroupName();
         String jobDescription = taskInfo.getJobDescription();
         JobDataMap dataMap = new JobDataMap();
-        if (!CollectionUtils.isEmpty(taskInfo.getData())) {
-            dataMap.putAll(taskInfo.getData());
+        if (!CollectionUtils.isEmpty(taskInfo.getDataMap())) {
+            dataMap.putAll(taskInfo.getDataMap());
         }
         dataMap.put("createTime", TimeUtil.getCurrentDatetime());
         dataMap.put(ScheduleConstant.TASK_PROPERTIES, taskInfo);
@@ -172,8 +172,8 @@ public class ScheduleUtil {
         String jobGroupName = taskInfo.getJobGroupName();
         String jobDescription = taskInfo.getJobDescription();
         JobDataMap dataMap = new JobDataMap();
-        if (!CollectionUtils.isEmpty(taskInfo.getData())) {
-            dataMap.putAll(taskInfo.getData());
+        if (!CollectionUtils.isEmpty(taskInfo.getDataMap())) {
+            dataMap.putAll(taskInfo.getDataMap());
         }
         try {
             if (!checkExists(scheduler, jobName, jobGroupName)) {

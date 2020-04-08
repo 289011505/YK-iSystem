@@ -39,7 +39,7 @@ public class EmailController {
      */
     @PostMapping("/sendEmail")
     public Result sendEmail(@RequestParam(value = "recipients") String recipients,
-                            @RequestParam(value = "cc") String cc,
+                            @RequestParam(value = "cc", required = false) String cc,
                             @RequestParam(value = "subject") String subject,
                             @RequestParam(value = "content") String content,
                             @RequestParam(value = "attachUrls", required = false) List<Map<String, String>> attachUrls) {
@@ -65,7 +65,7 @@ public class EmailController {
      */
     @PostMapping("/sendTplEmail")
     public Result sendTplEmail(@RequestParam(value = "recipients") String recipients,
-                            @RequestParam(value = "cc") String cc,
+                            @RequestParam(value = "cc", required = false) String cc,
                             @RequestParam(value = "subject") String subject,
                             @RequestParam(value = "tplCode") String tplCode,
                             @RequestParam(value = "tplParams") String tplParams,

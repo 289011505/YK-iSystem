@@ -53,6 +53,8 @@ public class AccessManager {
             permitAll.add("/**/v2/api-docs/**");
             permitAll.add("/doc.html");
 
+            permitAll.add("/druid/**");
+
             if (!CollectionUtils.isEmpty(apiGatewayProperties.getAuthorityIgnores())) {
                 authorityIgnores.addAll(apiGatewayProperties.getAuthorityIgnores());
             }
