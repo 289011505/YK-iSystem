@@ -9,7 +9,7 @@ api:
   access-control: true
   check-sign: false
   api-debug: true
-  permit-all: /*/api/login/**, /*/api/logout/**, /*/oauth/**, /actuator/health, /actuator/info, /*/api/generate/generateCode/**
+  permit-all: /*/api/login/**, /*/api/logout/**, /*/oauth/**, /actuator/health, /actuator/info, /*/api/generate/generateCode/**, /*/api/registered/**
 
 ribbon:
   #请求连接的超时时间
