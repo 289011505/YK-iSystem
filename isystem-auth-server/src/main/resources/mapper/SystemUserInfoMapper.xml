@@ -100,4 +100,38 @@
         LEFT JOIN tb_gateway_route c on c.route_name = b.service_id
         where a.status = 1 and b.status = 1 and  c.status = 1
     </select>
+
+    <!-- 判断用户是否存在 -->
+    <select id="checkUserIsExist" parameterType="Map" resultType="java.lang.Integer">
+        SELECT count(a.id) id
+        FROM tb_system_user a
+        <where>
+            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                AND a.id = #{id}
+            </if>
+            <if test="account != null and account != '' and account != 'null' and account != 'undefined'">
+                or a.account = #{account}
+            </if>
+            <if test="userName != null and userName != '' and userName != 'null' and userName != 'undefined'">
+                or a.user_name = #{userName}
+            </if>
+            <if test="phone != null and phone != '' and phone != 'null' and phone != 'undefined'">
+                or a.phone = #{phone}
+            </if>
+            <if test="email != null and email != '' and email != 'null' and email != 'undefined'">
+                or a.email = #{email}
+            </if>
+            <if test="idCard != null and idCard != '' and idCard != 'null' and idCard != 'undefined'">
+                or a.idCard = #{idCard}
+            </if>
+        </where>
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addSystemUser">
+        INSERT INTO tb_system_user(id, account, user_name, password, salt, nick_name, user_icon, last_login_time, age, sex, marry_flag, education,
+         phone, email, prov, city, dist, address, idcard, remark, status)
+        VALUES ( #{id}, #{account}, #{userName}, #{password}, #{salt}, #{nickName}, #{userIcon}, #{lastLoginTime} , #{age}, #{sex}, #{marryFlag}, #{education},
+         #{phone}, #{email}, #{prov}, #{city}, #{dist}, #{address}, #{idCard}, #{remark}, #{status})
+    </insert>
 </mapper>

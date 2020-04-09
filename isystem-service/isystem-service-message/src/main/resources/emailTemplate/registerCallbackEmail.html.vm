@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>用户注册验证</title>
+    <title>用户注册通知</title>
 </head>
 <body>
 <div>
     <p>
-        亲爱的${userName} 欢迎加入YKSystem后台管理系统!
+        亲爱的${userName}
     </p>
 
     <p>
-        您的验证码是 <br>
-    <h1>${verificationCode}</h1>
+        <h1>${content}</h1> <br/>
     </p>
 
     <p>

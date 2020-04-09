@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yksys.isystem.common.core.constants.RabbitConstant;
 import com.yksys.isystem.common.core.constants.TemplateEnum;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.utils.MapUtil;
@@ -11,6 +12,7 @@ import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.model.BaseMessage;
 import com.yksys.isystem.common.model.EmailMessage;
 import com.yksys.isystem.common.model.EmailTplMessage;
+import com.yksys.isystem.common.model.register.EmailRegister;
 import com.yksys.isystem.common.pojo.EmailConfig;
 import com.yksys.isystem.common.pojo.EmailLog;
 import com.yksys.isystem.common.pojo.EmailTemplate;
@@ -18,11 +20,15 @@ import com.yksys.isystem.service.message.service.EmailConfigService;
 import com.yksys.isystem.service.message.service.EmailLogService;
 import com.yksys.isystem.service.message.service.EmailService;
 import com.yksys.isystem.service.message.service.EmailTemplateService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.RabbitListeners;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
@@ -41,6 +47,7 @@ import java.util.Properties;
  * @create: 2020-03-30 11:40
  **/
 @Component
+@Slf4j
 public class EmailExchanger implements MessageExchanger {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 

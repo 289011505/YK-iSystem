@@ -7,6 +7,10 @@ package com.yksys.isystem.common.core.constants;
  * @create: 2020-03-23 09:15
  **/
 public class RedisConstants {
+
+    //验证码redis过期时间 5分钟
+    public final static long CHECK_CODE_EXPIRE_TIME = 5 * 60;
+
     // 操作日志key前缀
     public final static String ACTION_LOG = "action_log:";
 

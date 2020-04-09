@@ -185,6 +185,12 @@
         </dependency>
         <!-- Spring Boot Admin End -->
 
+        <!-- 消息总线rabbitMQ -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bus-amqp</artifactId>
+        </dependency>
+
         <!-- Environment Begin -->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>

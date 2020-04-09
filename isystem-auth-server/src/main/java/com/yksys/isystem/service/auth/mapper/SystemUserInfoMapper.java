@@ -5,6 +5,7 @@ import com.yksys.isystem.common.model.AuthorityApi;
 import com.yksys.isystem.common.model.AuthorityMenu;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.pojo.SystemRole;
+import com.yksys.isystem.common.pojo.SystemUser;
 
 import java.util.List;
 import java.util.Map;
@@ -75,4 +76,17 @@ public interface SystemUserInfoMapper {
      * @return
      */
     List<AuthorityResource> getAuthorityResources();
+
+    /**
+     * 判断用户是否存在
+     * @param map
+     * @return
+     */
+    int checkUserIsExist(Map<String, Object> map);
+
+    /**
+     * 注册用户信息
+     * @param systemUser
+     */
+    void addSystemUser(SystemUser systemUser);
 }

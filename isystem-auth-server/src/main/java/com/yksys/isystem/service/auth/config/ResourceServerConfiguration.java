@@ -53,7 +53,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers(
                         "/api/systemUserInfo/getAuthorityResources",
                         "/api/login/**",
-                        "/oauth/**").permitAll()
+                        "/oauth/**", "/api/registered/**").permitAll()
                 //监控端点内部放行
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 .anyRequest().authenticated()

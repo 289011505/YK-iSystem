@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.yksys.isystem.common.core.constants.ComConstants;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.security.UserAuthority;
+import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.core.utils.MapUtil;
 import com.yksys.isystem.common.model.AuthorityApi;
 import com.yksys.isystem.common.model.AuthorityMenu;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.model.SystemUserInfo;
 import com.yksys.isystem.common.pojo.SystemRole;
+import com.yksys.isystem.common.pojo.SystemUser;
 import com.yksys.isystem.service.auth.mapper.SystemUserInfoMapper;
 import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +127,23 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
     @Override
     public List<AuthorityResource> getAuthorityResources() {
         return systemUserInfoMapper.getAuthorityResources();
+    }
+
+    @Override
+    public boolean checkUserIsExist(Map<String, Object> map) {
+        int i = systemUserInfoMapper.checkUserIsExist(map);
+        if (i > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void addSystemUser(SystemUser systemUser) {
+        systemUser.setId(AppUtil.randomId());
+        systemUser.setStatus(1);
+
+        systemUserInfoMapper.addSystemUser(systemUser);
     }
 
 

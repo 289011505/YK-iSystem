@@ -10,6 +10,9 @@ public class ComConstants {
     // 默认超级管理员账号
     public final static String ROOT_ADMIN = "admin";
 
+    //超级管理员邮箱
+    public final static String ADMIN_EMAIL = "michaelkai@aliyun.com";
+
     /**
      * 账号状态
      * 0: 禁用, 1: 正常, 2: 锁定
