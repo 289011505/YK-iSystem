@@ -56,8 +56,6 @@ public class ActionLogAop {
      */
     @Around("log()")
     public Object printAndSaveLog(ProceedingJoinPoint joinPoint) throws Throwable {
-        //执行切入点, 获取返回值
-        Object proceed = joinPoint.proceed();
         //获取当前请求
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 
@@ -82,16 +80,21 @@ public class ActionLogAop {
             map.put("ipAddr", getIpAddr(requestAttributes.getRequest()));
         }
         try {
+            //执行切入点, 获取返回值
+            Object proceed = joinPoint.proceed();
             map.put("outputParam", JsonUtil.objectToJson(proceed));
             //打印log
             logger.info(logTypeEnum.getName() + ":" + map.toString());
+
+            return proceed;
         } catch (Throwable e) {
             map.put("exceptionInfo", e.getMessage());
         } finally {
             //存入redis
             redisUtil.set(RedisConstants.ACTION_LOG + AppUtil.randomId(), map);
-            return proceed;
         }
+
+        return null;
     }
 
     /**
