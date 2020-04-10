@@ -30,4 +30,11 @@ public class ComConstants {
      * http前缀
      */
     public final static String HTTP = "http://";
+
+    //默认角色id 超级管理员
+    public final static String ADMIN_ID = "1";
+    //默认角色id 客户
+    public final static String CUSTOMER_ID = "2";
+    //默认角色id 注册用户
+    public final static String REGISTER_ID = "3";
 }

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -21,11 +22,13 @@ public abstract class AbstractRegister implements Serializable {
     //用户名
     @ApiModelProperty(value = "用户名", dataType = "String")
     @NotNull(message = "用户名不能为空")
+    @NotEmpty(message = "用户名不能为空")
     private String userName;
 
     //密码
     @ApiModelProperty(value = "密码", dataType = "String")
     @NotNull(message = "密码不能为空")
+    @NotEmpty(message = "密码不能为空")
     private String password;
 
     //网页验证码
@@ -35,5 +38,6 @@ public abstract class AbstractRegister implements Serializable {
     //发送验证码
     @ApiModelProperty(value = "验证码", dataType = "String")
     @NotNull(message = "验证码不能为空")
+    @NotEmpty(message = "验证码不能为空")
     private String checkCode;
 }

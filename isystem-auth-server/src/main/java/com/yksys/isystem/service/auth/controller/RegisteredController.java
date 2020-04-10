@@ -12,7 +12,6 @@ import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.core.utils.ObjectConvertUtil;
 import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.common.core.utils.StringUtil;
-import com.yksys.isystem.common.model.EmailMessage;
 import com.yksys.isystem.common.model.EmailTplMessage;
 import com.yksys.isystem.common.model.register.EmailRegister;
 import com.yksys.isystem.common.pojo.SystemUser;

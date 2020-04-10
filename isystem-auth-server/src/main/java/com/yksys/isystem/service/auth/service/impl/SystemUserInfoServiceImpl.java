@@ -12,6 +12,7 @@ import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.model.SystemUserInfo;
 import com.yksys.isystem.common.pojo.SystemRole;
 import com.yksys.isystem.common.pojo.SystemUser;
+import com.yksys.isystem.common.pojo.UserRole;
 import com.yksys.isystem.service.auth.mapper.SystemUserInfoMapper;
 import com.yksys.isystem.service.auth.service.SystemUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,12 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
         systemUser.setStatus(1);
 
         systemUserInfoMapper.addSystemUser(systemUser);
+
+        //添加角色 默认注册会员
+        UserRole userRole = new UserRole();
+        userRole.setUserId(systemUser.getId());
+        userRole.setRoleId(ComConstants.REGISTER_ID);
+        systemUserInfoMapper.addUserRole(userRole);
     }
 
 

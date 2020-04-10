@@ -6,6 +6,7 @@ import com.yksys.isystem.common.model.AuthorityMenu;
 import com.yksys.isystem.common.model.AuthorityResource;
 import com.yksys.isystem.common.pojo.SystemRole;
 import com.yksys.isystem.common.pojo.SystemUser;
+import com.yksys.isystem.common.pojo.UserRole;
 
 import java.util.List;
 import java.util.Map;
@@ -89,4 +90,10 @@ public interface SystemUserInfoMapper {
      * @param systemUser
      */
     void addSystemUser(SystemUser systemUser);
+
+    /**
+     * 添加角色用户关系
+     * @param userRole
+     */
+    void addUserRole(UserRole userRole);
 }

@@ -8,6 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @program: YK-iSystem
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableEurekaClient
 @EnableFeignClients
 @MapperScan(basePackages = {"com.yksys.isystem.service.auth.mapper"})
+@EnableSwagger2
 public class ServiceAuthServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceAuthServerApplication.class, args);
