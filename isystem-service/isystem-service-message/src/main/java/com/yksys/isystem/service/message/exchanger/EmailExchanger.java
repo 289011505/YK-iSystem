@@ -158,6 +158,8 @@ public class EmailExchanger implements MessageExchanger {
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.smtp.starttls.required", "true");
+        properties.setProperty("mail.smtp.socketFactory.port", "465");
+        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         javaMailSender.setJavaMailProperties(properties);
         return javaMailSender;
     }
