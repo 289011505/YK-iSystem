@@ -67,8 +67,8 @@ public class TaskController {
     @PostMapping("/addLocalJob")
     public Result addLocalJob(@RequestBody TaskInfoVo taskInfoVo) {
         TaskInfo taskInfo = taskInfoVo.convert();
-        taskInfo = taskInfoService.addTaskInfo(taskInfo);
         taskInfo.setTaskProp(ScheduleConstant.LOCAL_TASK);
+        taskInfo = taskInfoService.addTaskInfo(taskInfo);
         taskInfo = taskService.addLocalJob(taskInfo);
 
         return new Result(HttpStatus.OK.value(), "添加成功", taskInfo);
@@ -96,8 +96,8 @@ public class TaskController {
     public Result addHttpJob(@RequestBody TaskInfoVo taskInfoVo) {
         TaskInfo taskInfo = taskInfoVo.convert();
         taskInfo.setJobClassName(HttpExecuteJob.class.getName());
-        taskInfo = taskInfoService.addTaskInfo(taskInfo);
         taskInfo.setTaskProp(ScheduleConstant.HTTP_TASK);
+        taskInfo = taskInfoService.addTaskInfo(taskInfo);
         taskInfo = taskService.addHttpJob(taskInfo);
         return new Result(HttpStatus.OK.value(), "添加成功", taskInfo);
     }

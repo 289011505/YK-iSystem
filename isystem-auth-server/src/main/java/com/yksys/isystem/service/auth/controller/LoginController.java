@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,8 @@ public class LoginController {
     private RestTemplate restTemplate;
     @Autowired
     private Oauth2ClientProperties oauth2ClientProperties;
+    @Autowired
+    private TokenStore tokenStore;
 
     /**
      * 用户登录认证
@@ -50,6 +53,18 @@ public class LoginController {
             return new Result(HttpStatus.UNAUTHORIZED.value(), "登陆失败", result);
         }
         return new Result(HttpStatus.OK.value(), "获取成功", result);
+    }
+
+    /**
+     * 退出登录, 移除token
+     * @param token
+     * @return
+     */
+    @PostMapping("/logout/token")
+    @ActionLog(logType = LogTypeEnum.USER_LOGOUT)
+    public Result removeToken(@RequestParam String token) {
+        tokenStore.removeAccessToken(tokenStore.readAccessToken(token));
+        return new Result(HttpStatus.OK.value(), "退出成功");
     }
 
     private JSONObject getToken(String userName, String password, String type, HttpHeaders headers) {

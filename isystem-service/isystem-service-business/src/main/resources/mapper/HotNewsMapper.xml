@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.business.mapper.HotNewsMapper">
+    <!-- 新增 -->
+    <insert id="addHotNews">
+        INSERT INTO tb_hot_news(
+        <include refid="hotNews_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="hotNews_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="addHotNewsBatch">
+        INSERT INTO tb_hot_news(
+        <include refid="hotNews_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="set" item="item" index="index" separator=",">
+            (#{item.id}
+            , #{item.subject}
+            , #{item.title}
+            , #{item.content}
+            , #{item.url}
+            , #{item.publishTime}
+            , #{item.publishPlatform}
+            , #{item.forwardNum}
+            , #{item.commentNum}
+            , #{item.likeNum}
+            , #{item.sort}
+            , #{item.type}
+            , #{item.hotType}
+            , #{item.remark}
+            , #{item.status}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="editHotNewsById">
+        UPDATE tb_hot_news
+        <set>
+            <include refid="hotNews_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="editHotNewsByIds">
+        UPDATE tb_hot_news
+        <set>
+            <include refid="hotNews_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 删除 -->
+    <update id="delHotNewsById">
+            update tb_hot_news SET status = 0 WHERE id = #{id}
+        </update>
+
+    <!-- 批量删除 -->
+    <update id="delHotNewsByIds">
+        UPDATE tb_hot_news SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 真删除 -->
+    <delete id="delHotNewsRealById">
+            DELETE FROM tb_hot_news WHERE id = #{id}
+        </delete>
+
+    <!-- 真批量删除 -->
+    <delete id="delHotNewsRealByIds">
+        DELETE FROM tb_hot_news WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 清空 -->
+    <delete id="delHotNewsReals">
+            DELETE FROM tb_hot_news
+        </delete>
+
+    <!-- 查询管理列表 -->
+    <select id="getHotNews" parameterType="Map" resultType="Map">
+        SELECT
+        <include refid="hotNews_select_cond"/>
+        FROM tb_hot_news a
+        <where>
+            <include refid="hotNews_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        ORDER BY a.status ASC, a.create_time DESC
+    </select>
+
+    <!-- 根据id查询热点新闻表 -->
+    <select id="getHotNewsById" resultType="Map">
+        SELECT
+        <include refid="hotNews_select_cond_one"/>
+        FROM tb_hot_news a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
+
+
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="hotNews_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.subject subject
+                                            
+                                    , a.title title
+                                            
+                                    , a.content content
+                                            
+                                    , a.url url
+                                            
+                                    , a.publish_time publishTime
+                                            
+                                    , a.publish_platform publishPlatform
+                                            
+                                    , a.forward_num forwardNum
+                                            
+                                    , a.comment_num commentNum
+                                            
+                                    , a.like_num likeNum
+                                            
+                                    , a.sort sort
+                                            
+                                    , a.type type
+                                            
+                                    , a.hot_type hotType
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="hotNews_select_cond_one">
+            a.id id
+                                                                            , a.subject subject
+                                                                , a.title title
+                                                                , a.content content
+                                                                , a.url url
+                                                                , a.publish_time publishTime
+                                                                , a.publish_platform publishPlatform
+                                                                , a.forward_num forwardNum
+                                                                , a.comment_num commentNum
+                                                                , a.like_num likeNum
+                                                                , a.sort sort
+                                                                , a.type type
+                                                                , a.hot_type hotType
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="hotNews_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="subject != null and subject != '' and subject != 'null' and subject != 'undefined'">
+            AND a.subject = #{subject}
+        </if>
+        <if test="title != null and title != '' and title != 'null' and title != 'undefined'">
+            AND a.title = #{title}
+        </if>
+        <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+            AND a.content = #{content}
+        </if>
+        <if test="url != null and url != '' and url != 'null' and url != 'undefined'">
+            AND a.url = #{url}
+        </if>
+        <if test="publishTime != null and publishTime != '' and publishTime != 'null' and publishTime != 'undefined'">
+            AND a.publish_time = #{publishTime}
+        </if>
+        <if test="publishPlatform != null and publishPlatform != '' and publishPlatform != 'null' and publishPlatform != 'undefined'">
+            AND a.publish_platform = #{publishPlatform}
+        </if>
+        <if test="forwardNum != null">
+            AND a.forward_num = #{forwardNum}
+        </if>
+        <if test="commentNum != null">
+            AND a.comment_num = #{commentNum}
+        </if>
+        <if test="likeNum != null">
+            AND a.like_num = #{likeNum}
+        </if>
+        <if test="sort != null">
+            AND a.sort = #{sort}
+        </if>
+        <if test="type != null">
+            AND a.type = #{type}
+        </if>
+        <if test="hotType != null">
+            AND a.hot_type = #{hotType}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="hotNews_add_key">
+            id
+                                                        
+                    , subject
+                                            
+                    , title
+                                            
+                    , content
+                                            
+                    , url
+                                            
+                    , publish_time
+                                            
+                    , publish_platform
+                                            
+                    , forward_num
+                                            
+                    , comment_num
+                                            
+                    , like_num
+                                            
+                    , sort
+                                            
+                    , type
+                                            
+                    , hot_type
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="hotNews_add_val">
+            #{id}
+                                                                            , #{subject}
+                                                                , #{title}
+                                                                , #{content}
+                                                                , #{url}
+                                                                , #{publishTime}
+                                                                , #{publishPlatform}
+                                                                , #{forwardNum}
+                                                                , #{commentNum}
+                                                                , #{likeNum}
+                                                                , #{sort}
+                                                                , #{type}
+                                                                , #{hotType}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="hotNews_set_if">
+        <if test="subject != null and subject != '' and subject != 'null' and subject != 'undefined'">
+            subject = #{subject},
+        </if>
+        <if test="title != null and title != '' and title != 'null' and title != 'undefined'">
+            title = #{title},
+        </if>
+        <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+            content = #{content},
+        </if>
+        <if test="url != null and url != '' and url != 'null' and url != 'undefined'">
+            url = #{url},
+        </if>
+        <if test="publishTime != null and publishTime != '' and publishTime != 'null' and publishTime != 'undefined'">
+            publish_time = #{publishTime},
+        </if>
+        <if test="publishPlatform != null and publishPlatform != '' and publishPlatform != 'null' and publishPlatform != 'undefined'">
+            publish_platform = #{publishPlatform},
+        </if>
+        <if test="forwardNum != null">
+            forward_num = #{forwardNum},
+        </if>
+        <if test="commentNum != null">
+            comment_num = #{commentNum},
+        </if>
+        <if test="likeNum != null">
+            like_num = #{likeNum},
+        </if>
+        <if test="sort != null">
+            sort = #{sort},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="hotType != null">
+            hot_type = #{hotType},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+    </sql>
+</mapper>

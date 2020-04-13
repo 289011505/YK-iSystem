@@ -2,10 +2,8 @@ package com.yksys.isystem.service.auth.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
-import com.yksys.isystem.common.core.constants.ComConstants;
-import com.yksys.isystem.common.core.constants.RabbitConstant;
-import com.yksys.isystem.common.core.constants.RedisConstants;
-import com.yksys.isystem.common.core.constants.TemplateConstant;
+import com.yksys.isystem.common.core.annotation.ActionLog;
+import com.yksys.isystem.common.core.constants.*;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.utils.AppUtil;
@@ -57,6 +55,7 @@ public class RegisteredController {
      */
     @ApiOperation("用户邮箱注册")
     @PostMapping("/emailRegistered")
+    @ActionLog(logType = LogTypeEnum.USER_EMAIL_REGISTERED)
     public Result emailRegistered(@RequestBody @ApiParam(name = "邮箱注册实体", required = true) @Valid EmailRegister register,
                                   BindingResult result) {
         //参数验证
@@ -130,6 +129,7 @@ public class RegisteredController {
             @ApiImplicitParam(name = "userName", required = true, value = "用户名", paramType = "string")
     })
     @PostMapping("/sendRegisterEmail")
+    @ActionLog(logType = LogTypeEnum.USER_SEND_REGISTER_EMAIL)
     public Result sendRegisterEmail(@RequestParam String email, @RequestParam String userName) {
         try {
             Map<String, String> map = Maps.newHashMap();

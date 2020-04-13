@@ -220,6 +220,13 @@
             <version>${swagger2.version}</version>
         </dependency>
         <!-- Swagger2 End -->
+
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
+        </dependency>
     </dependencies>
 
     <repositories>

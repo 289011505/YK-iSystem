@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.business.configuration;
+package com.yksys.isystem.service.base.configuration;
 
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.security.YkAccessDeniedHandler;
@@ -66,7 +66,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // Fegin访问不需要认证
-                .antMatchers("/api/systemBusinessTask/**").permitAll()
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

@@ -25,4 +25,7 @@ public class RedisConstants {
 
     //redis 删除操作
     public final static String REDIS_OPERATE_TYPE_DEL = "redis_del";
+
+    //热点新闻key前缀
+    public final static String HOT_NEWS = "hot_news:";
 }

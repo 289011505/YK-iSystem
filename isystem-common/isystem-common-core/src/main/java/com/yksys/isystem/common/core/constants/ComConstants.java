@@ -37,4 +37,8 @@ public class ComConstants {
     public final static String CUSTOMER_ID = "2";
     //默认角色id 注册用户
     public final static String REGISTER_ID = "3";
+
+    //爬取数据链接 微博链接
+    public final static String REPTILE_HOT_NEWS_KEYWORD_FROM_WEIBO = "https://s.weibo.com/top/summary?cate=realtimehot";
+    public final static String WEIBO_NEWS_URL = "https://s.weibo.com";
 }

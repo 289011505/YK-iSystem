@@ -12,6 +12,10 @@ import lombok.Getter;
 public enum LogTypeEnum {
 
     USER_LOGIN("user_login", "用户登录"),
+    USER_PROFILE("user_profile", "获取当前登录用户信息"),
+    USER_LOGOUT("user_logout", "用户退出登录"),
+    USER_EMAIL_REGISTERED("user_email_registered", "用户邮箱注册"),
+    USER_SEND_REGISTER_EMAIL("user_send_register_email", "用户发送邮箱注册验证码"),
     ;
 
     private String type;

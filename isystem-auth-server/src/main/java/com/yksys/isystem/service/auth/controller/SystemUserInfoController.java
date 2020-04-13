@@ -1,5 +1,7 @@
 package com.yksys.isystem.service.auth.controller;
 
+import com.yksys.isystem.common.core.annotation.ActionLog;
+import com.yksys.isystem.common.core.constants.LogTypeEnum;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.model.AuthorityMenu;
@@ -34,6 +36,7 @@ public class SystemUserInfoController {
      * @return
      */
     @GetMapping("/getUserProfile")
+    @ActionLog(logType = LogTypeEnum.USER_PROFILE)
     public Result getUserProfile() {
         return new Result(HttpStatus.OK.value(), "获取成功", AppSession.getCurrentUser());
     }

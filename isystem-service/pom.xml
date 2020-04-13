@@ -18,6 +18,7 @@
         <module>isystem-service-business</module>
         <module>isystem-service-workflow</module>
         <module>isystem-service-message</module>
+        <module>isystem-service-base</module>
     </modules>
 
     <dependencies>

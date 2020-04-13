@@ -11,4 +11,9 @@ public interface SystemTaskService {
      * 从redis中添加操作日志
      */
     void addActionLogByRedis();
+
+    /**
+     * 每40秒 更新热点新闻到redis
+     */
+    void updateHotNewsToRedis();
 }

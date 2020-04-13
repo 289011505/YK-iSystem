@@ -21,4 +21,11 @@ public class SystemTask {
     public void updateActionLogByRedis() {
         systemTaskService.addActionLogByRedis();
     }
+
+    /**
+     * 每40秒 更新热点新闻到redis
+     */
+    public void updateHotNewsToRedis() {
+        systemTaskService.updateHotNewsToRedis();
+    }
 }

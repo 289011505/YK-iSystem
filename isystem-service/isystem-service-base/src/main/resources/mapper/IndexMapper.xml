@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.base.mapper.IndexMapper">
+    <!-- 获取操作访问量统计数据 -->
+    <select id="getActionCountData" resultType="Map">
+        SELECT DATE_FORMAT(a.action_time,'%Y-%m-%d'), a2.num
+        FROM tb_action_log a
+        right JOIN
+        (
+
+        SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')), COUNT(*) num
+        FROM tb_action_log a1
+        GROUP BY DATE_FORMAT(a1.action_time,'%Y-%m-%d')
+
+        ) a2 on a.id = a2.id
+
+        ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d') DESC
+        LIMIT 0, 7
+    </select>
+
+    <!-- 获取统计总数 -->
+    <select id="getTotalCountData" resultType="Map">
+        SELECT COUNT(*) allNum, 'actionCount' type FROM tb_action_log a
+
+        union all
+
+        SELECT COUNT(*) allNum, 'messageCount' type FROM tb_action_log a
+
+        union all
+
+        SELECT COUNT(*) allNum, 'newsCount' type FROM tb_action_log a
+    </select>
+</mapper>
