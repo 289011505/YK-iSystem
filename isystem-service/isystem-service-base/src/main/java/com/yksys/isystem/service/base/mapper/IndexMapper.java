@@ -22,4 +22,18 @@ public interface IndexMapper {
      * @return
      */
     List<Map<String, Object>> getTotalCountData();
+
+    /**
+     * 获取热点新闻排行数据
+     * @param map
+     * @return
+     */
+    List<Map<String, Object>> getNewsCountData(Map<String, Object> map);
+
+    /**
+     * 获取所有热点新闻表
+     * @param map
+     * @return
+     */
+    List<Map<String, Object>> getHotNews(Map<String, Object> map);
 }

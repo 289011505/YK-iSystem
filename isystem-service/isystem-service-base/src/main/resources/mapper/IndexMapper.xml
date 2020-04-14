@@ -4,18 +4,18 @@
 <mapper namespace="com.yksys.isystem.service.base.mapper.IndexMapper">
     <!-- 获取操作访问量统计数据 -->
     <select id="getActionCountData" resultType="Map">
-        SELECT DATE_FORMAT(a.action_time,'%Y-%m-%d'), a2.num
+        SELECT DATE_FORMAT(a.action_time,'%Y-%m-%d') actionTime, a2.num
         FROM tb_action_log a
         right JOIN
         (
 
-        SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')), COUNT(*) num
+        SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')) , COUNT(*) num
         FROM tb_action_log a1
         GROUP BY DATE_FORMAT(a1.action_time,'%Y-%m-%d')
 
         ) a2 on a.id = a2.id
 
-        ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d') DESC
+        ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d')
         LIMIT 0, 7
     </select>
 
@@ -30,5 +30,39 @@
         union all
 
         SELECT COUNT(*) allNum, 'newsCount' type FROM tb_action_log a
+    </select>
+
+    <select id="getNewsCountData" resultType="Map">
+        SELECT a.title title, a.like_num likeNum, a.url url
+        from (select a.title, a.like_num, a.url
+        FROM tb_hot_news a
+        GROUP BY a.title) a
+        ORDER BY a.like_num DESC
+
+        LIMIT 0, 7
+    </select>
+
+    <!-- 查询管理列表 -->
+    <select id="getHotNews" parameterType="Map" resultType="Map">
+        SELECT a.id id, a.subject subject, a.title title, a.content content, a.url url, a.like_num likeNum, a.type type , a.hot_type hotType
+        from (select a.id id, a.subject, a.title, a.content, a.url, a.like_num, a.type , a.hot_type
+        FROM tb_hot_news a
+        <where>
+            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                AND a.id = #{id}
+            </if>
+            <if test="title != null and title != '' and title != 'null' and title != 'undefined'">
+                AND a.title = #{title}
+            </if>
+            <if test="type != null">
+                AND a.type = #{type}
+            </if>
+            <if test="hotType != null">
+                AND a.hot_type = #{hotType}
+            </if>
+            AND a.status in (1, 2)
+        </where>
+        GROUP BY a.title) a
+        ORDER BY a.like_num DESC
     </select>
 </mapper>

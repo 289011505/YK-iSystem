@@ -1,0 +1,106 @@
+package com.yksys.isystem.common.core.utils.jvm;
+
+import com.google.common.collect.Lists;
+
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @program: YK-iSystem
+ * @description: JVM GC信息工具类
+ * @author: YuKai Fan
+ * @create: 2020-04-14 14:09
+ **/
+public class JVMGCUtil {
+    static private GarbageCollectorMXBean youngGC;
+    static private GarbageCollectorMXBean fullGC;
+
+    static{
+        List<GarbageCollectorMXBean> gcMXBeanList = ManagementFactory.getGarbageCollectorMXBeans();
+        for (final GarbageCollectorMXBean gcMXBean : gcMXBeanList) {
+            String gcName = gcMXBean.getName();
+            if(gcName==null) {
+                continue;
+            }
+            //G1 Old Generation
+            //Garbage collection optimized for short pausetimes Old Collector
+            //Garbage collection optimized for throughput Old Collector
+            //Garbage collection optimized for deterministic pausetimes Old Collector
+            //G1 Young Generation
+            //Garbage collection optimized for short pausetimes Young Collector
+            //Garbage collection optimized for throughput Young Collector
+            //Garbage collection optimized for deterministic pausetimes Young Collector
+            if (fullGC == null &&
+                    (gcName.endsWith("Old Collector")
+                            || "ConcurrentMarkSweep".equals(gcName)
+                            || "MarkSweepCompact".equals(gcName)
+                            || "PS MarkSweep".equals(gcName))
+            ) {
+                fullGC = gcMXBean;
+            } else if (youngGC == null &&
+                    (gcName.endsWith("Young Generation")
+                            || "ParNew".equals(gcName)
+                            || "Copy".equals(gcName)
+                            || "PS Scavenge".equals(gcName))
+            ) {
+                youngGC = gcMXBean;
+            }
+        }
+    }//static
+
+    //YGC名称
+    static public String getYoungGCName() {
+        return youngGC == null ? "" : youngGC.getName();
+    }
+
+    //YGC总次数
+    static public long getYoungGCCollectionCount() {
+        return youngGC == null ? 0 : youngGC.getCollectionCount();
+    }
+
+    //YGC总时间
+    static public long getYoungGCCollectionTime() {
+        return youngGC == null ? 0 : youngGC.getCollectionTime();
+    }
+
+    //FGC名称
+    static public String getFullGCName() {
+        return fullGC == null ? "" : fullGC.getName();
+    }
+
+    //FGC总次数
+    static public long getFullGCCollectionCount() {
+        return fullGC == null ? 0 : fullGC.getCollectionCount();
+    }
+
+    //FGC总次数
+    static public long getFullGCCollectionTime() {
+        return fullGC == null ? 0 : fullGC.getCollectionTime();
+    }
+
+    public static void main(String[] args) {
+        List<List<Long>> listRoot = Lists.newArrayList();
+        for(;;) {
+            System.out.println("=======================================================================");
+            System.out.println("getYoungGCName: " + JVMGCUtil.getYoungGCName());
+            System.out.println("getYoungGCCollectionCount: " + JVMGCUtil.getYoungGCCollectionCount());
+            System.out.println("getYoungGCCollectionTime: " + JVMGCUtil.getYoungGCCollectionTime());
+            System.out.println("getFullGCName: " + JVMGCUtil.getFullGCName());
+            System.out.println("getFullGCCollectionCount: " + JVMGCUtil.getFullGCCollectionCount());
+            System.out.println("getFullGCCollectionTime: " + JVMGCUtil.getFullGCCollectionTime());
+            List<Long> list = new ArrayList<Long>(1000);
+            listRoot.add(list);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(list.size() > 1) {
+                list.remove(0);
+            }
+            Runtime.getRuntime().gc();
+        }
+    }
+}
