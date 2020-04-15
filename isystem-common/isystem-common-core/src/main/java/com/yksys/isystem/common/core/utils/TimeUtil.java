@@ -1,6 +1,7 @@
 package com.yksys.isystem.common.core.utils;
 
 import javax.xml.crypto.Data;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -92,6 +93,15 @@ public final class TimeUtil {
      */
     public static String getCurrentDatetime() {
         return DEFAULT_DATETIME_FORMATTER.format(LocalDateTime.now());
+    }
+
+    /**
+     * 获取当前时间时间戳
+     *
+     * @return
+     */
+    public static Long getCurrentTimestamp() {
+        return Timestamp.valueOf(LocalDateTime.now()).getTime();
     }
 
     /**

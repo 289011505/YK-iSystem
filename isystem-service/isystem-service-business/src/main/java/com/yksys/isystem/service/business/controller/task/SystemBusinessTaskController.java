@@ -42,15 +42,15 @@ public class SystemBusinessTaskController {
 
         Set<HotNews> set = Sets.newHashSet();
         keys.forEach(key -> {
-            List<HotNews> list = (List<HotNews>) redisUtil.get(key);
-            set.addAll(list);
+//            List<HotNews> list = (List<HotNews>) redisUtil.get(key);
+//            set.addAll(list);
 
             redisUtil.del(key);
         });
 
         //存入数据库
-        for (HotNews hotNews : set) {
-            hotNewsService.addHotNews(hotNews);
-        }
+//        for (HotNews hotNews : set) {
+//            hotNewsService.addHotNews(hotNews);
+//        }
     }
 }

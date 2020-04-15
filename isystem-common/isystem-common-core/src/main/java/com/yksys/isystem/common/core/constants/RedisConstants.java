@@ -28,4 +28,28 @@ public class RedisConstants {
 
     //热点新闻key前缀
     public final static String HOT_NEWS = "hot_news:";
+
+    //用户通道关系key前缀
+    public final static String USER_CHANNEL = "user_channel:";
+
+    //账号通道关系key前缀
+    public final static String ACCOUNT_CHANNEL = "account_channel:";
+
+    //单聊记录(未签收)
+    public final static String SINGLE_CHAT_RECORD = "single_chat_record:";
+
+    //单聊记录(已签收)
+    public final static String SINGLE_CHAT_RECORD_SIGNED = "single_chat_record_signed:";
+
+    //群聊记录(未签收)
+    public final static String GROUP_CHAT_RECORD = "group_chat_record:";
+
+    //群聊记录(已签收)
+    public final static String GROUP_CHAT_RECORD_SIGNED = "group_chat_record_signed:";
+
+    //系统通知记录(未签收)
+    public final static String SYSTEM_NOTICE_RECORD = "system_notice_recordL";
+
+    //系统通知记录(已签收)
+    public final static String SYSTEM_NOTICE_RECORD_SIGNED = "system_notice_record_signed:";
 }

@@ -25,7 +25,14 @@ public class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
      * 解决redis反序列化对象时报错 ：com.alibaba.fastjson.JSONException: autoType is not support
      */
     static {
-        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.pojo.HotNews");
+//        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.pojo.*");
+//        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.model.*");
+//        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.model.message.*");
+//        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.model.register.*");
+//        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.model.server.*");
+//        ParserConfig.getGlobalInstance().addAccept("com.yksys.isystem.common.model.tree.*");
+//        ParserConfig.getGlobalInstance().addAccept("io.netty.channel.socket.nio.NioSocketChannel");
+        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
     }
 
     public FastJsonRedisSerializer(Class<T> clazz) {

@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.message.netty.action;
+package com.yksys.isystem.service.message.netty.service;
 
 import com.yksys.isystem.common.model.message.MessageContent;
 import io.netty.channel.Channel;

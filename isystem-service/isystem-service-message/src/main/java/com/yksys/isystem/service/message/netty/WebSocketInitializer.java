@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.message.netty;
 
+import com.yksys.isystem.service.message.netty.handler.Handler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -37,13 +38,13 @@ public class WebSocketInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 
         //自定义handler
-        pipeline.addLast(null);
+        pipeline.addLast(new Handler());
 
         //针对客户端，如果在1分钟内没有向服务端发送读写心跳(ALL), 则主动断开
         //如果是读空闲或写空闲, 则不作处理
         pipeline.addLast(new IdleStateHandler(0, 0, 60 * 5));
         //自定义状态检测 处理心跳检测
-        pipeline.addLast(null);
+//        pipeline.addLast(null);
 
     }
 }

@@ -4,19 +4,23 @@
 <mapper namespace="com.yksys.isystem.service.base.mapper.IndexMapper">
     <!-- 获取操作访问量统计数据 -->
     <select id="getActionCountData" resultType="Map">
-        SELECT DATE_FORMAT(a.action_time,'%Y-%m-%d') actionTime, a2.num
-        FROM tb_action_log a
-        right JOIN
-        (
+        SELECT t.*
+        FROM
+        (SELECT DATE_FORMAT(a.action_time,'%Y-%m-%d') actionTime, a2.num
+                FROM tb_action_log a
+                right JOIN
+                (
 
-        SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')) , COUNT(*) num
-        FROM tb_action_log a1
-        GROUP BY DATE_FORMAT(a1.action_time,'%Y-%m-%d')
+                SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')) , COUNT(*) num
+                FROM tb_action_log a1
+                GROUP BY DATE_FORMAT(a1.action_time,'%Y-%m-%d')
 
-        ) a2 on a.id = a2.id
+                ) a2 on a.id = a2.id
 
-        ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d')
-        LIMIT 0, 7
+                ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d') DESC
+                LIMIT 0, 7) t
+
+        ORDER BY t.actionTime
     </select>
 
     <!-- 获取统计总数 -->

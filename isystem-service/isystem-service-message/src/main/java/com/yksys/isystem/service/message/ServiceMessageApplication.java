@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.message;
 
+import com.yksys.isystem.service.message.netty.WebSocketServer;
 import com.yksys.isystem.service.message.service.EmailConfigService;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class ServiceMessageApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        emailConfigService.loadCacheConfig();
+        try {
+            WebSocketServer.getInstance().start();
+            emailConfigService.loadCacheConfig();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

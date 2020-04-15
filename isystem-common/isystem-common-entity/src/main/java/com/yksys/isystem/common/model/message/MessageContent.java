@@ -18,17 +18,17 @@ public class MessageContent implements Serializable {
     //操作类型
     private String action;
     //类型1: 单聊, 2: 群聊, 3: 聊天室, 4: 系统消息, 5: 实时信息消息
-    private Integer msgType;
+    private String msgType;
     //消息标识
     private String msgId;
     //消息内容类型1:文本, 2：图片, 3: 语音
     private String msgContentType;
     //发送时间
-    private String senderTime;
+    private Long senderTime;
     //接收时间
     private String receiverTime;
     //聊天内容
-    private String content;
+    private Object content;
     //扩展字段
     private Map<String, Object> extension;
 }
