@@ -62,7 +62,6 @@ public class Handler extends SimpleChannelInboundHandler<Object> {
         //获取消息内容
         JSONObject jsonObject = JSONObject.parseObject(text);
         String msgType = jsonObject.getString("msgType");
-        String action = jsonObject.getString("action");
         ActionService actionService = ActionStrategyFactory.getActionByType(msgType);
         if (actionService == null) {
             log.error("获取操作服务实例为空, actionService: {}", actionService);
