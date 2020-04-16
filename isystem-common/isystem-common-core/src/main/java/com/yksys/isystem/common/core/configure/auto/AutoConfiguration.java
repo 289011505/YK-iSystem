@@ -1,5 +1,6 @@
 package com.yksys.isystem.common.core.configure.auto;
 
+import com.yksys.isystem.common.core.exception.GlobalExceptionHandler;
 import com.yksys.isystem.common.core.interceptor.SqlAppendInterceptor;
 import com.yksys.isystem.common.core.security.http.YkRestTemplate;
 import com.yksys.isystem.common.core.security.oauth2.client.Oauth2ClientProperties;
@@ -53,5 +54,11 @@ public class AutoConfiguration {
     @ConditionalOnMissingBean(SqlAppendInterceptor.class)
     public SqlAppendInterceptor sqlAppendInterceptor() {
         return new SqlAppendInterceptor();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(GlobalExceptionHandler.class)
+    public GlobalExceptionHandler globalExceptionHandler() {
+        return new GlobalExceptionHandler();
     }
 }

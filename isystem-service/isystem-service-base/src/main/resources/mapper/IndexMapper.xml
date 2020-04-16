@@ -7,20 +7,32 @@
         SELECT t.*
         FROM
         (SELECT DATE_FORMAT(a.action_time,'%Y-%m-%d') actionTime, a2.num
-                FROM tb_action_log a
-                right JOIN
-                (
+        FROM tb_action_log a
+        right JOIN
+        (
 
-                SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')) , COUNT(*) num
-                FROM tb_action_log a1
-                GROUP BY DATE_FORMAT(a1.action_time,'%Y-%m-%d')
+        SELECT a1.id id, MAX(DATE_FORMAT(a1.action_time,'%Y-%m-%d')) , COUNT(*) num
+        FROM tb_action_log a1
+        <where>
+            <if test="actionType != null and actionType != '' and actionType != 'null' and actionType != 'undefined'">
+                and a1.type = #{actionType}
+            </if>
+        </where>
+        GROUP BY DATE_FORMAT(a1.action_time,'%Y-%m-%d')
 
-                ) a2 on a.id = a2.id
+        ) a2 on a.id = a2.id
 
-                ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d') DESC
-                LIMIT 0, 7) t
+        ORDER BY DATE_FORMAT(a.action_time,'%Y-%m-%d') DESC
+        LIMIT 0, 7) t
 
         ORDER BY t.actionTime
+    </select>
+
+    <!--  获取操作类型 -->
+    <select id="getActionType" resultType="String">
+        SELECT a.type type
+        from tb_action_log a
+        GROUP BY a.type
     </select>
 
     <!-- 获取统计总数 -->
@@ -48,7 +60,8 @@
 
     <!-- 查询管理列表 -->
     <select id="getHotNews" parameterType="Map" resultType="Map">
-        SELECT a.id id, a.subject subject, a.title title, a.content content, a.url url, a.like_num likeNum, a.type type , a.hot_type hotType
+        SELECT a.id id, a.subject subject, a.title title, a.content content, a.url url, a.like_num likeNum, a.type type
+        , a.hot_type hotType
         from (select a.id id, a.subject, a.title, a.content, a.url, a.like_num, a.type , a.hot_type
         FROM tb_hot_news a
         <where>

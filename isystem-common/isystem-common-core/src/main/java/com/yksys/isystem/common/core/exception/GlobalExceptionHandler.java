@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @create: 2019-12-04 10:20
  **/
 @ControllerAdvice
+@ResponseBody
 public class GlobalExceptionHandler {
 
     /**

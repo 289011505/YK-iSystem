@@ -18,6 +18,12 @@ public interface IndexMapper {
     List<Map<String, Object>> getActionCountData(Map<String, Object> map);
 
     /**
+     * 获取操作类型
+     * @return
+     */
+    List<String> getActionType();
+
+    /**
      * 获取统计总数
      * @return
      */

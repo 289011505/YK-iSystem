@@ -81,26 +81,33 @@ public class JVMGCUtil {
     }
 
     public static void main(String[] args) {
-        List<List<Long>> listRoot = Lists.newArrayList();
-        for(;;) {
-            System.out.println("=======================================================================");
-            System.out.println("getYoungGCName: " + JVMGCUtil.getYoungGCName());
-            System.out.println("getYoungGCCollectionCount: " + JVMGCUtil.getYoungGCCollectionCount());
-            System.out.println("getYoungGCCollectionTime: " + JVMGCUtil.getYoungGCCollectionTime());
-            System.out.println("getFullGCName: " + JVMGCUtil.getFullGCName());
-            System.out.println("getFullGCCollectionCount: " + JVMGCUtil.getFullGCCollectionCount());
-            System.out.println("getFullGCCollectionTime: " + JVMGCUtil.getFullGCCollectionTime());
-            List<Long> list = new ArrayList<Long>(1000);
-            listRoot.add(list);
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(list.size() > 1) {
-                list.remove(0);
-            }
-            Runtime.getRuntime().gc();
-        }
+//        List<List<Long>> listRoot = Lists.newArrayList();
+//        for(;;) {
+//            System.out.println("=======================================================================");
+//            System.out.println("getYoungGCName: " + JVMGCUtil.getYoungGCName());
+//            System.out.println("getYoungGCCollectionCount: " + JVMGCUtil.getYoungGCCollectionCount());
+//            System.out.println("getYoungGCCollectionTime: " + JVMGCUtil.getYoungGCCollectionTime());
+//            System.out.println("getFullGCName: " + JVMGCUtil.getFullGCName());
+//            System.out.println("getFullGCCollectionCount: " + JVMGCUtil.getFullGCCollectionCount());
+//            System.out.println("getFullGCCollectionTime: " + JVMGCUtil.getFullGCCollectionTime());
+//            List<Long> list = new ArrayList<Long>(1000);
+//            listRoot.add(list);
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            if(list.size() > 1) {
+//                list.remove(0);
+//            }
+//            Runtime.getRuntime().gc();
+//        }
+        System.out.println("=======================================================================");
+        System.out.println("getYoungGCName: " + JVMGCUtil.getYoungGCName());
+        System.out.println("getYoungGCCollectionCount: " + JVMGCUtil.getYoungGCCollectionCount());
+        System.out.println("getYoungGCCollectionTime: " + JVMGCUtil.getYoungGCCollectionTime());
+        System.out.println("getFullGCName: " + JVMGCUtil.getFullGCName());
+        System.out.println("getFullGCCollectionCount: " + JVMGCUtil.getFullGCCollectionCount());
+        System.out.println("getFullGCCollectionTime: " + JVMGCUtil.getFullGCCollectionTime());
     }
 }
