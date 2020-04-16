@@ -50,7 +50,7 @@ public class SystemUserController {
      * @param id
      * @return
      */
-    @PostMapping("/getSystemUserById")
+    @GetMapping("/getSystemUserById")
     public Result getSystemUserById(@RequestParam String id) {
         return new Result(HttpStatus.OK.value(), "查询成功", systemUserService.getSystemUserById(id));
     }

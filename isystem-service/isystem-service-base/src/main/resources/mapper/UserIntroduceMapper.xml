@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.base.mapper.UserIntroduceMapper">
+        <!-- 新增 -->
+        <insert id="addUserIntroduce">
+            INSERT INTO tb_user_introduce(<include refid="userIntroduce_add_key"><property name="alias" value="" /></include>)
+            VALUES (<include refid="userIntroduce_add_val"><property name="alias" value="" /></include>)
+        </insert>
+
+        <!-- 批量新增 -->
+        <insert id="addUserIntroduces">
+            INSERT INTO tb_user_introduce(<include refid="userIntroduce_add_key"><property name="alias" value="" /></include>)
+            VALUES
+            <foreach collection="list" item="item" index="index" separator=",">
+                (<include refid="userIntroduce_add_val"><property name="alias" value="item."/></include>)
+            </foreach>
+        </insert>
+
+        <!-- 修改 -->
+        <update id="editUserIntroduceById">
+            UPDATE tb_user_introduce
+            <set>
+                <include refid="userIntroduce_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <!-- 批量修改 -->
+        <update id="editUserIntroduceByIds">
+            UPDATE tb_user_introduce
+            <set>
+                <include refid="userIntroduce_set_if"><property name="alias" value="" /></include>
+            </set>
+            WHERE id IN
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 删除 -->
+        <update id="delUserIntroduceById">
+            update tb_user_introduce SET status = 0 WHERE id = #{id}
+        </update>
+
+        <!-- 批量删除 -->
+        <update id="delUserIntroduceByIds">
+            UPDATE tb_user_introduce SET status = 0 WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </update>
+
+        <!-- 真删除 -->
+        <delete id="delUserIntroduceRealById">
+            DELETE FROM tb_user_introduce WHERE id = #{id}
+        </delete>
+
+        <!-- 真批量删除 -->
+        <delete id="delUserIntroduceRealByIds">
+            DELETE FROM tb_user_introduce WHERE id IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </delete>
+
+        <!-- 清空 -->
+        <delete id="delUserIntroduceReals">
+            DELETE FROM tb_user_introduce
+        </delete>
+
+        <!-- 查询管理列表 -->
+        <select id="getUserIntroduces" parameterType="Map" resultType="Map">
+            SELECT <include refid="userIntroduce_select_cond" />
+            FROM tb_user_introduce a
+            <where>
+                <include refid="userIntroduce_where_if" />
+                AND a.status in (1, 2)
+            </where>
+            ORDER BY a.status ASC, a.create_time DESC
+        </select>
+
+        <!-- 根据id查询用户简介表 -->
+        <select id="getUserIntroduceById" resultType="Map">
+            SELECT <include refid="userIntroduce_select_cond_one"/>
+            FROM tb_user_introduce a
+            WHERE a.status in (1, 2) and a.id = #{id}
+        </select>
+
+
+        <!-- 查询的选择项, 增删字段时调整 -->
+        <sql id="userIntroduce_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.user_id userId
+                                            
+                                    , a.one_word oneWord
+                                            
+                                    , a.skills skills
+                                            
+                                    , a.introduce introduce
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+                                            
+                                    , a.create_time createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , a.update_time updateTime
+                                    </sql>
+
+        <!-- (单个)查询的选择项, 增删字段时调整 -->
+        <sql id="userIntroduce_select_cond_one">
+            a.id id
+                                                                            , a.user_id userId
+                                                                , a.one_word oneWord
+                                                                , a.skills skills
+                                                                , a.introduce introduce
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+        <!-- 查询条件 -->
+        <sql id="userIntroduce_where_if">
+                                            <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+                    AND a.id = #{id}
+                </if>
+                                                            <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
+                    AND a.user_id = #{userId}
+                </if>
+                                                            <if test="oneWord != null and oneWord != '' and oneWord != 'null' and oneWord != 'undefined'">
+                    AND a.one_word = #{oneWord}
+                </if>
+                                                            <if test="skills != null and skills != '' and skills != 'null' and skills != 'undefined'">
+                    AND a.skills = #{skills}
+                </if>
+                                                            <if test="introduce != null and introduce != '' and introduce != 'null' and introduce != 'undefined'">
+                    AND a.introduce = #{introduce}
+                </if>
+                                                            <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                    AND a.remark = #{remark}
+                </if>
+                                                            <if test="status != null">
+                    AND a.status = #{status}
+                </if>
+                                                            <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+                    AND a.create_user_id = #{createUserId}
+                </if>
+                                                            <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+                    AND a.create_time = #{createTime}
+                </if>
+                                                            <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+                    AND a.update_user_id = #{updateUserId}
+                </if>
+                                                            <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+                    AND a.update_time = #{updateTime}
+                </if>
+                                    </sql>
+
+
+        <!-- (批量)新增键, 增删字段时调整 -->
+        <sql id="userIntroduce_add_key">
+            id
+                                                        
+                    , user_id
+                                            
+                    , one_word
+                                            
+                    , skills
+                                            
+                    , introduce
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+        <!-- (批量)新增值, 增删字段时调整 -->
+        <sql id="userIntroduce_add_val">
+            #{id}
+                                                                            , #{userId}
+                                                                , #{oneWord}
+                                                                , #{skills}
+                                                                , #{introduce}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+        <!-- (批量修改的条件,增减字段时调整) -->
+        <sql id="userIntroduce_set_if">
+                                                                                                                                <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
+                                user_id = #{userId},
+                            </if>
+                                                                                                                                                                <if test="oneWord != null and oneWord != '' and oneWord != 'null' and oneWord != 'undefined'">
+                                one_word = #{oneWord},
+                            </if>
+                                                                                                                                                                <if test="skills != null and skills != '' and skills != 'null' and skills != 'undefined'">
+                                skills = #{skills},
+                            </if>
+                                                                                                                                                                <if test="introduce != null and introduce != '' and introduce != 'null' and introduce != 'undefined'">
+                                introduce = #{introduce},
+                            </if>
+                                                                                                                                                                <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+                                remark = #{remark},
+                            </if>
+                                                                                                                                                                <if test="status != null">
+                                status = #{status},
+                            </if>
+                                                                                                                                                                                                                                                                                                                                                </sql>
+</mapper>
