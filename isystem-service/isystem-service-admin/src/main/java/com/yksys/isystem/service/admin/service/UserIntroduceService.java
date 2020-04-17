@@ -1,4 +1,4 @@
-package com.yksys.isystem.service.base.service;
+package com.yksys.isystem.service.admin.service;
 import com.yksys.isystem.common.pojo.UserIntroduce;
 
 import java.util.List;

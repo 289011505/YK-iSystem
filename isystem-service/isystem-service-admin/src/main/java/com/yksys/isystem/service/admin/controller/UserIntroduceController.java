@@ -1,11 +1,11 @@
-package com.yksys.isystem.service.base.controller;
+package com.yksys.isystem.service.admin.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.pojo.UserIntroduce;
 import com.yksys.isystem.common.vo.UserIntroduceVo;
-import com.yksys.isystem.service.base.service.UserIntroduceService;
+import com.yksys.isystem.service.admin.service.UserIntroduceService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

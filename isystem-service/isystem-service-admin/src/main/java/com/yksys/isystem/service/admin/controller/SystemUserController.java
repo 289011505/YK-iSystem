@@ -2,6 +2,7 @@ package com.yksys.isystem.service.admin.controller;
 
 import com.yksys.isystem.common.core.dto.DataTableViewPage;
 import com.yksys.isystem.common.core.dto.Result;
+import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.security.AppSession;
 import com.yksys.isystem.common.core.security.YkUserDetails;
 import com.yksys.isystem.common.pojo.Attachment;
@@ -10,6 +11,8 @@ import com.yksys.isystem.common.vo.SystemUserVo;
 import com.yksys.isystem.service.admin.service.SystemUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.web.bind.annotation.*;
 
@@ -138,6 +141,32 @@ public class SystemUserController {
         currentUser.setUserIconUrl(result.getData().getAttachUrl());
         AppSession.updateCurrentUser(redisTokenStore, currentUser);
         return result;
+    }
+
+    /**
+     * 用户更新密码
+     * @param oldPwd
+     * @param newPwd
+     * @return
+     */
+    @PutMapping("/updateUserPassword")
+    public Result updateUserPassword(@RequestParam String oldPwd, @RequestParam String newPwd) {
+        YkUserDetails currentUser = AppSession.getCurrentUser();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(oldPwd, currentUser.getPassword())) {
+            throw new ParameterException("原密码错误, 请重新输入");
+        }
+
+        SystemUser systemUser = new SystemUser();
+        systemUser.setId(currentUser.getUserId());
+        systemUser.setPassword(passwordEncoder.encode(newPwd));
+        systemUserService.editSystemUser(systemUser);
+
+        //更新当前登录的用户
+        currentUser.setPassword(systemUser.getPassword());
+        AppSession.updateCurrentUser(redisTokenStore, currentUser);
+
+        return new Result(HttpStatus.OK.value(), "更新密码成功");
     }
 
     /**

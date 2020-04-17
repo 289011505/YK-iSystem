@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yksys.isystem.service.admin.mapper.UserActivityMapper">
+    <!-- 新增 -->
+    <insert id="addUserActivity">
+        INSERT INTO tb_user_activity(
+        <include refid="userActivity_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES (
+        <include refid="userActivity_add_val">
+            <property name="alias" value=""/>
+        </include>
+        )
+    </insert>
+
+    <!-- 批量新增 -->
+    <insert id="addUserActivitys">
+        INSERT INTO tb_user_activity(
+        <include refid="userActivity_add_key">
+            <property name="alias" value=""/>
+        </include>
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            <include refid="userActivity_add_val">
+                <property name="alias" value="item."/>
+            </include>
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="editUserActivityById">
+        UPDATE tb_user_activity
+        <set>
+            <include refid="userActivity_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="editUserActivityByIds">
+        UPDATE tb_user_activity
+        <set>
+            <include refid="userActivity_set_if">
+                <property name="alias" value=""/>
+            </include>
+        </set>
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 删除 -->
+    <update id="delUserActivityById">
+            update tb_user_activity SET status = 0 WHERE id = #{id}
+        </update>
+
+    <!-- 批量删除 -->
+    <update id="delUserActivityByIds">
+        UPDATE tb_user_activity SET status = 0 WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 真删除 -->
+    <delete id="delUserActivityRealById">
+            DELETE FROM tb_user_activity WHERE id = #{id}
+        </delete>
+
+    <!-- 真批量删除 -->
+    <delete id="delUserActivityRealByIds">
+        DELETE FROM tb_user_activity WHERE id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 清空 -->
+    <delete id="delUserActivityReals">
+            DELETE FROM tb_user_activity
+        </delete>
+
+    <!-- 查询管理列表 -->
+    <select id="getUserActivitys" parameterType="Map" resultType="Map">
+        SELECT<include refid="userActivity_select_cond"/>, b.nick_name nickName, GROUP_CONCAT(c.attach_url) attachUrls
+        FROM tb_user_activity a left join tb_system_user b on a.user_id = b.id
+        left join tb_attachment c on FIND_IN_SET(c.id, a.activity_img)
+        <where>
+            <include refid="userActivity_where_if"/>
+            AND a.status in (1, 2)
+        </where>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+
+    <!-- 根据id查询用户动态表 -->
+    <select id="getUserActivityById" resultType="Map">
+        SELECT
+        <include refid="userActivity_select_cond_one"/>
+        FROM tb_user_activity a
+        WHERE a.status in (1, 2) and a.id = #{id}
+    </select>
+
+
+    <!-- 查询的选择项, 增删字段时调整 -->
+    <sql id="userActivity_select_cond">
+            a.id id
+                            
+                                            
+                                    , a.user_id userId
+                                            
+                                    , a.content content
+                                            
+                                    , a.activity_img activityImg
+                                            
+                                    , a.forward_num forwardNum
+                                            
+                                    , a.comment_num commentNum
+                                            
+                                    , a.like_num likeNum
+                                            
+                                    , a.sort sort
+                                            
+                                    , a.type type
+                                            
+                                    , a.remark remark
+                                            
+                                    , a.status status
+                                            
+                                    , a.create_user_id createUserId
+
+                                    , DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime
+                                            
+                                    , a.update_user_id updateUserId
+                                            
+                                    , DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i') updateTime
+                                    </sql>
+
+    <!-- (单个)查询的选择项, 增删字段时调整 -->
+    <sql id="userActivity_select_cond_one">
+            a.id id
+                                                                            , a.user_id userId
+                                                                , a.content content
+                                                                , a.activity_img activityImg
+                                                                , a.forward_num forwardNum
+                                                                , a.comment_num commentNum
+                                                                , a.like_num likeNum
+                                                                , a.sort sort
+                                                                , a.type type
+                                                                , a.remark remark
+                                                                , a.status status
+                                                                , a.create_user_id createUserId
+                                                                , a.create_time createTime
+                                                                , a.update_user_id updateUserId
+                                                                , a.update_time updateTime
+                                    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="userActivity_where_if">
+        <if test="id != null and id != '' and id != 'null' and id != 'undefined'">
+            AND a.id = #{id}
+        </if>
+        <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
+            AND a.user_id = #{userId}
+        </if>
+        <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+            AND a.content = #{content}
+        </if>
+        <if test="activityImg != null and activityImg != '' and activityImg != 'null' and activityImg != 'undefined'">
+            AND a.activity_img = #{activityImg}
+        </if>
+        <if test="forwardNum != null">
+            AND a.forward_num = #{forwardNum}
+        </if>
+        <if test="commentNum != null">
+            AND a.comment_num = #{commentNum}
+        </if>
+        <if test="likeNum != null">
+            AND a.like_num = #{likeNum}
+        </if>
+        <if test="sort != null">
+            AND a.sort = #{sort}
+        </if>
+        <if test="type != null">
+            AND a.type = #{type}
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            AND a.remark = #{remark}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
+        <if test="createUserId != null and createUserId != '' and createUserId != 'null' and createUserId != 'undefined'">
+            AND a.create_user_id = #{createUserId}
+        </if>
+        <if test="createTime != null and createTime != '' and createTime != 'null' and createTime != 'undefined'">
+            AND a.create_time = #{createTime}
+        </if>
+        <if test="updateUserId != null and updateUserId != '' and updateUserId != 'null' and updateUserId != 'undefined'">
+            AND a.update_user_id = #{updateUserId}
+        </if>
+        <if test="updateTime != null and updateTime != '' and updateTime != 'null' and updateTime != 'undefined'">
+            AND a.update_time = #{updateTime}
+        </if>
+    </sql>
+
+
+    <!-- (批量)新增键, 增删字段时调整 -->
+    <sql id="userActivity_add_key">
+            id
+                                                        
+                    , user_id
+                                            
+                    , content
+                                            
+                    , activity_img
+                                            
+                    , forward_num
+                                            
+                    , comment_num
+                                            
+                    , like_num
+                                            
+                    , sort
+                                            
+                    , type
+                                            
+                    , remark
+                                            
+                    , status
+                                                                                                                                                    </sql>
+
+    <!-- (批量)新增值, 增删字段时调整 -->
+    <sql id="userActivity_add_val">
+            #{id}
+                                                                            , #{userId}
+                                                                , #{content}
+                                                                , #{activityImg}
+                                                                , #{forwardNum}
+                                                                , #{commentNum}
+                                                                , #{likeNum}
+                                                                , #{sort}
+                                                                , #{type}
+                                                                , #{remark}
+                                                                , #{status}
+                                                                                                                                                    </sql>
+
+    <!-- (批量修改的条件,增减字段时调整) -->
+    <sql id="userActivity_set_if">
+        <if test="userId != null and userId != '' and userId != 'null' and userId != 'undefined'">
+            user_id = #{userId},
+        </if>
+        <if test="content != null and content != '' and content != 'null' and content != 'undefined'">
+            content = #{content},
+        </if>
+        <if test="activityImg != null and activityImg != '' and activityImg != 'null' and activityImg != 'undefined'">
+            activity_img = #{activityImg},
+        </if>
+        <if test="forwardNum != null">
+            forward_num = #{forwardNum},
+        </if>
+        <if test="commentNum != null">
+            comment_num = #{commentNum},
+        </if>
+        <if test="likeNum != null">
+            like_num = #{likeNum},
+        </if>
+        <if test="sort != null">
+            sort = #{sort},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="remark != null and remark != '' and remark != 'null' and remark != 'undefined'">
+            remark = #{remark},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+    </sql>
+</mapper>

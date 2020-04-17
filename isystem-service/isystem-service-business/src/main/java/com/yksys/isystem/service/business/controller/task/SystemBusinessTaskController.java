@@ -1,5 +1,6 @@
 package com.yksys.isystem.service.business.controller.task;
 
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Sets;
 import com.yksys.isystem.common.core.constants.RedisConstants;
 import com.yksys.isystem.common.core.utils.AppUtil;
@@ -42,15 +43,21 @@ public class SystemBusinessTaskController {
 
         Set<HotNews> set = Sets.newHashSet();
         keys.forEach(key -> {
-//            List<HotNews> list = (List<HotNews>) redisUtil.get(key);
-//            set.addAll(list);
+            List<HotNews> list = (List<HotNews>) redisUtil.get(key);
+            set.addAll(list);
 
             redisUtil.del(key);
         });
 
         //存入数据库
-//        for (HotNews hotNews : set) {
-//            hotNewsService.addHotNews(hotNews);
-//        }
+        for (HotNews hotNews : set) {
+            List<Map<String, Object>> list = hotNewsService.getHotNews(ImmutableBiMap.of("title", hotNews.getTitle()));
+            if (CollectionUtils.isEmpty(list)) {
+                hotNewsService.addHotNews(hotNews);
+            } else {
+                hotNews.setId(list.get(0).get("id").toString());
+                hotNewsService.editHotNews(hotNews);
+            }
+        }
     }
 }

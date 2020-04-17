@@ -102,9 +102,9 @@ public class SystemUserServiceImpl implements SystemUserService {
     public void editSystemUser(SystemUser systemUser) {
         systemUserMapper.editSystemUserById(systemUser);
 
-        //先删除用户角色关系, 再添加
-        systemUserMapper.delUserRolesByUserId(systemUser.getId());
         if (!StringUtil.isBlank(systemUser.getRoleId())) {
+            //先删除用户角色关系, 再添加
+            systemUserMapper.delUserRolesByUserId(systemUser.getId());
             addUserRoles(systemUser);
         }
     }
