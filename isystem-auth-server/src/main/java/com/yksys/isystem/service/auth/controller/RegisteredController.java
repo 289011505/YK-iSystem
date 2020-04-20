@@ -82,7 +82,14 @@ public class RegisteredController {
             systemUser.setPassword(encodePwd);
             systemUser.setEmail(register.getEmail());
             systemUser.setUserName(register.getUserName());
-            systemUserInfoService.addSystemUser(systemUser);
+            systemUser = systemUserInfoService.addSystemUser(systemUser);
+
+            //更新redis中的用户信息
+            Map<String, Object> redisMap = Maps.newHashMap();
+            redisMap.put("id", systemUser.getId());
+            redisMap.put("account", systemUser.getAccount());
+            redisMap.put("phone", systemUser.getPhone());
+            redisUtil.set(RedisConstants.SYSTEM_USER_INFO_LIST + systemUser.getId(), redisMap);
 
             return new Result(HttpStatus.OK.value(), "注册成功");
         } catch (Exception e) {

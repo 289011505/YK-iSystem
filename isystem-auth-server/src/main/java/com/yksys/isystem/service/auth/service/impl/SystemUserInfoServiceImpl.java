@@ -140,7 +140,7 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
     }
 
     @Override
-    public void addSystemUser(SystemUser systemUser) {
+    public SystemUser addSystemUser(SystemUser systemUser) {
         systemUser.setId(AppUtil.randomId());
         systemUser.setStatus(1);
 
@@ -151,6 +151,13 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
         userRole.setUserId(systemUser.getId());
         userRole.setRoleId(ComConstants.REGISTER_ID);
         systemUserInfoMapper.addUserRole(userRole);
+
+        return systemUser;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllSystemUserInfos() {
+        return systemUserInfoMapper.getAllSystemUserInfos();
     }
 
 

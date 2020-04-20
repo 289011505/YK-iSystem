@@ -42,9 +42,6 @@ public class SystemNoticeActionImpl implements ActionService, InitializingBean{
         String action = messageContent.getAction();
         //判断操作类型
         switch (action) {
-            case MsgActionConstant.CONNECT:
-                this.doConnect(messageContent, channel);
-                break;
             case MsgActionConstant.SEND:
                 this.doSend(messageContent);
                 break;
@@ -71,7 +68,7 @@ public class SystemNoticeActionImpl implements ActionService, InitializingBean{
             if (receiverChannel != null) {
                 //如果receiverChannel不为空，从channelGroup中去查找对应的channel是否存在
                 Channel channel = MessageHandler.getChannel(receiverChannel.id());
-                if (channel != null) { // 如果接受者不在线, 就保存消息到缓存
+                if (channel != null) {
                     systemNoticeContent.setSenderTime(TimeUtil.getCurrentTimestamp());
                     channel.writeAndFlush(new TextWebSocketFrame(JsonUtil.objectToJson(systemNoticeContent)));
 

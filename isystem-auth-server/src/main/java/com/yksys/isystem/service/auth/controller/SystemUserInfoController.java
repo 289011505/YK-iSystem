@@ -72,4 +72,14 @@ public class SystemUserInfoController {
         List<AuthorityResource> list = systemUserInfoService.getAuthorityResources();
         return new Result(HttpStatus.OK.value(), "获取成功", list);
     }
+
+    /**
+     * 获取所有用户信息(id, phone)
+     * @return
+     */
+    @GetMapping("/getAllSystemUserInfos")
+    public Result getAllSystemUserInfos() {
+        List<Map<String, Object>> list = systemUserInfoService.getAllSystemUserInfos();
+        return new Result(HttpStatus.OK.value(), "获取成功", list);
+    }
 }

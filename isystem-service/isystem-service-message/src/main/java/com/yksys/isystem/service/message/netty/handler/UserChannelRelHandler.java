@@ -1,7 +1,10 @@
 package com.yksys.isystem.service.message.netty.handler;
 
 import com.google.common.collect.Maps;
+import com.yksys.isystem.common.core.constants.RedisConstants;
+import com.yksys.isystem.common.core.utils.RedisUtil;
 import io.netty.channel.Channel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -16,6 +19,9 @@ import java.util.Map;
 @Component
 public class UserChannelRelHandler {
     private static Map<String, Channel> manager = Maps.newConcurrentMap();
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 保存用户id, channel
@@ -50,6 +56,15 @@ public class UserChannelRelHandler {
      */
     public boolean checkUserIsExistRelByUserId(String key) {
         return manager.containsKey(key);
+    }
+
+    /**
+     * 判断用户是否存在
+     * @param key
+     * @return
+     */
+    public boolean checkUserIsExistFromRedisByKey(String key) {
+        return redisUtil.hasKey(RedisConstants.SYSTEM_USER_INFO_LIST + key);
     }
 
 }

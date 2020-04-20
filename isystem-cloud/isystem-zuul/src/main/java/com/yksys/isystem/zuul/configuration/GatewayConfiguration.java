@@ -2,9 +2,11 @@ package com.yksys.isystem.zuul.configuration;
 
 import com.google.common.collect.Lists;
 import com.netflix.zuul.ZuulFilter;
+import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.zuul.filter.modifyHeaderFilter;
 import com.yksys.isystem.zuul.locator.JdbcRouteLocator;
 import com.yksys.isystem.zuul.locator.ResourceLocator;
+import com.yksys.isystem.zuul.locator.SystemUserLocator;
 import com.yksys.isystem.zuul.service.AuthorityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,8 @@ public class GatewayConfiguration {
 
     @Autowired
     private JdbcRouteLocator jdbcRouteLocator;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 修改请求头
@@ -63,6 +67,17 @@ public class GatewayConfiguration {
         ResourceLocator resourceLocator = new ResourceLocator(authorityService, jdbcRouteLocator);
         log.info("CorsFilter [{}]", resourceLocator);
         return resourceLocator;
+    }
+
+    /**
+     * 系统用户信息加载器
+     * @param authorityService
+     * @return
+     */
+    @Bean
+    public SystemUserLocator systemUserLocator(AuthorityService authorityService) {
+        SystemUserLocator systemUserLocator = new SystemUserLocator(authorityService, redisUtil);
+        return systemUserLocator;
     }
 
     /**

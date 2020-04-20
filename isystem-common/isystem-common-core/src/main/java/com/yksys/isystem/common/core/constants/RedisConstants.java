@@ -52,4 +52,7 @@ public class RedisConstants {
 
     //系统通知记录(已签收)
     public final static String SYSTEM_NOTICE_RECORD_SIGNED = "system_notice_record_signed:";
+
+    //系统用户信息集合key前缀
+    public final static String SYSTEM_USER_INFO_LIST = "system_user_info_list:";
 }

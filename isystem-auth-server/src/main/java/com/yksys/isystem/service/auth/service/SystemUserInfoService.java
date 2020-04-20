@@ -74,5 +74,11 @@ public interface SystemUserInfoService {
      * 注册用户
      * @param systemUser
      */
-    void addSystemUser(SystemUser systemUser);
+    SystemUser addSystemUser(SystemUser systemUser);
+
+    /**
+     * 获取所有用户信息(id, phone)
+     * @return
+     */
+    List<Map<String, Object>> getAllSystemUserInfos();
 }

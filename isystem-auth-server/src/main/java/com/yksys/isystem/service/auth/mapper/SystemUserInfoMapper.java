@@ -96,4 +96,10 @@ public interface SystemUserInfoMapper {
      * @param userRole
      */
     void addUserRole(UserRole userRole);
+
+    /**
+     * 获取所有用户信息(id, phone)
+     * @return
+     */
+    List<Map<String, Object>> getAllSystemUserInfos();
 }

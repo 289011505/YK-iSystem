@@ -140,4 +140,11 @@
         INSERT INTO tb_user_role(user_id, role_id)
         values (#{userId}, #{roleId})
     </insert>
+
+    <!-- 获取所有用户信息 -->
+    <select id="getAllSystemUserInfos" resultType="Map">
+        select a.id id, a.phone phone, a.account account
+        from tb_system_user a
+        where a.status = 1
+    </select>
 </mapper>

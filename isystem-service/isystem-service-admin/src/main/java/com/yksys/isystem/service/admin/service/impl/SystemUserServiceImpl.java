@@ -3,10 +3,13 @@ package com.yksys.isystem.service.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.yksys.isystem.common.core.constants.RedisConstants;
 import com.yksys.isystem.common.core.dto.Result;
 import com.yksys.isystem.common.core.exception.ParameterException;
 import com.yksys.isystem.common.core.utils.AppUtil;
 import com.yksys.isystem.common.core.utils.PinYinUtil;
+import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.core.utils.file.FileModel;
 import com.yksys.isystem.common.core.utils.file.FileUtil;
@@ -24,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +44,8 @@ public class SystemUserServiceImpl implements SystemUserService {
     private SystemUserMapper systemUserMapper;
     @Autowired
     private FileUploadService fileUploadService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public SystemUser addSystemUser(SystemUser systemUser) {
@@ -60,6 +66,13 @@ public class SystemUserServiceImpl implements SystemUserService {
             throw new ParameterException("角色为空, 请选择角色!");
         }
         addUserRoles(systemUser);
+
+        //更新redis中的用户信息
+        Map<String, Object> redisMap = Maps.newHashMap();
+        redisMap.put("id", systemUser.getId());
+        redisMap.put("account", systemUser.getAccount());
+        redisMap.put("phone", systemUser.getPhone());
+        redisUtil.set(RedisConstants.SYSTEM_USER_INFO_LIST + systemUser.getId(), redisMap);
         return systemUser;
     }
 
@@ -112,11 +125,17 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public void delSystemUserById(String id) {
         systemUserMapper.delSystemUserById(id);
+
+        //更新redis中的用户信息
+        redisUtil.del(RedisConstants.SYSTEM_USER_INFO_LIST + id);
     }
 
     @Override
     public void delSystemUserByIs(List<String> ids) {
         systemUserMapper.delSystemUserByIds(ids);
+
+        //更新redis中的用户信息
+        redisUtil.del(ids.toArray(new String[ids.size()]));
     }
 
     @Override

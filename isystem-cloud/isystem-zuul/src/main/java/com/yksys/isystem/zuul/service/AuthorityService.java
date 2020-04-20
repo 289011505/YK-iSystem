@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: YK-iSystem
@@ -25,4 +26,12 @@ public interface AuthorityService {
      */
     @GetMapping("/api/systemUserInfo/getAuthorityResources")
     Result<List<AuthorityResource>> getAuthorityResources();
+
+    /**
+     * 获取所有用户信息(id, phone)
+     * @return
+     */
+    @GetMapping("/api/systemUserInfo/getAllSystemUserInfos")
+    Result<List<Map<String, Object>>> getAllSystemUserInfos();
+
 }

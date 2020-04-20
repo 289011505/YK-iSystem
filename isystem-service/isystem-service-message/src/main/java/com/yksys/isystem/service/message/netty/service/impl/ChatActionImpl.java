@@ -1,9 +1,11 @@
 package com.yksys.isystem.service.message.netty.service.impl;
 
+import com.google.common.collect.Maps;
 import com.yksys.isystem.common.core.constants.MsgActionConstant;
 import com.yksys.isystem.common.core.constants.MsgTypeEnum;
 import com.yksys.isystem.common.core.constants.RedisConstants;
 import com.yksys.isystem.common.core.utils.JsonUtil;
+import com.yksys.isystem.common.core.utils.StringUtil;
 import com.yksys.isystem.common.core.utils.TimeUtil;
 import com.yksys.isystem.common.model.message.ChatMessageContent;
 import com.yksys.isystem.common.model.message.MessageContent;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: yk-isystem
@@ -65,9 +68,14 @@ public class ChatActionImpl implements ActionService, InitializingBean {
     @Override
     public boolean doConnect(MessageContent messageContent, Channel channel) {
         ChatMessageContent chatMessageContent = (ChatMessageContent) messageContent;
-        //判断用户id是否为空 todo
-
-        //判断用户是否存在 todo
+        //判断用户id是否为空
+        if (StringUtil.isBlank(chatMessageContent.getSenderId())) {
+            return false;
+        }
+        //判断用户是否存在
+        if (!userChannelRelHandler.checkUserIsExistFromRedisByKey(chatMessageContent.getSenderId())) {
+            return false;
+        }
 
         userChannelRelHandler.put(chatMessageContent.getSenderId(), channel);
 
@@ -76,14 +84,23 @@ public class ChatActionImpl implements ActionService, InitializingBean {
         //连接成功, 给用户发送未签收的消息
         List notSignRecordList = messageService.getMessageRecord(chatMessageContent.getSenderId(), RedisConstants.SINGLE_CHAT_RECORD);
 
-        //发送客户端签收
+        //单聊消息发送客户端签收
         if (CollectionUtils.isEmpty(notSignRecordList)) {
             return true;
         }
 
+        List notSignGroupRecordList = messageService.getMessageRecord(chatMessageContent.getSenderId(), RedisConstants.GROUP_CHAT_RECORD);
+        //群聊消息发送客户端签收
+        if (CollectionUtils.isEmpty(notSignGroupRecordList)) {
+            return true;
+        }
+
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("notSignRecordList", notSignRecordList);
+        map.put("notSignGroupRecordList", notSignGroupRecordList);
         log.info("对用户 【{}】 发送签收消息", chatMessageContent.getSenderId());
         chatMessageContent.setAction(MsgActionConstant.SIGNED);
-        chatMessageContent.setContent(notSignRecordList);
+        chatMessageContent.setContent(map);
         chatMessageContent.setReceiverId(chatMessageContent.getSenderId());
         doSend(chatMessageContent);
 
@@ -105,7 +122,7 @@ public class ChatActionImpl implements ActionService, InitializingBean {
             //发送消息
             //获取接受者channel
             Channel receiverChannel = userChannelRelHandler.get(receiverId);
-            if (receiverChannel != null) { // 如果接受者不在线, 就保存消息到缓存 todo
+            if (receiverChannel != null) { // 如果接受者不在线, 就保存消息到缓存
                 //如果receiverChannel不为空，从channelGroup中去查找对应的channel是否存在
                 Channel channel = MessageHandler.getChannel(receiverChannel.id());
                 if (channel != null) { // 如果接受者不在线, 就保存消息到缓存

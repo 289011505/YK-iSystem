@@ -1,7 +1,9 @@
 package com.yksys.isystem.zuul;
 
+import com.yksys.isystem.common.core.utils.RedisUtil;
 import com.yksys.isystem.zuul.locator.JdbcRouteLocator;
 import com.yksys.isystem.zuul.locator.ResourceLocator;
+import com.yksys.isystem.zuul.locator.SystemUserLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,6 +32,8 @@ public class ZuulApplication implements CommandLineRunner {
     private ResourceLocator resourceLocator;
     @Autowired
     private JdbcRouteLocator jdbcRouteLocator;
+    @Autowired
+    private SystemUserLocator systemUserLocator;
 
     public static void main(String[] args) {
         SpringApplication.run(ZuulApplication.class, args);
@@ -40,5 +44,6 @@ public class ZuulApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         jdbcRouteLocator.doRefresh();
         resourceLocator.refresh();
+        systemUserLocator.loadSystemUserToRedis();
     }
 }
